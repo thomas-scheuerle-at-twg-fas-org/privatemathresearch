@@ -1,0 +1,596 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A Somos-Type Constraint on Hankel Determinants and\\Jacobi Recurrence Coefficients}
+\author{Thomas Scheuerle \and Michael Somos}
+\date{August 31, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Assuming that a sequence arises as the shifted Hankel transform of the coefficient sequence of a Stieltjes continued fraction, we translate a Somos-type quartic relation into a constraint on the recurrence coefficients of the associated monic orthogonal polynomials. We prove a characterization: the shifted Hankel determinants satisfy the Somos-type relation if and only if consecutive off-diagonal Jacobi coefficients satisfy a fixed symmetric biquadratic equation. Equivalently, the Somos constraint imposes an algebraic law on successive ratios of squared norms. The diagonal Jacobi coefficients do not occur in this condition.
+\end{abstract}
+
+\section*{Preface and motivation}
+
+This note originated from a rather specific question concerning Somos--4 sequences and, in particular, from an exchange with Michael Somos about computations involving rational Somos--4 sequences.
+
+The immediate starting point was the observation that the general Somos--4 recurrence is a rational recurrence. Given arbitrary nonzero initial values, there is no reason for the resulting terms to remain integral; rational values are in fact the natural generic situation. The remarkable phenomenon is rather the opposite one: for certain special integer initial conditions, the recurrence produces integers indefinitely. This distinction led to a simple question: what structure remains visible if one deliberately does not restrict attention to the exceptional integral solutions?
+
+The question arose in connection with an experiment using the two elementary transformations which replace one member of a four-term Somos--4 seed by the other root of the corresponding quadratic relation. Starting from four consecutive terms of the classical Somos--4 sequence
+
+$$
+1,1,2,3,
+$$
+
+with parameters
+
+$$
+p_1=p_2=1,\qquad p_4=4,
+$$
+
+these transformations generate alternative four-term seeds having the same Somos parameters. Iterating the transformations therefore provides a convenient way of exploring different rational orbits belonging to the same underlying Somos--4 family.
+
+In the course of this experiment, an unexpected connection appeared with OEIS A377264, a sequence arising from a nonlinear recurrence for coefficients of a Stieltjes continued fraction. This suggested looking at the problem from a direction somewhat different from the usual treatments of Somos sequences.
+
+There is already a rich theory surrounding Somos--4 recurrences, including the Laurent phenomenon, elliptic curves and elliptic divisibility sequences, theta functions, and combinatorial interpretations; see, for example, Fomin and Zelevinsky~\cite{FominZelevinsky2002} and Hone and Swart~\cite{HoneSwart2008}. The purpose here is not to reproduce or compete with those developments. Instead, we deliberately take a different route. The central object is the Somos biquadratic relation
+
+$$
+a_1^2a_4^2
++p_1a_1a_3^3
++p_1a_2^3a_4
++p_2a_2^2a_3^2
+-p_4a_1a_2a_3a_4=0,
+$$
+
+viewed not primarily as an elliptic or combinatorial object, but as a relation which may be transported through continued fractions, Hankel determinants, moment functionals, and orthogonal polynomials.
+
+This viewpoint leads naturally to the ratios
+
+$$
+u_n=\frac{a_{n-1}a_{n+1}}{a_n^2}.
+$$
+
+For shifted Hankel determinants these ratios have an independent interpretation: they are precisely the off-diagonal coefficients of the associated monic Jacobi recurrence. The Somos biquadratic relation therefore becomes a direct algebraic constraint on consecutive Jacobi coefficients. This observation is the main starting point of the present note.
+
+The connection with continued fractions is particularly useful because it also explains why nonlinear recurrences for individual Stieltjes coefficients can produce Somos sequences after contraction. The example associated with A377264 provides a concrete instance in which the continued-fraction coefficients, their contracted Jacobi coefficients, the Hankel determinants, and the resulting elliptic dynamics can all be seen within the same construction.
+
+The development that follows should therefore be read partly as an exploration. Some of the results are elementary characterizations, while later sections investigate the integrable structure suggested by them. In particular, the resulting two-dimensional map has a symmetric biquadratic invariant, is symplectic and reversible, and possesses genus-one invariant curves. This naturally raises the question of whether the continued-fraction level admits a lift to a Volterra- or modified-Volterra-type transformation. That latter direction is left explicitly as a conjectural one.
+
+The present version also has something of the character of a research notebook. It grew out of the attempt to understand several connections which were not apparent at the beginning, and some of the organization reflects that history. Nevertheless, the individual statements and calculations are presented independently of that correspondence, with the intention that the mathematical content should stand on its own.
+
+The motivating correspondence also served as a useful reminder that there is value in examining a familiar structure outside its most celebrated special cases. In the present setting, the rational solutions are not a nuisance to be removed in favor of the integral ones; they provide the generic setting in which the underlying algebraic and dynamical structure becomes visible. This note is an attempt to follow that structure.
+
+
+\section{Introduction}
+The purpose of this note is to identify the orthogonal-polynomial content of a Somos-type quartic relation satisfied by shifted Hankel determinants. The main result is a characterization in terms of the off-diagonal coefficients in the three-term recurrence for the monic orthogonal polynomials of the normalized shifted moment functional. More precisely, if these coefficients are denoted by $\widehat b_n$, then the quartic recurrence for the determinants is equivalent to the biquadratic relation
+\[
+\widehat b_n^2\widehat b_{n+1}^2-p_4\widehat b_n\widehat b_{n+1}
++p_1(\widehat b_n+\widehat b_{n+1})+p_2=0
+\]
+for all relevant indices. No diagonal coefficient $\widehat d_n$ appears. Since $\widehat b_n$ is also the ratio of two consecutive squared norms, the same equation gives an algebraic law for successive norm ratios. Recent work of Liu, Wang, and Zhang~\cite{LiuWangZhang2026} studies sufficient conditions and Hankel-determinant formulae for $(\alpha,\beta)$ Somos--4 sequences. The present note instead isolates an if-and-only-if condition directly on consecutive off-diagonal Jacobi coefficients.
+
+\section{The quartic relation}
+Let $(a_n)_{n\ge1}$ satisfy
+\begin{equation}
+ a_{n-3}^2a_n^2+p_1a_{n-3}a_{n-1}^3+p_1a_{n-2}^3a_n
+ +p_2a_{n-2}^2a_{n-1}^2-p_4a_{n-3}a_{n-2}a_{n-1}a_n=0.
+\end{equation}
+Here $p_1,p_2,p_4$ are fixed parameters. The entries may lie in $\mathbb R$, $\mathbb C$, or a suitable commutative field; no integrality assumption is made.
+
+\section{Stieltjes continued fraction and moments}
+Classical connections among continued fractions, moments, and Hankel determinants are discussed by Wall~\cite{Wall} and Flajolet~\cite{Flajolet1980}. Consider the formal Stieltjes continued fraction
+\begin{equation}
+S(x)=\cfrac{1}{1-\cfrac{c_1x}{1-\cfrac{c_2x}{1-\cfrac{c_3x}{\ddots}}}}
+=\sum_{n\ge0}\mu_nx^n.
+\end{equation}
+Its constant coefficient is $\mu_0=1$. Thus no additional coefficient $c_0$ is hidden in (2). If a numerator $c_0$ is placed in front of the fraction, then the moment sequence is merely rescaled by $c_0$. We use the normalization $c_0=1$.
+For $r,m\ge0$, define
+\begin{equation}
+\Delta_m^{(r)}=\det(\mu_{i+j+r})_{0\le i,j\le m-1},\qquad \Delta_0^{(r)}=1.
+\end{equation}
+The sequence considered here is the first shifted Hankel sequence
+\begin{equation}
+a_n=\Delta_n^{(1)}\qquad(n\ge1).
+\end{equation}
+For (2),
+\begin{equation}
+\Delta_n^{(1)}=c_1^n\prod_{j=1}^{n-1}(c_{2j}c_{2j+1})^{n-j}.
+\end{equation}
+In particular,
+\begin{equation}
+a_1=c_1,\quad a_2=c_1^2c_2c_3,\quad
+a_3=c_1^3c_2^2c_3^2c_4c_5,\quad
+a_4=c_1^4c_2^3c_3^3c_4^2c_5^2c_6c_7.
+\end{equation}
+
+\section{Continued fraction contraction}
+The even contraction of (2) is
+\begin{equation}
+S(x)=\cfrac{1}{1-d_0x-\cfrac{b_1x^2}{1-d_1x-\cfrac{b_2x^2}{1-d_2x-\ddots}}},
+\end{equation}
+where
+\begin{equation}
+d_0=c_1,\qquad d_n=c_{2n}+c_{2n+1},\qquad b_n=c_{2n-1}c_{2n}\quad(n\ge1).
+\end{equation}
+The associated monic orthogonal polynomials satisfy
+\begin{equation}
+P_{-1}(t)=0,\quad P_0(t)=1,\quad
+P_{n+1}(t)=(t-d_n)P_n(t)-b_nP_{n-1}(t).
+\end{equation}
+
+\section{The normalized shifted functional}
+The determinants in (4) belong to the shifted moments $(\mu_{n+1})$. Normalize them by setting
+\begin{equation}
+\widehat\mu_n=\frac{\mu_{n+1}}{c_1},\qquad \widehat L(t^n)=\widehat\mu_n.
+\end{equation}
+Let $(\widehat P_n)$ be the monic orthogonal polynomials for $\widehat L$ and write their recurrence as
+\begin{equation}
+\widehat P_{-1}(t)=0,\quad \widehat P_0(t)=1,\quad
+\widehat P_{n+1}(t)=(t-\widehat d_n)\widehat P_n(t)-\widehat b_n\widehat P_{n-1}(t).
+\end{equation}
+The shifted product formula identifies the off-diagonal coefficients as
+\begin{equation}
+\widehat b_n=c_{2n}c_{2n+1}\qquad(n\ge1),
+\end{equation}
+and consequently
+\begin{equation}
+a_n=c_1^n\prod_{j=1}^{n-1}\widehat b_j^{\,n-j}.
+\end{equation}
+Thus the Jacobi parameters relevant to $(a_n)$ are the $\widehat b_n$ of the normalized shifted functional, rather than the original $b_n=c_{2n-1}c_{2n}$.
+
+\section{The determinant-ratio reduction}
+Define
+\begin{equation}
+F(x,y)=x^2y^2-p_4xy+p_1(x+y)+p_2.
+\end{equation}
+\begin{theorem}
+Let $(a_n)_{n\ge1}$ be nonzero, and define
+\begin{equation}
+q_n=\frac{a_{n-1}a_{n+1}}{a_n^2}\qquad(n\ge2).
+\end{equation}
+For each $n\ge4$, the quartic relation (1) is equivalent to
+\begin{equation}
+F(q_{n-2},q_{n-1})=0.
+\end{equation}
+\end{theorem}
+\begin{proof}
+Divide (1) by $a_{n-3}a_{n-2}a_{n-1}a_n$. Using
+\[
+q_{n-2}=\frac{a_{n-3}a_{n-1}}{a_{n-2}^2},\qquad
+q_{n-1}=\frac{a_{n-2}a_n}{a_{n-1}^2},
+\]
+one obtains
+\[
+q_{n-2}q_{n-1}+\frac{p_1}{q_{n-2}}+\frac{p_1}{q_{n-1}}
++\frac{p_2}{q_{n-2}q_{n-1}}-p_4=0.
+\]
+Multiplication by $q_{n-2}q_{n-1}$ gives (16). Every step is reversible under the non-vanishing assumptions.
+\end{proof}
+
+\begin{proposition}
+For the shifted Hankel determinants (13),
+\begin{equation}
+\frac{a_{n-1}a_{n+1}}{a_n^2}=\widehat b_n=c_{2n}c_{2n+1}.
+\end{equation}
+\end{proposition}
+\begin{proof}
+In the quotient $a_{n-1}a_{n+1}/a_n^2$, the factors $c_1$ cancel. For every $j<n$, the exponent of $\widehat b_j$ is
+\[
+(n-1-j)+(n+1-j)-2(n-j)=0,
+\]
+while $\widehat b_n$ occurs once in $a_{n+1}$. This proves (17).
+\end{proof}
+
+\section{Characterization by the polynomial recurrence}
+\begin{theorem}[Characterization theorem]
+Let $\widehat L$ be a normalized quasi-definite moment functional, and let its monic orthogonal polynomials satisfy (11), with $\widehat b_n\ne0$. Let $(a_n)$ be the corresponding first shifted Hankel determinants, with the normalization in (13). Then the following are equivalent:
+\begin{enumerate}
+\item $(a_n)$ satisfies the Somos-type relation (1) for every $n\ge4$;
+\item the off-diagonal coefficients in the polynomial recurrence satisfy
+\begin{equation}
+F(\widehat b_m,\widehat b_{m+1})=0\qquad(m\ge2),
+\end{equation}
+that is,
+\begin{equation}
+\widehat b_m^2\widehat b_{m+1}^2-p_4\widehat b_m\widehat b_{m+1}
++p_1(\widehat b_m+\widehat b_{m+1})+p_2=0.
+\end{equation}
+\end{enumerate}
+The diagonal coefficients $\widehat d_n$ are unrestricted by this equivalence and do not occur in (19).
+\end{theorem}
+\begin{proof}
+By Proposition 2, $q_m=\widehat b_m$. For $n\ge4$, Theorem 1 states that (1) is equivalent to $F(q_{n-2},q_{n-1})=0$. Putting $m=n-2$ gives (18) for $m\ge2$. Since neither the determinant product (13) nor the resulting equation contains $\widehat d_n$, no condition on the diagonal coefficients arises.
+\end{proof}
+\begin{remark}
+The characterization is entirely off-diagonal. Once a nonzero sequence $(\widehat b_n)$ satisfying (19) has been chosen, the Somos constraint itself places no additional restriction on the diagonal Jacobi parameters $(\widehat d_n)$. Questions of quasi-definiteness, positivity, support, and recognition of a resulting measure may impose further conditions, but these are separate from the Somos relation.
+\end{remark}
+
+\section{The associated algebraic curve and dynamics}
+Every pair $(\widehat b_m,\widehat b_{m+1})$, $m\ge2$, lies on
+\begin{equation}
+C:\qquad F(x,y)=0.
+\end{equation}
+The equation is symmetric in $x$ and $y$ and defines a reversible algebraic correspondence. Solving for $y$ gives
+\begin{equation}
+y=\frac{p_4x-p_1\pm\sqrt{(p_4x-p_1)^2-4x^2(p_1x+p_2)}}{2x^2}.
+\end{equation}
+\begin{proposition}
+Assume $p_1\ne0$ and that
+\begin{equation}
+D(x)=-4p_1x^3+(p_4^2-4p_2)x^2-2p_1p_4x+p_1^2
+\end{equation}
+has no multiple root. Then the smooth projective model of $C$ is a genus-one curve.
+\end{proposition}
+\begin{proof}
+Regarding $F(x,y)=0$ as a quadratic equation in $y$ and introducing $z=2x^2y+p_1-p_4x$ gives the birational model $z^2=D(x)$. If $D$ is a square-free cubic, this is a nonsingular hyperelliptic curve of genus one.
+\end{proof}
+Given $(x,y)\in C$, the equation $F(y,z)=0$ has the backtracking root $z=x$. When $y\ne0$, the other root is
+\[
+z=\frac{p_4y-p_1}{y^2}-x.
+\]
+Selecting this branch defines the birational map
+\begin{equation}
+T(x,y)=\left(y,\frac{p_4y-p_1}{y^2}-x\right),
+\end{equation}
+where it is defined. Direct substitution shows that $T$ preserves $F$. Without a branch choice, (20) is naturally a reversible algebraic correspondence; with (23), it is a birational discrete dynamical system on $C$.
+
+\section{Squared norms}
+Let
+\begin{equation}
+h_n=\widehat L(\widehat P_n^2)
+\end{equation}
+be the squared norms for the normalized shifted functional. The monic three-term recurrence gives
+\begin{equation}
+h_n=\widehat b_nh_{n-1},\qquad \widehat b_n=\frac{h_n}{h_{n-1}}.
+\end{equation}
+\begin{corollary}[Norm-ratio characterization]
+Under the hypotheses of Theorem 3, the shifted Hankel determinants satisfy (1) for every $n\ge4$ if and only if
+\begin{equation}
+F\left(\frac{h_m}{h_{m-1}},\frac{h_{m+1}}{h_m}\right)=0\qquad(m\ge2).
+\end{equation}
+Equivalently,
+\begin{equation}
+\left(\frac{h_{m+1}}{h_{m-1}}\right)^2-p_4\frac{h_{m+1}}{h_{m-1}}
++p_1\left(\frac{h_m}{h_{m-1}}+\frac{h_{m+1}}{h_m}\right)+p_2=0.
+\end{equation}
+\end{corollary}
+\begin{proof}
+Substitute (25) into (19) and use $\widehat b_m\widehat b_{m+1}=h_{m+1}/h_{m-1}$.
+\end{proof}
+
+\section{Somos Parameters and the Associated First Integral}
+We use the notation $A(p_1,p_2)$ for the autonomous Somos--4 recurrence
+\begin{equation}
+a_{n+4}a_n=p_1a_{n+3}a_{n+1}+p_2a_{n+2}^2.
+\end{equation}
+Equivalently, after shifting the index,
+\[
+a_{n-2}a_{n+2}=p_1a_{n-1}a_{n+1}+p_2a_n^2.
+\]
+Thus $p_1$ and $p_2$ are the two fixed coefficients of the Somos recurrence. They are parameters of the recurrence itself and are independent of $n$. The notation $A(p_1,p_2)$ will always refer to the recurrence (28), together with initial values for which the required denominators are nonzero. The classical Somos--4 recurrence is the specialization
+\[
+A(1,1):\qquad a_{n+4}a_n=a_{n+3}a_{n+1}+a_{n+2}^2.
+\]
+More generally, $A(1,t)$ refers to $a_{n+4}a_n=a_{n+3}a_{n+1}+ta_{n+2}^2$.
+To pass from the bilinear recurrence to the Jacobi coefficients, define
+\begin{equation}
+u_n:=\frac{a_{n-1}a_{n+1}}{a_n^2},
+\end{equation}
+whenever the quotient is defined. Dividing the shifted form of (28) by $a_n^2$ gives
+\begin{equation}
+u_{n-1}u_n^2u_{n+1}=p_1u_n+p_2.
+\end{equation}
+Indeed, $u_{n-1}u_n^2u_{n+1}=a_{n-2}a_{n+2}/a_n^2$.
+For two consecutive values $x=u_n$ and $y=u_{n+1}$, define
+\begin{equation}
+H(x,y)=xy+p_1\left(\frac1x+\frac1y\right)+\frac{p_2}{xy}.
+\end{equation}
+Along every nonsingular orbit of (30), $H(u_n,u_{n+1})$ is independent of $n$. We denote this constant by $p_4$:
+\begin{equation}
+p_4=u_nu_{n+1}+p_1\left(\frac1{u_n}+\frac1{u_{n+1}}\right)+\frac{p_2}{u_nu_{n+1}}.
+\end{equation}
+The notation $p_4$ is chosen because this constant is associated with the fourth-order bilinear Somos recurrence. It is not a third coefficient in (28): $p_1,p_2$ are fixed recurrence coefficients, whereas $p_4$ is determined by $p_1,p_2$ and the initial data. Multiplying (32) by $u_nu_{n+1}$ yields
+\begin{equation}
+u_n^2u_{n+1}^2-p_4u_nu_{n+1}+p_1(u_n+u_{n+1})+p_2=0.
+\end{equation}
+Conversely,
+\begin{equation}
+u_{n+2}=\frac{p_4u_{n+1}-p_1}{u_{n+1}^2}-u_n.
+\end{equation}
+\begin{lemma}
+Let $u_n\ne0$ satisfy (30). Then $H(u_n,u_{n+1})=H(u_{n-1},u_n)$. Consequently, $p_4$ in (32) is independent of $n$.
+\end{lemma}
+\begin{proof}
+From (30), $u_{n-1}=(p_1u_n+p_2)/(u_n^2u_{n+1})$. Substitution into $H(u_{n-1},u_n)$ followed by simplification gives $H(u_n,u_{n+1})$.
+\end{proof}
+\begin{remark}
+The subscript in $p_4$ should not be interpreted as an index of a sequence. It records the connection with Somos--4 and distinguishes the first integral from the recurrence coefficients $p_1$ and $p_2$. Formula (32) is the definitive meaning of $p_4$ in this paper.
+\end{remark}
+
+\section{The Example Recorded as OEIS A377264}
+A concrete continued-fraction example related to the construction above is recorded in the OEIS as A377264. The OEIS entry begins with a sequence of continued-fraction coefficients $d(k)$ satisfying
+\begin{equation}
+d(k)=\frac{d(k-3)d(k-2)+1}{d(k-5)d(k-4)d(k-3)^2d(k-2)^2d(k-1)},
+\end{equation}
+with $d(0),d(1),d(2),d(3),d(4)=1,1,1,2,1$. The sequence A377264 itself is defined by $\operatorname{num}(d(2n+1))$, where $\operatorname{num}$ denotes the numerator in lowest terms. The same OEIS entry considers the Stieltjes continued fraction
+\begin{equation}
+S(x)=\cfrac{1}{1-\cfrac{d(0)x}{1-\cfrac{d(1)x}{1-\cfrac{d(2)x}{\ddots}}}}
+=\sum_{m\ge0}s_mx^m.
+\end{equation}
+Its Hankel transform is a shifted copy of the classical Somos--4 sequence A006720. More generally, the construction uses coefficients $c(k)$ satisfying
+\begin{equation}
+c(2k+1)=\frac{c(2k-2)c(2k-1)+t}{c(2k-4)c(2k-3)c(2k-2)^2c(2k-1)^2c(2k)},
+\end{equation}
+with a prescribed convention for negative subscripts. The associated Hankel determinants satisfy a Somos--4 recurrence of type $A(1,t)$.
+Three different sequences occur: the continued-fraction coefficients $d(k)$; A377264, formed from the numerators of $d(2n+1)$; and the Hankel determinants of the coefficient sequence of (36). Accordingly, A377264 should not be identified directly with either the Hankel sequence $a_n$ or the Jacobi sequence $\widehat b_n$. Under contraction,
+\begin{equation}
+\widehat b_n=c_{2n}c_{2n+1},
+\end{equation}
+subject to the initial-index convention adopted for the shifted functional. Thus the Jacobi variables are products of adjacent continued-fraction coefficients, not the odd coefficients alone. In the specialization $t=1$, the Hankel determinants satisfy $A(1,1)$, while $p_4$ is determined from two consecutive nonzero Jacobi coefficients by (32).
+\begin{remark}
+The OEIS entry also describes A377264 by odd multiples of a point on an elliptic curve. This provides independent evidence that the continued-fraction recurrence, its Hankel transform, and the associated Jacobi dynamics belong to the same elliptic setting. Because the OEIS formula concerns the numerators of $d(2n+1)$, whereas the present Jacobi variables are the products $d(2n)d(2n+1)$, the two elliptic descriptions should be compared through the continued-fraction contraction rather than by direct termwise identification.
+\end{remark}
+
+\subsection{A generalized continued-fraction construction}
+The recurrence appearing in the OEIS construction admits a direct generalization to arbitrary Somos parameters $p_1,p_2$. Let the Stieltjes coefficients $c_k$ satisfy
+\begin{equation}
+c_{2k+1}=\frac{p_1c_{2k-2}c_{2k-1}+p_2}{c_{2k-4}c_{2k-3}c_{2k-2}^{2}c_{2k-1}^{2}c_{2k}},
+\end{equation}
+with suitable prescribed initial values and with all required denominators nonzero. Define
+\begin{equation}
+u_k=c_{2k}c_{2k+1}.
+\end{equation}
+Since $c_{2k-4}c_{2k-3}=u_{k-2}$ and $c_{2k-2}c_{2k-1}=u_{k-1}$, multiplication of the defining recurrence by $c_{2k}$ gives
+\begin{equation}
+u_k=\frac{p_1u_{k-1}+p_2}{u_{k-2}u_{k-1}^{2}}.
+\end{equation}
+Equivalently,
+\begin{equation}
+u_{k-2}u_{k-1}^{2}u_k=p_1u_{k-1}+p_2.
+\end{equation}
+Thus, after an index shift,
+\begin{equation}
+u_{n-1}u_n^{2}u_{n+1}=p_1u_n+p_2,
+\end{equation}
+which is precisely the determinant-ratio recurrence associated with
+\begin{equation}
+a_{n+4}a_n=p_1a_{n+3}a_{n+1}+p_2a_{n+2}^{2}.
+\end{equation}
+Consequently, the corresponding shifted Hankel determinants form a sequence of type $A(p_1,p_2)$.
+
+The parameters $p_1,p_2$ do not determine the particular orbit. The additional quantity $p_4$ is the first integral
+\begin{equation}
+p_4=u_nu_{n+1}+p_1\left(\frac{1}{u_n}+\frac{1}{u_{n+1}}\right)+\frac{p_2}{u_nu_{n+1}},
+\end{equation}
+and is independent of $n$. Equivalently, the initial pair $(u_0,u_1)$ must satisfy
+\begin{equation}
+u_0^{2}u_1^{2}-p_4u_0u_1+p_1(u_0+u_1)+p_2=0.
+\end{equation}
+Hence, if $p_1,p_2,p_4$ are prescribed, one may choose an admissible nonzero value $u_0=r$ and determine $u_1$ from
+\begin{equation}
+u_1=\frac{p_4r-p_1\mathbin{\pm}\sqrt{(p_4r-p_1)^2-4r^2(p_1r+p_2)}}{2r^2}.
+\end{equation}
+The subsequent values are then generated by
+\begin{equation}
+u_{n+1}=\frac{p_1u_n+p_2}{u_{n-1}u_n^{2}}.
+\end{equation}
+Thus $p_4$ is incorporated through the choice of the initial point on the invariant biquadratic curve, rather than as an additional coefficient of the Somos recurrence.
+
+\subsection{Example: $p_1=p_2=1$ and $p_4=4$}
+As a concrete example, consider $p_1=p_2=1$ and $p_4=4$. The initial values satisfy
+\begin{equation}
+u_0^{2}u_1^{2}-4u_0u_1+u_0+u_1+1=0.
+\end{equation}
+Choosing $u_0=1$ gives $u_1^2-3u_1+2=0$, and hence $u_1=1$ or $u_1=2$. The choice $u_1=1$ gives the constant solution $u_n=1$. The nontrivial choice $u_0=1$, $u_1=2$ generates
+\begin{equation}
+u_{n+1}=\frac{u_n+1}{u_{n-1}u_n^{2}}.
+\end{equation}
+The first terms are
+\[
+u_0,u_1,u_2,u_3,u_4,\ldots=1,2,\frac34,\frac{14}{9},\frac{69}{49},\ldots.
+\]
+The corresponding shifted Hankel determinants therefore satisfy the classical Somos--4 recurrence
+\[
+a_{n+4}a_n=a_{n+3}a_{n+1}+a_{n+2}^{2},
+\]
+that is, they belong to the family $A(1,1)$.
+
+At the level of Stieltjes coefficients, any factorization $c_{2n}c_{2n+1}=u_n$ gives the same contracted Jacobi coefficients. In particular, one may choose
+\[
+c_{2n}=r_n,\qquad c_{2n+1}=\frac{u_n}{r_n},
+\]
+where the nonzero quantities $r_n$ are arbitrary. This freedom does not change the sequence $u_n$, the associated Hankel determinants, or the value of $p_4$.
+Thus the three levels of data can be distinguished as follows:
+\[
+(p_1,p_2)\longrightarrow\text{Somos family},
+\]
+\[
+(p_1,p_2,p_4)\longrightarrow\text{invariant elliptic curve},
+\]
+and
+\[
+(p_1,p_2,p_4,u_0)\longrightarrow\text{particular elliptic orbit}.
+\]
+The remaining factorization variables $r_n$ do not affect the contracted Jacobi dynamics.
+
+\section{Symplectic Elliptic Dynamics of the Jacobi Coefficients}
+Assume that the Hankel determinants $a_n$ satisfy $A(p_1,p_2)$, and let $u_n=\widehat b_n=a_{n-1}a_{n+1}/a_n^2$. By Section 10,
+\begin{equation}
+u_{n+2}=\frac{p_4u_{n+1}-p_1}{u_{n+1}^2}-u_n,
+\end{equation}
+which defines the birational map
+\begin{equation}
+T(x,y)=\left(y,\frac{p_4y-p_1}{y^2}-x\right).
+\end{equation}
+Define
+\begin{equation}
+I(x,y)=x^2y^2-p_4xy+p_1(x+y)+p_2.
+\end{equation}
+\begin{proposition}
+The polynomial $I$ is invariant under $T$: $I(T(x,y))=I(x,y)$. Consequently, every level set $C_K:I(x,y)=K$ is invariant.
+\end{proposition}
+\begin{proof}
+Set $z=(p_4y-p_1)/y^2-x$. Then $x+z=(p_4y-p_1)/y^2$, and
+\[
+I(y,z)-I(x,y)=(z-x)\bigl(y^2(z+x)-p_4y+p_1\bigr)=0.
+\]
+\end{proof}
+\begin{proposition}
+The map $T$ preserves the standard symplectic form $\omega=dx\wedge dy$. Equivalently, $\det DT(x,y)=1$ where $T$ is defined.
+\end{proposition}
+\begin{proof}
+Writing $T(x,y)=(y,z)$ gives
+\[
+DT(x,y)=\begin{pmatrix}0&1\\-1&-p_4/y^2+2p_1/y^3\end{pmatrix},
+\]
+whose determinant is $1$.
+\end{proof}
+\begin{corollary}
+With respect to the canonical Poisson bracket, $T$ is a Poisson map.
+\end{corollary}
+\begin{proposition}
+The inverse is
+\begin{equation}
+T^{-1}(x,y)=\left(\frac{p_4x-p_1}{x^2}-y,x\right).
+\end{equation}
+Moreover, $T$ is reversible: if $\rho(x,y)=(y,x)$, then $\rho\circ T\circ\rho=T^{-1}$.
+\end{proposition}
+
+\subsection{The invariant elliptic pencil}
+For a fixed $K$, the equation of $C_K$ is
+\begin{equation}
+x^2y^2+(p_1-p_4x)y+p_1x+p_2-K=0.
+\end{equation}
+Introduce $z=2x^2y+p_1-p_4x$. Completing the square gives
+\begin{equation}
+z^2=-4p_1x^3+(p_4^2-4p_2+4K)x^2-2p_1p_4x+p_1^2.
+\end{equation}
+\begin{theorem}
+If the cubic on the right has no repeated root, the smooth projective completion of $C_K$ is a curve of genus one, birational to the displayed cubic model.
+\end{theorem}
+
+\subsection{Involutions and QRT structure}
+Define
+\[
+\iota_s(x,y)=(y,x),\qquad
+\iota_v(x,y)=\left(x,\frac{p_4x-p_1}{x^2}-y\right).
+\]
+Then $T=\iota_v\circ\iota_s$. Consequently, $T$ is a symmetric QRT-type map associated with the biquadratic pencil $C_K$, in the sense of Quispel, Roberts, and Thompson~\cite{QRT1988}.
+
+\subsection{A commuting elliptic Hamiltonian flow}
+Since $T$ preserves both the symplectic form and $I$, consider
+\begin{equation}
+\dot x=\frac{\partial I}{\partial y},\qquad \dot y=-\frac{\partial I}{\partial x}.
+\end{equation}
+Explicitly,
+\begin{equation}
+\dot x=2x^2y-p_4x+p_1,\qquad \dot y=-2xy^2+p_4y-p_1.
+\end{equation}
+Under the substitution above, $\dot x=z$ and the flow is elliptic. Since $T$ is symplectic and $I\circ T=I$, $T$ commutes with the Hamiltonian flow wherever both sides are defined.
+
+\section{Zero-Diagonal Jacobi Matrices and a Possible Volterra Lift}
+The diagonal Jacobi coefficients are not constrained by the Somos identity. One may therefore make the canonical choice $\widehat d_n=0$, giving
+\begin{equation}
+\widehat P_{n+1}(t)=t\widehat P_n(t)-\widehat b_n\widehat P_{n-1}(t).
+\end{equation}
+Then $\widehat P_n(-t)=(-1)^n\widehat P_n(t)$. After a choice of square roots $\alpha_n^2=\widehat b_n$, the associated symmetric Jacobi matrix is zero-diagonal and bipartite. Such matrices are natural spectral operators for the Kac--van Moerbeke, or Volterra, hierarchy; see van Moerbeke~\cite{VanMoerbeke1976} and Michor and Teschl~\cite{MichorTeschl2009}. In one standard normalization,
+\begin{equation}
+\dot u_n=u_n(u_{n+1}-u_{n-1}).
+\end{equation}
+The present discrete evolution is reversible, symplectic, and preserves a pencil of genus-one curves, but a direct identification with the first Volterra flow should not be made without an additional argument. The contraction
+\begin{equation}
+u_n=\widehat b_n=c_{2n}c_{2n+1}
+\end{equation}
+forgets the factorization into individual Stieltjes coefficients. Writing $c_{2n}=r_n$ and $c_{2n+1}=u_n/r_n$ exposes an additional multiplicative variable invisible in the projected Jacobi dynamics.
+\begin{conjecture}
+There exists a lift of the birational Jacobi map $T(u_n,u_{n+1})=(u_{n+1},u_{n+2})$ to a birational transformation of the Stieltjes coefficients $c_j$ such that:
+\begin{enumerate}
+\item the contraction $u_n=c_{2n}c_{2n+1}$ recovers $T$;
+\item the lifted transformation possesses a Lax or Darboux representation of Volterra or modified-Volterra type;
+\item the biquadratic first integral $I$ is obtained from a spectral invariant of the lifted transformation.
+\end{enumerate}
+\end{conjecture}
+The example A377264 is particularly suggestive in this context. A first step toward proving the conjecture would be to determine the translation point induced by $T$ on the Weierstrass model. A second would be to lift this translation to the factorization variables and compare the resulting transformation with known Volterra and modified-Volterra Darboux maps.
+
+\begin{thebibliography}{99}
+
+\bibitem{Chihara}
+T. S. Chihara,
+\emph{An Introduction to Orthogonal Polynomials},
+Gordon and Breach, 1978.
+
+\bibitem{Wall}
+H. S. Wall,
+\emph{Analytic Theory of Continued Fractions},
+Chelsea, 1948.
+
+\bibitem{Ismail}
+M. E. H. Ismail,
+\emph{Classical and Quantum Orthogonal Polynomials in One Variable},
+Cambridge University Press, 2005.
+
+\bibitem{Flajolet1980}
+P. Flajolet,
+Combinatorial aspects of continued fractions,
+\emph{Discrete Mathematics} \textbf{32} (1980), 125--161.
+
+\bibitem{FominZelevinsky2002}
+S. Fomin and A. Zelevinsky,
+The Laurent phenomenon,
+\emph{Advances in Applied Mathematics} \textbf{28} (2002), 119--144.
+
+\bibitem{HoneSwart2008}
+A. N. W. Hone and C. Swart,
+Integrality and the Laurent phenomenon for Somos--4 and Somos--5 sequences,
+\emph{Mathematical Proceedings of the Cambridge Philosophical Society}
+\textbf{145} (2008), 65--85.
+
+\bibitem{Hone}
+A. N. W. Hone,
+Continued fractions and Hankel determinants from hyperelliptic curves,
+\emph{Communications on Pure and Applied Mathematics} \textbf{74} (2021), 2310--2347.
+
+\bibitem{QRT1988}
+G. R. W. Quispel, J. A. G. Roberts, and C. J. Thompson,
+Integrable mappings and soliton equations,
+\emph{Physics Letters A} \textbf{126} (1988), no.~7, 419--421.
+
+\bibitem{VanMoerbeke1976}
+P. van Moerbeke,
+The spectrum of Jacobi matrices,
+\emph{Inventiones Mathematicae} \textbf{37} (1976), 45--81.
+
+\bibitem{MichorTeschl2009}
+J. Michor and G. Teschl,
+On the equivalence of different Lax pairs for the Kac--van Moerbeke hierarchy,
+in \emph{Modern Analysis and Applications: The Mark Krein Centenary Conference},
+Operator Theory: Advances and Applications, vol.~191,
+Birkh\"auser, 2009, pp.~445--453.
+
+\bibitem{LiuWangZhang2026}
+F. Liu, Y. Wang, and Z. Zhang,
+Hankel transform and $(\alpha,\beta)$ Somos--4 sequences,
+\emph{arXiv preprint} arXiv:2608.08703 (2026).
+
+\bibitem{A377264}
+T. Scheuerle,
+Sequence A377264,
+\emph{The On-Line Encyclopedia of Integer Sequences},
+\url{https://oeis.org/A377264}, accessed 31 August 2026.
+
+\end{thebibliography}
+\end{document}
