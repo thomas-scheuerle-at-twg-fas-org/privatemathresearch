@@ -15,7 +15,7 @@
 
 \title{A Somos-Type Constraint on Hankel Determinants and\\Jacobi Recurrence Coefficients}
 \author{Thomas Scheuerle \and Michael Somos}
-\date{August 31, 2026}
+\date{September 2, 2026}
 
 \begin{document}
 \maketitle
@@ -81,7 +81,7 @@ The purpose of this note is to identify the orthogonal-polynomial content of a S
 \widehat b_n^2\widehat b_{n+1}^2-p_4\widehat b_n\widehat b_{n+1}
 +p_1(\widehat b_n+\widehat b_{n+1})+p_2=0
 \]
-for all relevant indices. No diagonal coefficient $\widehat d_n$ appears. Since $\widehat b_n$ is also the ratio of two consecutive squared norms, the same equation gives an algebraic law for successive norm ratios. Recent work of Liu, Wang, and Zhang~\cite{LiuWangZhang2026} studies sufficient conditions and Hankel-determinant formulae for $(\alpha,\beta)$ Somos--4 sequences. The present note instead isolates an if-and-only-if condition directly on consecutive off-diagonal Jacobi coefficients.
+for all relevant indices. No diagonal coefficient $\widehat d_n$ appears. Since $\widehat b_n$ is also the ratio of two consecutive squared norms, the same equation gives an algebraic law for successive norm ratios. Liu, Wang, and Zhang~\cite{LiuWangZhang2026} study sufficient conditions under which Hankel transforms of generating functions satisfy $(\alpha,\beta)$ Somos--4 identities. They also use the standard quotient variables \[ x_n=\frac{S_{n-1}S_{n+1}}{S_n^2} \] and their rational first integral in the analysis of even and odd subsequences. The purpose of the present note is different. Assuming that the terms are first-shifted Hankel determinants of a Stieltjes moment sequence, we identify these quotient variables with the off-diagonal Jacobi coefficients of the normalized shifted moment functional. This yields an if-and-only-if characterization of the Somos identity as a symmetric biquadratic constraint on consecutive Jacobi coefficients. In particular, the diagonal Jacobi coefficients are absent from, and remain unrestricted by, the Somos constraint.
 
 \section{The quartic relation}
 Let $(a_n)_{n\ge1}$ satisfy
@@ -427,6 +427,73 @@ and
 \]
 The remaining factorization variables $r_n$ do not affect the contracted Jacobi dynamics.
 
+\subsection{An integral-moment gauge for the family $A(1,N)$}
+
+The factorization freedom can be used to impose an additional arithmetic
+condition when integral moments are desired. A concrete construction for the
+family $A(1,N)$ is recorded in OEIS A377441~\cite{A377441}. We retain the
+indexing used in that entry in order to avoid conflating it with the one-based
+coefficients $c_j$ of (2).
+
+Let $d(m,N)$ be defined, with the initial convention of A377441, by
+\begin{equation}
+ d(m,N)=
+ \begin{cases}
+ \displaystyle
+ \frac{d(m-3,N)d(m-2,N)+N}
+ {d(m-5,N)d(m-4,N)d(m-3,N)^2d(m-2,N)^2d(m-1,N)},
+ &m\text{ even},\\[1.2em]
+ \displaystyle
+ \frac{1}{d(m-1,N)d(m-2,N)},
+ &m\text{ odd}.
+ \end{cases}
+\end{equation}
+The convention for the initial indices is $d(m,N)=1$ before the recurrence
+starts, as specified in the OEIS entry. The associated Stieltjes continued
+fraction produces the integer moment rows recorded in A377441. Its shifted
+Hankel determinants satisfy the Somos--4 recurrence of type $A(1,N)$.
+
+The structurally important additional condition is the reciprocal parity rule
+\begin{equation}
+ d(m,N)d(m-1,N)d(m-2,N)=1
+ \qquad(m\text{ odd}).
+\end{equation}
+This condition is not imposed by the Somos recurrence. Rather, it fixes the
+otherwise free factorization at every second step. In the notation of the
+present paper, the contracted quantities remain products of adjacent
+Stieltjes coefficients, whereas the reciprocal parity rule selects particular
+individual factors above that contracted orbit.
+
+To see the distinction, suppose that a contracted coefficient is written as
+\[
+ u_n=c_{2n}c_{2n+1}.
+\]
+Without an additional condition, one may choose
+\[
+ c_{2n}=r_n,\qquad c_{2n+1}=\frac{u_n}{r_n}
+\]
+with arbitrary nonzero $r_n$. An A377441-type reciprocal relation removes
+this arbitrariness recursively. The projected Jacobi dynamics and the shifted
+Hankel determinants are preserved, but the selected moment sequence is
+changed. For $A(1,N)$, the construction in A377441 selects a representative
+having integral moments even though its individual continued-fraction
+coefficients are generally rational.
+
+Thus moment integrality is not a consequence of the Somos relation alone, nor
+of integrality of the individual Stieltjes coefficients. It is an additional
+property of the chosen lift from the contracted Jacobi coefficients to the
+continued-fraction coefficients. For the family $A(1,N)$, the recurrence above
+supplies an explicit optional constraint that enforces this arithmetic choice.
+
+\begin{remark}
+The indexing of A377441 and the indexing of the shifted determinants in the
+present paper differ by initial terms. Accordingly, the continued-fraction
+coefficients and the contracted products should be compared only after
+applying the corresponding shift. The arithmetic statement is unaffected:
+the A377441 construction gives an integral moment sequence whose Hankel
+transform belongs to the family $A(1,N)$.
+\end{remark}
+
 \section{Symplectic Elliptic Dynamics of the Jacobi Coefficients}
 Assume that the Hankel determinants $a_n$ satisfy $A(p_1,p_2)$, and let $u_n=\widehat b_n=a_{n-1}a_{n+1}/a_n^2$. By Section 10,
 \begin{equation}
@@ -501,6 +568,184 @@ Explicitly,
 \dot x=2x^2y-p_4x+p_1,\qquad \dot y=-2xy^2+p_4y-p_1.
 \end{equation}
 Under the substitution above, $\dot x=z$ and the flow is elliptic. Since $T$ is symplectic and $I\circ T=I$, $T$ commutes with the Hamiltonian flow wherever both sides are defined.
+
+
+\section{Zero-Diagonal Prefix Convergents and Recovery of the Jacobi Orbit}
+
+We now exploit the freedom in the diagonal Jacobi coefficients by making the
+specific choice
+\[
+\widehat d_n=0\qquad(n\geq 0).
+\]
+This is not claimed to describe every moment functional covered by the
+characterization theorem.  It selects a particularly tractable and
+mathematically interesting representative for which the relation between the
+Somos orbit and the prefix convergents can be examined directly.
+
+Put $z=x^2$ and abbreviate $b_n=\widehat b_n$.  Consider the finite prefix
+convergents
+\begin{equation}
+ C_n(z)=
+ \cfrac{1}{1-\cfrac{b_1z}{1-\cfrac{b_2z}{\ddots-
+ \cfrac{b_nz}{1}}}},
+ \qquad C_0(z)=1.
+ \label{eq:zero-diagonal-convergents}
+\end{equation}
+Thus all the $C_n$ are prefixes of one and the same formal continued fraction.
+Let $Q_n(z)$ denote the corresponding denominator continuants, normalized by
+\begin{equation}
+ Q_{-1}(z)=Q_0(z)=1,\qquad
+ Q_n(z)=Q_{n-1}(z)-b_nzQ_{n-2}(z).
+ \label{eq:Q-recurrence}
+\end{equation}
+In particular, $Q_n(0)=1$ for every $n$.
+
+\begin{proposition}[Successive-convergent difference]
+For $n\geq1$,
+\begin{equation}
+ C_n(z)-C_{n-1}(z)
+ =\frac{(b_1b_2\cdots b_n)z^n}{Q_n(z)Q_{n-1}(z)}.
+ \label{eq:convergent-difference}
+\end{equation}
+Consequently, if
+\begin{equation}
+ R_n(z):=
+ \frac{C_n(z)-C_{n-1}(z)}
+ {z\bigl(C_{n-1}(z)-C_{n-2}(z)\bigr)}
+ \qquad(n\geq2),
+ \label{eq:Rn-definition}
+\end{equation}
+then the apparent singularity at $z=0$ is removable and
+\begin{equation}
+ R_n(z)=b_n\frac{Q_{n-2}(z)}{Q_n(z)},
+ \qquad R_n(0)=b_n.
+ \label{eq:Rn-exact}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+The standard continuant determinant identity, or a direct induction using
+\eqref{eq:Q-recurrence}, gives \eqref{eq:convergent-difference}.  Dividing its
+$n$th instance by $z$ times its $(n-1)$st instance gives
+\[
+ R_n(z)=
+ \frac{b_1\cdots b_n}{b_1\cdots b_{n-1}}
+ \frac{Q_{n-2}(z)}{Q_n(z)}.
+\]
+Since every $Q_j$ has constant term $1$, evaluation at $z=0$ proves the last
+claim.
+\end{proof}
+
+This gives an exact answer to one part of the convergent-level question.  The
+Jacobi coefficient is recoverable from three consecutive prefix convergents,
+not by their common value, but by the first normalized difference that has not
+yet stabilized.
+
+\begin{theorem}[Somos law for normalized convergent increments]
+Assume that the shifted Hankel determinants satisfy the Somos-type relation,
+so that
+\[
+ F(b_n,b_{n+1})=0,
+ \qquad
+ F(X,Y)=X^2Y^2-p_4XY+p_1(X+Y)+p_2.
+\]
+Then, for every relevant $n$,
+\begin{equation}
+ F\bigl(R_n(0),R_{n+1}(0)\bigr)=0,
+ \label{eq:Somos-R-zero}
+\end{equation}
+where $R_n$ is defined solely from four neighboring prefix convergents by
+\eqref{eq:Rn-definition}.  Equivalently,
+\begin{multline}
+ \left.
+ F\left(
+ \frac{C_n-C_{n-1}}{z(C_{n-1}-C_{n-2})},
+ \frac{C_{n+1}-C_n}{z(C_n-C_{n-1})}
+ \right)\right|_{z=0}=0,
+ \label{eq:Somos-convergent-increments}
+\end{multline}
+where both quotients are interpreted by removal of their singularities at
+$z=0$.
+\end{theorem}
+
+\begin{proof}
+By \eqref{eq:Rn-exact}, $R_n(0)=b_n$ and
+$R_{n+1}(0)=b_{n+1}$.  Substitution into the Jacobi biquadratic gives the
+claim.
+\end{proof}
+
+The theorem is stronger than a merely heuristic analogy between the Somos
+recurrence and the convergents: it gives a precise finite-level carrier of the
+Somos dynamics.  At the same time, it identifies the correct limiting scale.
+The unnormalized differences tend to zero to successively higher orders,
+whereas division by the newly appearing power of $z$ retains the Jacobi
+coefficient.
+
+A useful approximation follows without evaluating the removable singularity
+exactly.  From \eqref{eq:Q-recurrence},
+\begin{equation}
+ R_n(z)=b_n\left(1+(b_{n-1}+b_n)z+O(z^2)\right).
+ \label{eq:Rn-first-order}
+\end{equation}
+Hence
+\begin{equation}
+ F\bigl(R_n(z),R_{n+1}(z)\bigr)=O(z).
+ \label{eq:Somos-approx-first}
+\end{equation}
+A first corrected estimator is
+\begin{equation}
+ B_n^{[1]}(z):=
+ \frac{R_n(z)}{1+z\bigl(R_{n-1}(z)+R_n(z)\bigr)},
+ \label{eq:corrected-estimator}
+\end{equation}
+for which
+\begin{equation}
+ B_n^{[1]}(z)=b_n+O(z^2),\qquad
+ F\bigl(B_n^{[1]}(z),B_{n+1}^{[1]}(z)\bigr)=O(z^2).
+ \label{eq:corrected-order}
+\end{equation}
+Thus finite evaluations of neighboring convergents provide systematically
+improvable approximations to the Jacobi orbit.  This is useful when the
+convergents are available numerically or symbolically but extraction of their
+first non-stabilized coefficient is inconvenient.
+
+There is also a direct error-amplitude interpretation.  Since each additional
+level first contributes at order $z^n$, define
+\begin{equation}
+ E_n:=[z^n]\bigl(C_n(z)-C_{n-1}(z)\bigr).
+ \label{eq:error-amplitude}
+\end{equation}
+Equation \eqref{eq:convergent-difference} yields
+\begin{equation}
+ E_n=b_1b_2\cdots b_n,
+ \qquad b_n=\frac{E_n}{E_{n-1}}.
+ \label{eq:error-amplitude-product}
+\end{equation}
+The Somos biquadratic is therefore equivalent to
+\begin{equation}
+ \left(\frac{E_n}{E_{n-1}}\right)^2
+ \left(\frac{E_{n+1}}{E_n}\right)^2
+ -p_4\frac{E_{n+1}}{E_{n-1}}
+ +p_1\left(\frac{E_n}{E_{n-1}}+
+ \frac{E_{n+1}}{E_n}\right)+p_2=0.
+ \label{eq:error-amplitude-Somos}
+\end{equation}
+This is a closed Somos-type law for the leading increments of successive
+prefix approximants.
+
+\begin{remark}
+The literal substitution $C_{n-1}=C_n=C_{n+1}=S$ is not the appropriate test
+for the zero-diagonal case, because it is performed before the first
+non-stabilized coefficient is resolved.  Equations
+\eqref{eq:Somos-convergent-increments} and
+\eqref{eq:error-amplitude-Somos} show that the dynamics survives in the
+normalized confluence of the convergents.  This does not yet give a scalar
+algebraic equation for $S(z)$ alone.  It gives instead an exact hierarchy of
+constraints on the successive approximation layers by which the prefix
+convergents build $S(z)$.  Any further scalar equation for $S$ must be
+compatible with this refined limit rather than inferred from the unscaled
+diagonal specialization.
+\end{remark}
 
 \section{Zero-Diagonal Jacobi Matrices and a Possible Volterra Lift}
 The diagonal Jacobi coefficients are not constrained by the Somos identity. One may therefore make the canonical choice $\widehat d_n=0$, giving
@@ -592,5 +837,10 @@ Sequence A377264,
 \emph{The On-Line Encyclopedia of Integer Sequences},
 \url{https://oeis.org/A377264}, accessed 31 August 2026.
 
+\bibitem{A377441}
+T. Scheuerle,
+Sequence A377441,
+\emph{The On-Line Encyclopedia of Integer Sequences},
+\url{https://oeis.org/A377441}, accessed 1 September 2026.
 \end{thebibliography}
 \end{document}
