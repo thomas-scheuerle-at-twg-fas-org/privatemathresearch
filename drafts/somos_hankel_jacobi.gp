@@ -108,15 +108,33 @@ monic_ops(nu, K) = {
 
 /* Conservative seralgdep search.  A returned relation R(x,y) means
    R(S(y),y)=O(y^M).  It is evidence, not a proof, unless verified
-   independently from the recurrence. */
-guess_algebraic(S, maxpow=4, maxdeg=8) = {
-  my(R=0);
+   independently from the recurrence.
+
+   Experimental mode: clear denominators in the truncated series first,
+   then run seralgdep on T(y)=L*S(y).  This can help when rational
+   coefficients hinder recognition. */
+guess_algebraic(S, M, maxpow=4, maxdeg=8, scale_first=1) = {
+  my(R=0, L=1, T=S, vv);
+
+  if(scale_first,
+    vv = vector(M,k,polcoef(S,k-1,'y));
+    for(k=1,#vv, L = lcm(L, denominator(vv[k])));
+    if(L!=1, T = subst(S,'y,'y/L)*L);
+  );
+
   for(p=2,maxpow,
     for(r=4,maxdeg,
-      R=seralgdep(S,p,r);
-      if(R!=0, return([p,r,R,subst(R,x,S)]));
+      R=seralgdep(T,p,r);
+      if(R!=0,
+        if(scale_first,
+          return(["scaled",L,p,r,R,subst(R,x,T)]),
+          return(["raw",1,p,r,R,subst(R,x,S)])
+        )
+      );
     )
   );
+
+  if(scale_first, return(guess_algebraic(S,M,maxpow,maxdeg,0)));
   0;
 };
 
@@ -185,13 +203,14 @@ somos_hankel_jacobi(p1,p2,p3,p4,nextra,r0=0) = {
   print("   Seed convention check: -a4/a2 = ",-A[4]/A[2]," (requested p3=",p3,")");
   print("   Somos recurrence check through available terms: ",if(ok,"OK","FAILED"));
 
-  alg=guess_algebraic(S,4,min(10,N+2));
+  alg=guess_algebraic(S,M,4,min(10,N+2),1);
   print("\n5. seralgdep generating-function search");
   if(alg==0,
     print("No relation found in the searched bounds."),
-    print("degree in S <= ",alg[1],", coefficient degree in y <= ",alg[2]);
-    print("R(x,y) = ",alg[3]);
-    print("verification R(S(y),y) = ",alg[4]);
+    print("mode=",alg[1],", denominator scale L=",alg[2]);
+    print("degree in S <= ",alg[3],", coefficient degree in y <= ",alg[4]);
+    print("R(x,y) = ",alg[5]);
+    print("verification (in selected mode) = ",alg[6]);
   );
 
   norms=vector(N+1,k,inner_moment(OP[k],OP[k],nu));

@@ -15,13 +15,13 @@
 
 \title{A Somos-Type Constraint on Hankel Determinants and\\Jacobi Recurrence Coefficients}
 \author{Thomas Scheuerle \and Michael Somos}
-\date{September 2, 2026}
+\date{September 3, 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Assuming that a sequence arises as the shifted Hankel transform of the coefficient sequence of a Stieltjes continued fraction, we translate a Somos-type quartic relation into a constraint on the recurrence coefficients of the associated monic orthogonal polynomials. We prove a characterization: the shifted Hankel determinants satisfy the Somos-type relation if and only if consecutive off-diagonal Jacobi coefficients satisfy a fixed symmetric biquadratic equation. Equivalently, the Somos constraint imposes an algebraic law on successive ratios of squared norms. The diagonal Jacobi coefficients do not occur in this condition.
+Assuming that a sequence arises as the shifted Hankel transform of the coefficient sequence of a Stieltjes continued fraction, we translate a Somos-type quartic relation into a constraint on the recurrence coefficients of the associated monic orthogonal polynomials. We prove a characterization: the shifted Hankel determinants satisfy the Somos-type relation if and only if consecutive off-diagonal Jacobi coefficients satisfy a fixed symmetric biquadratic equation. Equivalently, the Somos constraint imposes an algebraic law on successive ratios of squared norms. The diagonal Jacobi coefficients do not occur in this condition. We also record an explicit quadratic algebraic generating-function ansatz whose coefficient Hankel determinants reproduce, in the accompanying symbolic computation, the Somos--4 family $A(1,t)$ with prescribed initial determinants.  
 \end{abstract}
 
 \section*{Preface and motivation}
@@ -493,6 +493,85 @@ applying the corresponding shift. The arithmetic statement is unaffected:
 the A377441 construction gives an integral moment sequence whose Hankel
 transform belongs to the family $A(1,N)$.
 \end{remark}
+
+
+\section{Direct generation from an algebraic generating function}
+\label{sec:algebraic-generating-function}
+
+The preceding constructions begin with continued-fraction or Jacobi data and
+then form Hankel determinants.  Here we show how to generate the Somos-4 sequence directly from the generating function of moments.
+
+Let $\lambda,\eta,\tau$ be parameters and let
+\[
+ G(z)=\sum_{n\geq0}g_nz^n.
+\]
+Define the three polynomials
+\begin{align}
+ A(z)={}&\lambda(\eta\tau-\eta^2)z^2
+ +\bigl(-(\lambda^2\eta+2)\tau
+       +\lambda^2\eta^2+2\eta-2\lambda\bigr)z
+ +\lambda(\tau+\lambda-\eta),                                      \label{eq:gf-A}\\
+ B(z)={}&-\lambda^2\eta\tau z^2
+ +\bigl((2\lambda^3\eta+3\lambda)\tau
+       -\lambda^3\eta^2-\lambda\eta+3\lambda^2\bigr)z
+ +\lambda^2(\eta-2\lambda-2\tau),                                  \label{eq:gf-B}\\
+ C(z)={}&-\bigl((\lambda^4\eta+\lambda^2)\tau+\lambda^3\bigr)z
+ +\lambda^3(\tau+\lambda).                                         \label{eq:gf-C}
+\end{align}
+The generating function is the formal-power-series solution of
+\begin{equation}
+ A(z)G(z)^2+B(z)G(z)+C(z)=0,
+ \qquad G(0)=\lambda.                                                \label{eq:gf-quadratic}
+\end{equation}
+Equivalently, put
+\[
+ D(z)=B(z)^2-4A(z)C(z)
+\]
+and choose the formal square root $R(z)$ by
+\begin{equation}
+ R(z)^2=D(z),\qquad R(0)=-\lambda^2\eta.                             \label{eq:gf-root-normalization}
+\end{equation}
+Then
+\begin{equation}
+ \boxed{\displaystyle
+ G(z)=\frac{-B(z)+R(z)}{2A(z)}.}                                     \label{eq:gf-explicit}
+\end{equation}
+This normalization, rather than a fixed printed choice of a plus or minus
+sign, is essential.  Indeed,
+\[
+ 2A(0)\lambda+B(0)=-\lambda^2\eta,
+\]
+so \eqref{eq:gf-root-normalization} makes
+\eqref{eq:gf-explicit} select precisely the root with constant coefficient
+$g_0=\lambda$.  When the square-root routine chooses the opposite constant
+term, its sign must be reversed. 
+
+For $n\geq1$, form the ordinary Hankel determinants
+\begin{equation}
+ H_n=\det(g_{i+j})_{0\leq i,j\leq n-1}.                              \label{eq:gf-Hankel}
+\end{equation}
+We find now that
+\begin{equation}
+ H_1=\lambda,\qquad H_2=1,\qquad H_3=1,\qquad H_4=\eta,              \label{eq:gf-initial-Hankel}
+\end{equation}
+and 
+\begin{equation}
+ H_{n+4}H_n=H_{n+3}H_{n+1}+\tau H_{n+2}^2.                           \label{eq:gf-Somos}
+\end{equation}
+Thus the three parameters have distinct roles: $\tau$ is the second
+coefficient of the Somos family $A(1,\tau)$, whereas $\lambda$ and $\eta$
+select the initial Hankel determinants $(H_1,H_2,H_3,H_4)$.
+
+The quotient expression \eqref{eq:gf-explicit} requires
+$A(0)=\lambda(\tau+\lambda-\eta)\neq0$.  The branch normalization is
+nondegenerate when $\lambda\eta\neq0$, because
+\[
+ \left.\frac{\partial}{\partial X}
+ \bigl(A(z)X^2+B(z)X+C(z)\bigr)\right|_{z=0,\,X=\lambda}
+ =-\lambda^2\eta.
+\]
+These are the admissibility conditions used implicitly by the formal-series
+construction.  
 
 \section{Symplectic Elliptic Dynamics of the Jacobi Coefficients}
 Assume that the Hankel determinants $a_n$ satisfy $A(p_1,p_2)$, and let $u_n=\widehat b_n=a_{n-1}a_{n+1}/a_n^2$. By Section 10,
