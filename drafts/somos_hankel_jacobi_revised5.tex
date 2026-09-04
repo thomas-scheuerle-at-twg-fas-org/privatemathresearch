@@ -15,7 +15,7 @@
 
 \title{A Somos-Type Constraint on Hankel Determinants and\\Jacobi Recurrence Coefficients}
 \author{Thomas Scheuerle \and Michael Somos}
-\date{September 3, 2026}
+\date{September 4, 2026}
 
 \begin{document}
 \maketitle
@@ -561,6 +561,96 @@ and
 Thus the three parameters have distinct roles: $\tau$ is the second
 coefficient of the Somos family $A(1,\tau)$, whereas $\lambda$ and $\eta$
 select the initial Hankel determinants $(H_1,H_2,H_3,H_4)$.
+
+\subsection{The first shift and recovery of the Stieltjes coefficients}
+The same algebraic generating function has an additional property which is
+special to this construction.  Define the once-shifted Hankel determinants by
+\begin{equation}
+ K_n=\det(g_{i+j+1})_{0\leq i,j\leq n-1},\qquad K_0=1.
+ \label{eq:gf-shifted-Hankel}
+\end{equation}
+Direct formal expansion of \eqref{eq:gf-quadratic} and determinant evaluation
+give
+\begin{equation}
+ K_n=H_{n+1}\qquad(n\geq0).
+ \label{eq:gf-shift-identity}
+\end{equation}
+Consequently, the Hankel transform of the moment sequence
+$(g_1,g_2,g_3,\ldots)$ is the same Somos--4 sequence as in
+\eqref{eq:gf-Somos}, with its first term removed.  This shift covariance is
+not a general property of Hankel transforms.  In particular, no analogous
+claim is made for the twice-shifted moments $(g_2,g_3,g_4,\ldots)$.
+
+This observation removes the factorization freedom which is present when only
+one Hankel transform is known.  To make this explicit, write the generating
+function as a Stieltjes continued fraction with a leading numerator,
+\begin{equation}
+ G(z)=\cfrac{c_0}{1-\cfrac{c_1z}{1-\cfrac{c_2z}{1-\cfrac{c_3z}{\ddots}}}}.
+ \label{eq:gf-S-fraction}
+\end{equation}
+For nonzero coefficients, the standard product formulae are
+\begin{align}
+ H_n&=c_0^n\prod_{j=1}^{n-1}(c_{2j-1}c_{2j})^{n-j},
+ \label{eq:gf-unshifted-product}\\
+ K_n&=(c_0c_1)^n\prod_{j=1}^{n-1}(c_{2j}c_{2j+1})^{n-j}.
+ \label{eq:gf-shifted-product}
+\end{align}
+Thus $H_1=c_0$, $H_2=c_0^2c_1c_2$, and $K_1=c_0c_1$.
+Introduce the determinant ratios
+\begin{equation}
+ U_n=\frac{H_{n-1}H_{n+1}}{H_n^2},\qquad
+ V_n=\frac{K_{n-1}K_{n+1}}{K_n^2}\qquad(n\geq1).
+ \label{eq:gf-two-ratio-families}
+\end{equation}
+Equations \eqref{eq:gf-unshifted-product} and
+\eqref{eq:gf-shifted-product} give
+\begin{equation}
+ U_n=c_{2n-1}c_{2n},\qquad V_n=c_{2n}c_{2n+1}.
+ \label{eq:gf-adjacent-products}
+\end{equation}
+Knowledge of only $(H_n)$ determines the products $U_n$ but leaves one
+multiplicative degree of freedom in each adjacent factorization.  Knowledge of
+both $(H_n)$ and $(K_n)$ removes that freedom: starting with
+\begin{equation}
+ c_0=H_1,\qquad c_1=\frac{K_1}{H_1},
+ \label{eq:gf-c0-c1}
+\end{equation}
+one obtains recursively
+\begin{equation}
+ c_{2n}=\frac{U_n}{c_{2n-1}},\qquad
+ c_{2n+1}=\frac{V_n}{c_{2n}}.
+ \label{eq:gf-c-recovery}
+\end{equation}
+
+For the algebraic generating function above,
+\eqref{eq:gf-shift-identity} implies $V_n=U_{n+1}$.  Hence
+\eqref{eq:gf-adjacent-products} yields
+$c_{2n}=c_{2n+2}$ whenever the intervening coefficient is nonzero.  Using
+\eqref{eq:gf-initial-Hankel}, one finds
+\begin{equation}
+ c_0=\lambda,\qquad c_{2n}=\frac1\lambda\quad(n\geq1),\qquad
+ c_{2n-1}=\lambda U_n\quad(n\geq1).
+ \label{eq:gf-explicit-S-coefficients}
+\end{equation}
+Thus the two Hankel transforms determine every Stieltjes coefficient, rather
+than only the contracted products.
+
+Finally, the Somos recurrence \eqref{eq:gf-Somos} implies the quotient
+recurrence
+\begin{equation}
+ U_{n-1}U_n^2U_{n+1}=U_n+\tau.
+ \label{eq:gf-U-recurrence}
+\end{equation}
+Therefore the odd Stieltjes coefficients
+$r_n:=c_{2n-1}=\lambda U_n$ obey the closed recurrence
+\begin{equation}
+ r_{n+1}=\frac{\lambda^3(r_n+\lambda\tau)}{r_{n-1}r_n^2},
+ \label{eq:gf-odd-c-recurrence}
+\end{equation}
+with $r_1=1/\lambda$ and $r_2=\lambda^2$.  The even coefficients remain
+constant, $c_{2n}=1/\lambda$.  This gives the continued-fraction coefficients
+directly from the algebraic moment generating function and its two adjacent
+Hankel transforms.
 
 The quotient expression \eqref{eq:gf-explicit} requires
 $A(0)=\lambda(\tau+\lambda-\eta)\neq0$.  The branch normalization is
