@@ -21,7 +21,7 @@
 \maketitle
 
 \begin{abstract}
-Assuming that a sequence arises as the shifted Hankel transform of the coefficient sequence of a Stieltjes continued fraction, we translate a Somos-type quartic relation into a constraint on the recurrence coefficients of the associated monic orthogonal polynomials. We prove a characterization: the shifted Hankel determinants satisfy the Somos-type relation if and only if consecutive off-diagonal Jacobi coefficients satisfy a fixed symmetric biquadratic equation. Equivalently, the Somos constraint imposes an algebraic law on successive ratios of squared norms. The diagonal Jacobi coefficients do not occur in this condition. We also record a five-parameter quadratic algebraic generating-function ansatz whose coefficient Hankel determinants reproduce, in the accompanying symbolic computation, the Somos--4 family $A(1,\tau)$ with prescribed initial determinants $(\lambda,m,r,\eta)$.  The family is covariant under removal of the constant coefficient: the induced parameter shift is $(\ell,m,r,n,t)\mapsto(m,r,n,(mn+tr^2)/\ell,t)$.  
+Assuming that a sequence arises as the shifted Hankel transform of the coefficient sequence of a Stieltjes continued fraction, we translate a Somos-type quartic relation into a constraint on the recurrence coefficients of the associated monic orthogonal polynomials. We prove a characterization: the shifted Hankel determinants satisfy the Somos-type relation if and only if consecutive off-diagonal Jacobi coefficients satisfy a fixed symmetric biquadratic equation. Equivalently, the Somos constraint imposes an algebraic law on successive ratios of squared norms. The diagonal Jacobi coefficients do not occur in this condition. We also record a five-parameter quadratic algebraic generating-function ansatz whose coefficient Hankel determinants reproduce, in the accompanying symbolic computation, the Somos--4 family $A(1,\tau)$ with prescribed initial determinants $(\lambda,m,r,\eta)$.  At the level of Hankel determinants, removal of the constant coefficient produces the shifted Somos sequence, with induced parameter shift $(\ell,m,r,n,t)\mapsto(m,r,n,(mn+tr^2)/\ell,t)$. No equality of the corresponding generating functions is asserted.  
 \end{abstract}
 
 \section*{Preface and motivation}
@@ -563,169 +563,173 @@ Thus $\tau$ is the second coefficient of the Somos family $A(1,\tau)$,
 whereas $\lambda,m,r,$ and $\eta$ select the initial Hankel determinants
 $(H_1,H_2,H_3,H_4)=(\lambda,m,r,\eta)$.
 
-\subsection{How the algebraic family was obtained}
-\label{sec:gf-construction-process}
-It is useful to make explicit how the preceding algebraic expression was
-found.  The generating function was not guessed independently of the Hankel
-recurrence.  Rather, the shift property and the Somos recurrence were used
-together as defining constraints and the resulting polynomial system was
-solved by computer algebra.
-
-To state this cleanly, let
+\subsection{Hankel-level shift and the parameter map}
+\label{sec:gf-hankel-shift}
+Let
 \begin{equation}
  G_{0;\ell,m,r,n,t}(x)=\sum_{q\geq0}g_qx^q
  \label{eq:G0-definition}
 \end{equation}
-denote the selected formal-power-series branch of
+denote a selected formal-power-series solution of
 \eqref{eq:gf-quadratic} after the substitutions
 \[
  \lambda=\ell,\qquad \eta=n,\qquad \tau=t.
 \]
-Thus the five parameters are defined by the initial Hankel determinants and
-the Somos coefficient,
+Its ordinary Hankel determinants are denoted by
+\[
+ H_q=\det(g_{i+j})_{0\leq i,j\leq q-1},\qquad H_0=1.
+\]
+The symbolic calculation is organized so that
 \begin{equation}
  (H_1,H_2,H_3,H_4)=(\ell,m,r,n),\qquad
  H_{q+4}H_q=H_{q+3}H_{q+1}+tH_{q+2}^2.
  \label{eq:G0-parameter-meaning}
 \end{equation}
-Here the letter $n$ in the subscript of $G_0$ is a parameter, while $q$ is
-used as the running index.
-
-Remove the constant term and shift the coefficients by one place:
-\begin{equation}
- G_{1;\ell,m,r,n,t}(x)
- :=\frac{G_{0;\ell,m,r,n,t}(x)-g_0}{x}
- =\sum_{q\geq0}g_{q+1}x^q.
- \label{eq:G1-definition}
-\end{equation}
-The defining shift covariance of the family is
-\begin{equation}
- G_{1;\ell,m,r,n,t}(x)
- =G_{0;m,r,n,(mn+tr^2)/\ell,t}(x).
- \label{eq:G1-G0-covariance}
-\end{equation}
-The fourth parameter on the right is forced by the first Somos step, since
+The first Somos step gives
 \begin{equation}
  H_5=\frac{H_2H_4+tH_3^2}{H_1}
      =\frac{mn+tr^2}{\ell}.
  \label{eq:G0-fifth-Hankel}
 \end{equation}
-Accordingly, coefficient shifting acts on the parameter tuple by
+Consequently the shift of the \emph{Hankel sequence} acts on the parameter
+ tuple as
 \begin{equation}
  (\ell,m,r,n,t)\longmapsto
  \left(m,r,n,\frac{mn+tr^2}{\ell},t\right).
  \label{eq:G0-parameter-shift}
 \end{equation}
+This statement concerns the Hankel transforms only.  In particular, it does
+not imply the generating-function identity
+\[
+ \frac{G_{0;\ell,m,r,n,t}(x)-g_0}{x}
+ =G_{0;m,r,n,(mn+tr^2)/\ell,t}(x),
+\]
+Distinct moment sequences, and hence distinct generating functions, may have the same Hankel
+transform.
 
-In the computer-algebra derivation, one begins with an algebraic quadratic
-ansatz for $G_0$, expands its selected branch as a formal power series, forms
-the first Hankel determinants, and imposes both
-\eqref{eq:G0-parameter-meaning} and the covariance
-\eqref{eq:G1-G0-covariance}.  The unknown coefficients of the quadratic
-ansatz are then obtained by solving the resulting algebraic equations.  The
-expressions \eqref{eq:gf-A}--\eqref{eq:gf-C} are the resulting solution in the
-parameterization $(\ell,m,r,n,t)=(\lambda,m,r,\eta,\tau)$.  Subsequent Hankel
-determinants were used as symbolic consistency checks of the Somos
-recurrence.  Thus the shift formula is part of the construction that defines
-this particular algebraic family, not an empirical property imposed only
-after the generating function had been found.
+\subsection{The square-root branches at the origin}
+Write
+\[
+ P(z,X)=A(z)X^2+B(z)X+C(z).
+\]
+For the coefficients displayed in \eqref{eq:gf-A}--\eqref{eq:gf-C}, the
+constant coefficients are
+\[
+ A_0=\lambda^2\eta m(m-1)r,\qquad
+ B_0=-2\lambda^3\eta m(m-1)r,\qquad
+ C_0=\lambda^4\eta m(m-1)r.
+\]
+Hence
+\begin{equation}
+ P(0,X)=A_0(X-\lambda)^2.
+ \label{eq:gf-double-root}
+\end{equation}
+Thus $X=\lambda$ is a double root at the origin and
+\begin{equation}
+ \partial_XP(0,\lambda)=2A_0\lambda+B_0=0.
+ \label{eq:gf-vanishing-branch-derivative}
+\end{equation}
+The ordinary simple-root form of the formal implicit-function theorem is
+therefore not applicable at $z=0$.  Moreover, the signs in
+\eqref{eq:gf-explicit} cannot be labeled globally as the desired and undesired
+branches merely from the value at the origin: both algebraic branches coalesce
+there.  A branch must instead be selected by expanding the square root and
+requiring the prescribed initial coefficients, beginning with
+$g_0=\lambda$ and $g_1=m$.  Depending on the parameters, rationalization may
+be needed to avoid cancellation.
 
-\subsection{The first shift and recovery of the Stieltjes coefficients}
-The shift covariance now has to be read with all five parameters.  Define the
-once-shifted Hankel determinants by
+Set
 \begin{equation}
- K_q=\det(g_{i+j+1})_{0\leq i,j\leq q-1},\qquad K_0=1.
- \label{eq:gf-shifted-Hankel}
+ G(z)=\lambda+zF(z),\qquad
+ F(z)=\sum_{q\geq0}f_qz^q,\qquad f_q=g_{q+1}.
+ \label{eq:gf-desingularization}
 \end{equation}
-By \eqref{eq:G1-G0-covariance}, their positive-index part is the first shift
-of the original Somos sequence:
+For
+\[
+ D_j=2\lambda A_j+B_j,\qquad
+ E_j=\lambda^2A_j+\lambda B_j+C_j,
+\]
+where $C_3=0$, substitution into $P(z,G(z))=0$ gives
+\[
+ P(z,\lambda+zF)=\sum_{j=0}^3E_jz^j
+ +z\left(\sum_{j=0}^3D_jz^j\right)F
+ +z^2\left(\sum_{j=0}^3A_jz^j\right)F^2.
+\]
+Because \eqref{eq:gf-double-root} gives $E_0=D_0=0$, an ordinary power-series
+branch first requires the compatibility condition
 \begin{equation}
- K_q=H_{q+1}\qquad(q\geq1).
- \label{eq:gf-shift-identity}
+ E_1=0.
+ \label{eq:gf-branch-compatibility}
 \end{equation}
-The restriction $q\geq1$ is essential: by convention $K_0=1$, whereas
-$H_1=\ell$ in general.  No analogous claim is made here for a second raw
-coefficient shift without simultaneously applying the parameter map
-\eqref{eq:G0-parameter-shift} again.
-
-Write the generating function as a Stieltjes continued fraction with a
-leading numerator,
+The next coefficient equation is
 \begin{equation}
- G(x)=\cfrac{c_0}{1-\cfrac{c_1x}{1-\cfrac{c_2x}{1-\cfrac{c_3x}{\ddots}}}}.
- \label{eq:gf-S-fraction}
-\end{equation}
-For nonzero coefficients, the standard product formulae are
-\begin{align}
- H_q&=c_0^q\prod_{j=1}^{q-1}(c_{2j-1}c_{2j})^{q-j},
- \label{eq:gf-unshifted-product}\\
- K_q&=(c_0c_1)^q\prod_{j=1}^{q-1}(c_{2j}c_{2j+1})^{q-j}.
- \label{eq:gf-shifted-product}
-\end{align}
-Introduce
-\begin{equation}
- U_q=\frac{H_{q-1}H_{q+1}}{H_q^2},\qquad
- V_q=\frac{K_{q-1}K_{q+1}}{K_q^2}\qquad(q\geq1),
- \label{eq:gf-two-ratio-families}
-\end{equation}
-where $H_0=K_0=1$.  Then
-\begin{equation}
- U_q=c_{2q-1}c_{2q},\qquad V_q=c_{2q}c_{2q+1}.
- \label{eq:gf-adjacent-products}
-\end{equation}
-Hence both Hankel transforms recover the individual Stieltjes coefficients:
-\begin{equation}
- c_0=H_1,\qquad c_1=\frac{K_1}{H_1},\qquad
- c_{2q}=\frac{U_q}{c_{2q-1}},\qquad
- c_{2q+1}=\frac{V_q}{c_{2q}}.
- \label{eq:gf-c-recovery}
+ A_0f_0^2+D_1f_0+E_2=0.
+ \label{eq:gf-first-branch-coefficient}
 \end{equation}
 
-For the present five-parameter family,
+\subsection{Quadratic convolution law for the moments}
+Write
+\[
+ A(z)=\sum_{j=0}^{3}A_jz^j,\qquad
+ B(z)=\sum_{j=0}^{3}B_jz^j,\qquad
+ C(z)=\sum_{j=0}^{2}C_jz^j,
+\]
+and define
+\[
+ S_q=\sum_{k=0}^{q}g_kg_{q-k},\qquad S_q=0\quad(q<0).
+\]
+Coefficient extraction from \eqref{eq:gf-quadratic} gives the formal identity
 \begin{equation}
- c_0=\ell,\qquad c_1=\frac{m}{\ell},\qquad
- c_2=\frac1\ell,\qquad c_3=\frac{\ell r}{m^2}.
- \label{eq:gf-first-S-coefficients}
+ \sum_{j=0}^{3}A_jS_{q-j}
+ +\sum_{j=0}^{3}B_jg_{q-j}+C_q=0,
+ \label{eq:gf-convolution-identity}
 \end{equation}
-Because \eqref{eq:gf-shift-identity} starts at $q=1$, one has
-\begin{equation}
- V_1=\frac{r}{m^2},\qquad V_q=U_{q+1}\quad(q\geq2).
- \label{eq:gf-VU-relation}
-\end{equation}
-It follows recursively that
-\begin{equation}
- c_{2q}=1\quad(q\geq2),\qquad
- c_{2q-1}=U_q\quad(q\geq2).
- \label{eq:gf-explicit-S-coefficients}
-\end{equation}
-Thus the exceptional initial normalization is carried by $c_0,c_1,c_2$;
-after that prefix, the even Stieltjes coefficients are constant and the odd
-coefficients are precisely the Hankel quotient variables.
+where $g_q=0$ for $q<0$ and $C_q=0$ for $q>2$.  This finite-width quadratic
+convolution law is exact for every formal-power-series root of the algebraic
+equation.
 
-Finally, the Somos recurrence implies
+In the present double-root situation it is preferable to use
+\eqref{eq:gf-desingularization}.  Put
+\[
+ T_q=\sum_{k=0}^{q}f_kf_{q-k},\qquad T_q=0\quad(q<0).
+\]
+Assuming \eqref{eq:gf-branch-compatibility}, division by $z^2$ and coefficient
+extraction yield
 \begin{equation}
- U_{q-1}U_q^2U_{q+1}=U_q+t.
- \label{eq:gf-U-recurrence}
+ \sum_{j=0}^{3}A_jT_{q-j}
+ +D_1f_q+D_2f_{q-1}+D_3f_{q-2}+E_{q+2}=0.
+ \label{eq:gf-desingularized-convolution}
 \end{equation}
-Consequently, if $s_q:=c_{2q-1}=U_q$ for $q\geq2$, then
+Here $f_q=0$ for $q<0$ and $E_j=0$ for $j>3$.  If
 \begin{equation}
- s_{q+1}=\frac{s_q+t}{s_{q-1}s_q^2}\qquad(q\geq3),
- \label{eq:gf-odd-c-recurrence}
+ 2A_0m+D_1\ne0,
+ \label{eq:gf-desingularized-nondegeneracy}
 \end{equation}
-with initial values
-\begin{equation}
- s_2=\frac{\ell r}{m^2},\qquad
- s_3=\frac{mn}{r^2}.
- \label{eq:gf-odd-c-initial-data}
-\end{equation}
-All four initial Hankel parameters therefore enter the recovered continued
-fraction: $\ell,m,r$ determine the initial prefix, while $n$ enters the odd
-orbit through $s_3$.  The coefficient $t$ remains the autonomous Somos
-parameter.
+then \eqref{eq:gf-desingularized-convolution} recursively determines the
+subsequent $f_q$ from $f_0=m$. 
 
-The quotient expression \eqref{eq:gf-explicit} and the selected formal branch
-require the corresponding denominators and branch derivative to be nonzero.
-As elsewhere in this section, all displayed recovery formulae are understood
-on this admissible nonvanishing locus.
+\subsection{Nonuniqueness of the moment representation}
+The Hankel transform does not in general determine the moment sequence.  The
+five-parameter algebraic generating function should therefore be viewed as a
+representative of a larger equivalence class rather than as a unique moment
+representation of a Somos orbit.  For example, the binomial transform
+\begin{equation}
+ g'_q=\sum_{k=0}^{q}\binom{q}{k}g_k
+ \label{eq:gf-binomial-transform}
+\end{equation}
+has generating function
+\[
+ G'(z)=\frac{1}{1-z}G\!\left(\frac{z}{1-z}\right)
+\]
+and preserves the Hankel determinants.  Scalar and exponential rescalings of
+moments produce explicit normalization factors in the determinants, while
+affine changes of the underlying variable give further related moment
+functionals.  Accordingly, equality of Hankel transforms must not be replaced
+by equality of generating functions without an independent argument.
+
+No classification of these equivalent moment representations is attempted
+here.  The inverse problem of describing all moment sequences realizing a
+given contracted Jacobi orbit remains open.
 
 \section{Symplectic Elliptic Dynamics of the Jacobi Coefficients}
 Assume that the Hankel determinants $a_n$ satisfy $A(p_1,p_2)$, and let $u_n=\widehat b_n=a_{n-1}a_{n+1}/a_n^2$. By Section 10,

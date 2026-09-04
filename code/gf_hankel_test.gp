@@ -145,12 +145,13 @@ run_one_test(l, j, m, r, t, nterms, verbose = 0) =
   status;
 };
 
-build_stress_tests(num_random = 80, seed = 20260904) =
+build_stress_tests(num_random = 1000, seed = 20266904) =
 {
   my(pool_all = [-12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
   my(pool_large = [-12, -11, -10, -9, -8, -7, -6, 6, 7, 8, 9, 10, 11, 12]);
   my(tests = List());
   my(base = [
+    [1, 1, 1, 1, 1],
     [1, 2, 1, 1, 1],
     [2, 4, 2, 2, 1],
     [3, 3, 3, 5, 1],
