@@ -667,46 +667,86 @@ The next coefficient equation is
  \label{eq:gf-first-branch-coefficient}
 \end{equation}
 
-\subsection{Quadratic convolution law for the moments}
-Write
-\[
- A(z)=\sum_{j=0}^{3}A_jz^j,\qquad
- B(z)=\sum_{j=0}^{3}B_jz^j,\qquad
- C(z)=\sum_{j=0}^{2}C_jz^j,
-\]
-and define
-\[
- S_q=\sum_{k=0}^{q}g_kg_{q-k},\qquad S_q=0\quad(q<0).
-\]
-Coefficient extraction from \eqref{eq:gf-quadratic} gives the formal identity
+\subsection{Desingularized quadratic recurrence for the moments}
+\label{sec:gf-desingularized-recurrence}
+Set
 \begin{equation}
- \sum_{j=0}^{3}A_jS_{q-j}
- +\sum_{j=0}^{3}B_jg_{q-j}+C_q=0,
- \label{eq:gf-convolution-identity}
+ G(z)=\lambda+zF(z),\qquad
+ F(z)=\sum_{q\geq0}f_qz^q,\qquad f_q=g_{q+1}.
+ \label{eq:gf-desingularized-F}
 \end{equation}
-where $g_q=0$ for $q<0$ and $C_q=0$ for $q>2$.  This finite-width quadratic
-convolution law is exact for every formal-power-series root of the algebraic
-equation.
-
-In the present double-root situation it is preferable to use
-\eqref{eq:gf-desingularization}.  Put
-\[
- T_q=\sum_{k=0}^{q}f_kf_{q-k},\qquad T_q=0\quad(q<0).
-\]
-Assuming \eqref{eq:gf-branch-compatibility}, division by $z^2$ and coefficient
-extraction yield
+With
 \begin{equation}
- \sum_{j=0}^{3}A_jT_{q-j}
- +D_1f_q+D_2f_{q-1}+D_3f_{q-2}+E_{q+2}=0.
- \label{eq:gf-desingularized-convolution}
+ D_j=2\lambda A_j+B_j,\qquad
+ E_j=\lambda^2A_j+\lambda B_j+C_j,
+ \label{eq:gf-DE-definitions}
 \end{equation}
-Here $f_q=0$ for $q<0$ and $E_j=0$ for $j>3$.  If
+the double-root identity at the origin gives $D_0=E_0=0$.  An ordinary
+power-series branch additionally requires $E_1=0$.  After substitution into
+the quadratic equation and division by $z^2$, one obtains
 \begin{equation}
- 2A_0m+D_1\ne0,
+ A(z)F(z)^2+(D_1+D_2z+D_3z^2)F(z)+E_2+E_3z=0.
+ \label{eq:gf-desingularized-quadratic}
+\end{equation}
+In particular, the prescribed coefficient $f_0=m$ must satisfy
+\begin{equation}
+ A_0m^2+D_1m+E_2=0.
+ \label{eq:gf-branch-selection}
+\end{equation}
+Thus $m$ selects one of the two branches of the desingularized quadratic.
+The branch is simple precisely when
+\begin{equation}
+ 2A_0m+D_1\ne0.
  \label{eq:gf-desingularized-nondegeneracy}
 \end{equation}
-then \eqref{eq:gf-desingularized-convolution} recursively determines the
-subsequent $f_q$ from $f_0=m$. 
+Equivalently,
+\begin{equation}
+ (2A_0m+D_1)^2=D_1^2-4A_0E_2,
+ \label{eq:gf-branch-discriminant}
+\end{equation}
+so the nondegeneracy condition is exactly the nonvanishing of the
+discriminant of \eqref{eq:gf-branch-selection}.
+
+Define
+\begin{equation}
+ T_q=\sum_{k=0}^{q}f_kf_{q-k},\qquad T_q=0\quad(q<0).
+ \label{eq:gf-Tq-definition}
+\end{equation}
+Coefficient extraction gives
+\begin{equation}
+ \sum_{j=0}^{3}A_jT_{q-j}
+ +D_1f_q+D_2f_{q-1}+D_3f_{q-2}+E_{q+2}=0,
+ \label{eq:gf-desingularized-convolution}
+\end{equation}
+where $f_q=0$ for $q<0$ and $E_j=0$ for $j>3$.  For $q\geq1$,
+\begin{equation}
+ T_q=2mf_q+\sum_{k=1}^{q-1}f_kf_{q-k}.
+ \label{eq:gf-Tq-split}
+\end{equation}
+Hence, under condition \eqref{eq:gf-desingularized-nondegeneracy},
+\begin{equation}
+ f_q=-\frac{
+ A_0\displaystyle\sum_{k=1}^{q-1}f_kf_{q-k}
+ +\displaystyle\sum_{j=1}^{3}A_jT_{q-j}
+ +D_2f_{q-1}+D_3f_{q-2}+E_{q+2}}
+ {2A_0m+D_1}.
+ \label{eq:gf-explicit-moment-recurrence}
+\end{equation}
+This is an explicit quadratic convolution recurrence for the moments
+$g_{q+1}=f_q$.  It is a consequence solely of the algebraic
+generating-function equation.  No Hankel or Somos assumption is used in its
+derivation.
+
+The exceptional locus $2A_0m+D_1=0$ requires separate treatment.  On this
+locus the two desingularized branches coalesce at the origin, and the
+first-order coefficient equation no longer determines the next moment
+uniquely.  Higher-order compatibility or a Puiseux expansion may then be
+required.
+
+Finally, because $F$ is algebraic of degree at most two, it is D-finite.
+Consequently, the same moment sequence also satisfies a fixed-width linear
+recurrence with polynomial coefficients in the index.  This provides an
+alternative practical method for generating long moment sequences.
 
 \subsection{Nonuniqueness of the moment representation}
 The Hankel transform does not in general determine the moment sequence.  The
