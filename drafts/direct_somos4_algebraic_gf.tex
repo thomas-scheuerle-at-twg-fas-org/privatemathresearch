@@ -1,0 +1,338 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+
+\newtheorem{proposition}{Proposition}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\title{Direct Generation of a Somos--4 Sequence\\
+from an Algebraic Generating Function}
+\author{Thomas Scheuerle}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We record a five-parameter quadratic algebraic generating function whose
+coefficient sequence has prescribed initial Hankel determinants
+$(\lambda,m,r,\eta)$ and whose Hankel transform belongs to the Somos--4
+family $A(1,\tau)$.  The Hankel determinants and their parameters are
+introduced first, before the explicit algebraic equation.  We then describe
+the two square-root branches, their coalescence at the origin, a
+desingularized coefficient recurrence, the induced shift of the Hankel
+parameters, the Hankel-transform identity used in the construction, and the
+nonuniqueness of the coefficient sequence underlying a given Hankel transform.
+\end{abstract}
+
+\section{Hankel determinants and Somos parameters}
+
+Let
+\[
+ G(z)=\sum_{n\geq0}g_nz^n
+\]
+be a formal power series, and for $n\geq1$ define its ordinary Hankel
+determinants by
+\begin{equation}
+ H_n=\det(g_{i+j})_{0\leq i,j\leq n-1},
+ \qquad H_0=1.
+ \label{eq:Hankel}
+\end{equation}
+
+The five parameters $\lambda,m,r,\eta,\tau$ have the following roles:
+\begin{equation}
+ H_1=\lambda,\qquad H_2=m,\qquad H_3=r,\qquad H_4=\eta,
+ \label{eq:initial-Hankel}
+\end{equation}
+and the Hankel sequence satisfies the Somos--4 recurrence
+\begin{equation}
+ H_{n+4}H_n=H_{n+3}H_{n+1}+\tau H_{n+2}^2.
+ \label{eq:Somos}
+\end{equation}
+Thus $\tau$ is the second coefficient of the Somos family $A(1,\tau)$,
+whereas $\lambda,m,r,$ and $\eta$ select the initial Hankel determinants.
+The algebraic generating function producing these determinants is given in
+the next section.
+
+\section{The algebraic generating function}
+
+Define the polynomials $A(z),B(z),C(z)$ by
+\begin{align}
+ A(z)={}&\lambda\eta mr^2(\tau-\eta)z^3 \\
+ &+r\Bigl(-(\lambda^2\eta m+m^2(m+r^2))\tau
+ +(2m-1)\lambda^2\eta^2+\eta m^2(m+r^2)
+ -\lambda r(m+r^2)\Bigr)z^2 \\
+ &+\lambda\Bigl(m^2r^2\tau-(m-1)\lambda^2\eta^2
+ -m(m^2+2mr^2-m-r^2)\eta+\lambda r^3\Bigr)z \\
+ &+\lambda^2\eta m(m-1)r,
+ \label{eq:A}\\[0.4em]
+ B(z)={}&-\lambda^2\eta mr^2\tau z^3 \\
+ &+r\Bigl((2\lambda^3\eta m+\lambda m^2(2m+r^2))\tau
+ -(2m-1)\lambda^3\eta^2-\lambda\eta m^3
+ +\lambda^2r(2m+r^2)\Bigr)z^2 \\
+ &+\lambda^2\Bigl(-2m^2r^2\tau+2(m-1)\lambda^2\eta^2
+ +m(2m^2+2mr^2-2m-r^2)\eta-2\lambda r^3\Bigr)z \\
+ &-2\lambda^3\eta m(m-1)r,
+ \label{eq:B}\\[0.4em]
+ C(z)={}&-\lambda^2mr\Bigl(\tau(\lambda^2\eta+m^2)+\lambda r\Bigr)z^2 \\
+ &+\Bigl(\lambda^3m^2r^2\tau+\lambda^4r^3
+ +\eta(m-1)\bigl(\eta(-15\lambda^4+85\lambda^3-225\lambda^2
+ +274\lambda-120) \\
+ &\hspace{7.5em}-\lambda^3m^2
+ -3(\lambda-1)(\lambda-2)(\lambda-3)(\lambda-4)(\lambda-5)\bigr)\Bigr)z \\
+ &+\lambda^4\eta m(m-1)r.
+ \label{eq:C}
+\end{align}
+
+The generating function is the formal-power-series branch of
+\begin{equation}
+ A(z)G(z)^2+B(z)G(z)+C(z)=0
+ \label{eq:quadratic}
+\end{equation}
+selected by the initial conditions implicit in
+\eqref{eq:initial-Hankel}, beginning with $g_0=\lambda$ and $g_1=m$.
+
+\begin{remark}[The apparently mysterious integer coefficients]
+The polynomial occurring in \eqref{eq:C} is simply
+\begin{align}
+ -15\lambda^4+85\lambda^3-225\lambda^2+274\lambda-120
+ &=\frac{6!}{\lambda}\binom{\lambda}{6}-\lambda^5 \\
+ &=(\lambda-1)(\lambda-2)(\lambda-3)(\lambda-4)(\lambda-5)-\lambda^5.
+ \label{eq:binomial-identity}
+\end{align}
+Thus the coefficients $-15,85,-225,274,-120$ arise by removing the leading term $\lambda^5$ from
+the falling factorial $(\lambda-1)\cdots(\lambda-5)$.
+\end{remark}
+
+\section{The two algebraic branches}
+
+With
+\[
+ D(z)=B(z)^2-4A(z)C(z),
+\]
+the two algebraic branches may be represented by
+\begin{equation}
+ G(z)=\frac{-B(z)\mathbin{\pm}\sqrt{D(z)}}{2A(z)}.
+ \label{eq:explicit}
+\end{equation}
+When the constant term of $A$ vanishes, the rationalized expressions
+\[
+ \frac{-2C(z)}{B(z)\mp\sqrt{D(z)}}
+\]
+can be used instead.  The sign in \eqref{eq:explicit} cannot be fixed
+uniformly over the full parameter space.
+
+Write
+\[
+ P(z,X)=A(z)X^2+B(z)X+C(z).
+\]
+The constant coefficients of \eqref{eq:A}--\eqref{eq:C} are
+\[
+ A_0=\lambda^2\eta m(m-1)r,\qquad
+ B_0=-2\lambda^3\eta m(m-1)r,\qquad
+ C_0=\lambda^4\eta m(m-1)r.
+\]
+Consequently,
+\begin{equation}
+ P(0,X)=A_0(X-\lambda)^2.
+ \label{eq:double-root}
+\end{equation}
+Both algebraic branches therefore coalesce at $X=\lambda$ when $z=0$, and
+\begin{equation}
+ \partial_XP(0,\lambda)=2A_0\lambda+B_0=0.
+ \label{eq:vanishing-derivative}
+\end{equation}
+The simple-root form of the formal implicit-function theorem is not
+applicable at the origin.  The desired branch is instead selected by
+expanding the square root and requiring the prescribed coefficients,
+beginning with $g_0=\lambda$ and $g_1=m$.
+
+Set
+\begin{equation}
+ G(z)=\lambda+zF(z),\qquad
+ F(z)=\sum_{q\geq0}f_qz^q,\qquad f_q=g_{q+1}.
+ \label{eq:desingularization}
+\end{equation}
+For
+\[
+ D_j=2\lambda A_j+B_j,\qquad
+ E_j=\lambda^2A_j+\lambda B_j+C_j,
+\]
+where $C_3=0$, substitution into $P(z,G(z))=0$ gives
+\[
+ P(z,\lambda+zF)=\sum_{j=0}^3E_jz^j
+ +z\left(\sum_{j=0}^3D_jz^j\right)F
+ +z^2\left(\sum_{j=0}^3A_jz^j\right)F^2.
+\]
+Equation \eqref{eq:double-root} gives $E_0=D_0=0$.  An ordinary power-series
+branch additionally requires
+\begin{equation}
+ E_1=0.
+ \label{eq:compatibility}
+\end{equation}
+The next coefficient equation is
+\begin{equation}
+ A_0f_0^2+D_1f_0+E_2=0.
+ \label{eq:first-coefficient}
+\end{equation}
+Since $f_0=g_1=m$, the prescribed value of $m$ selects one of the two
+branches of the desingularized quadratic.
+
+\section{Hankel-level shift of the parameters}
+
+To display the shift independently of the letters used above, let
+\[
+ G_{0;\ell,m,r,n,t}(x)=\sum_{q\geq0}g_qx^q
+\]
+denote the selected formal-power-series solution of \eqref{eq:quadratic}
+after the substitutions
+\[
+ \lambda=\ell,\qquad \eta=n,\qquad \tau=t.
+\]
+Its Hankel determinants satisfy
+\begin{equation}
+ (H_1,H_2,H_3,H_4)=(\ell,m,r,n),\qquad
+ H_{q+4}H_q=H_{q+3}H_{q+1}+tH_{q+2}^2.
+ \label{eq:parameter-meaning}
+\end{equation}
+The first Somos step gives
+\begin{equation}
+ H_5=\frac{H_2H_4+tH_3^2}{H_1}
+     =\frac{mn+tr^2}{\ell}.
+ \label{eq:fifth-Hankel}
+\end{equation}
+Hence shifting the Hankel sequence induces the parameter map
+\begin{equation}
+ (\ell,m,r,n,t)\longmapsto
+ \left(m,r,n,\frac{mn+tr^2}{\ell},t\right).
+ \label{eq:parameter-shift}
+\end{equation}
+
+The point of this shift in the present construction is the following
+Hankel-transform identity.  Remove the first coefficient of
+$G_{0;\ell,m,r,n,t}$ and shift the remaining series to the origin:
+\begin{equation}
+ \widehat G(x)
+ =\frac{G_{0;\ell,m,r,n,t}(x)-g_0}{x}
+ =\sum_{q\geq0}g_{q+1}x^q.
+ \label{eq:coefficient-tail}
+\end{equation}
+Also form the generating function with shifted parameters,
+\begin{equation}
+ \widetilde G(x)
+ =G_{0;m,r,n,(mn+tr^2)/\ell,t}(x)
+ =\sum_{q\geq0}\widetilde g_qx^q.
+ \label{eq:shifted-parameter-gf}
+\end{equation}
+Although the two coefficient sequences are generally different, their
+Hankel transforms are identical:
+\begin{equation}
+ \det(g_{i+j+1})_{0\leq i,j\leq q-1}
+ =\det(\widetilde g_{i+j})_{0\leq i,j\leq q-1}
+ \qquad(q\geq1).
+ \label{eq:tail-shift-hankel-identity}
+\end{equation}
+Both sides therefore begin with
+\[
+ m,\quad r,\quad n,\quad \frac{mn+tr^2}{\ell},\ldots
+\]
+and continue according to the same Somos--4 recurrence with parameter $t$.
+This Hankel-level identity, rather than equality of the generating functions,
+is the shift property used in the design of the algebraic generating function.
+In general,
+\[
+ \widehat G(x)\ne\widetilde G(x),
+\]
+which is consistent with the fact that different coefficient sequences can
+have the same Hankel transform.
+
+\section{A recurrence for the coefficients}
+
+Using the notation of \eqref{eq:desingularization}, division of the expanded
+quadratic equation by $z^2$ yields
+\begin{equation}
+ A(z)F(z)^2+(D_1+D_2z+D_3z^2)F(z)+E_2+E_3z=0.
+ \label{eq:desingularized-quadratic}
+\end{equation}
+The branch condition is
+\begin{equation}
+ A_0m^2+D_1m+E_2=0,
+ \label{eq:branch-selection}
+\end{equation}
+and the branch is simple precisely when
+\begin{equation}
+ 2A_0m+D_1\ne0.
+ \label{eq:nondegeneracy}
+\end{equation}
+Equivalently,
+\begin{equation}
+ (2A_0m+D_1)^2=D_1^2-4A_0E_2.
+ \label{eq:branch-discriminant}
+\end{equation}
+
+Define
+\begin{equation}
+ T_q=\sum_{k=0}^{q}f_kf_{q-k},\qquad T_q=0\quad(q<0).
+ \label{eq:Tq}
+\end{equation}
+Coefficient extraction from \eqref{eq:desingularized-quadratic} gives
+\begin{equation}
+ \sum_{j=0}^{3}A_jT_{q-j}
+ +D_1f_q+D_2f_{q-1}+D_3f_{q-2}+E_{q+2}=0,
+ \label{eq:convolution}
+\end{equation}
+where $f_q=0$ for $q<0$ and $E_j=0$ for $j>3$.  For $q\geq1$,
+\begin{equation}
+ T_q=2mf_q+\sum_{k=1}^{q-1}f_kf_{q-k}.
+ \label{eq:Tq-split}
+\end{equation}
+Under condition \eqref{eq:nondegeneracy}, the coefficients are therefore generated
+recursively by
+\begin{equation}
+ f_q=-\frac{
+ A_0\displaystyle\sum_{k=1}^{q-1}f_kf_{q-k}
+ +\displaystyle\sum_{j=1}^{3}A_jT_{q-j}
+ +D_2f_{q-1}+D_3f_{q-2}+E_{q+2}}
+ {2A_0m+D_1}.
+ \label{eq:coefficient-recurrence}
+\end{equation}
+This quadratic convolution recurrence follows directly from the algebraic
+generating-function equation.  On the exceptional locus
+$2A_0m+D_1=0$, the two desingularized branches coalesce at the origin and
+the next coefficient is not determined by the first-order coefficient equation;
+higher-order compatibility or a Puiseux expansion may then be required.
+
+Because $F$ is algebraic of degree at most two, it is D-finite.  Consequently,
+the same coefficient sequence also satisfies a fixed-width linear recurrence with
+polynomial coefficients in the index.
+
+\section{Nonuniqueness of the coefficient sequence}
+
+The Hankel transform does not in general determine the coefficient sequence.
+The five-parameter algebraic generating function should therefore be viewed as
+a representative of a larger equivalence class, rather than as the unique
+generating function of a Somos orbit.  For example, the binomial transform
+\begin{equation}
+ g'_q=\sum_{k=0}^{q}\binom{q}{k}g_k
+ \label{eq:binomial-transform}
+\end{equation}
+has generating function
+\[
+ G'(z)=\frac{1}{1-z}G\!\left(\frac{z}{1-z}\right)
+\]
+and preserves the Hankel determinants.  Scalar and exponential rescalings of the coefficients produce explicit
+normalization factors in the determinants, and substitutions in the generating
+function give further related coefficient sequences.  Equality of Hankel transforms must therefore not be replaced
+by equality of generating functions without an independent argument.
+
+No classification of these equivalent coefficient sequences is attempted
+here.  The inverse problem of describing all coefficient sequences realizing
+a given Hankel sequence remains open.
+
+\end{document}
