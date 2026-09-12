@@ -390,16 +390,46 @@ Hence shifting the Hankel sequence induces the parameter map
  \left(m,r,n,\frac{mn+tr^2}{\ell},t\right).
  \label{eq:parameter-shift}
 \end{equation}
-This concerns the Hankel transforms only.  In particular, it does not imply
-an identity of generating functions such as
-\[
- \frac{G_{0;\ell,m,r,n,t}(x)-g_0}{x}
- =G_{0;m,r,n,(mn+tr^2)/\ell,t}(x).
-\]
-Distinct moment sequences, and hence distinct generating functions, may have
-the same Hankel transform.
 
-\section{A recurrence for the moments}
+The point of this shift in the present construction is the following
+Hankel-transform identity.  Remove the first coefficient of
+$G_{0;\ell,m,r,n,t}$ and shift the remaining series to the origin:
+\begin{equation}
+ \widehat G(x)
+ =\frac{G_{0;\ell,m,r,n,t}(x)-g_0}{x}
+ =\sum_{q\geq0}g_{q+1}x^q.
+ \label{eq:coefficient-tail}
+\end{equation}
+Also form the generating function with shifted parameters,
+\begin{equation}
+ \widetilde G(x)
+ =G_{0;m,r,n,(mn+tr^2)/\ell,t}(x)
+ =\sum_{q\geq0}\widetilde g_qx^q.
+ \label{eq:shifted-parameter-gf}
+\end{equation}
+Although the two coefficient sequences are generally different, their
+Hankel transforms are identical:
+\begin{equation}
+ \det(g_{i+j+1})_{0\leq i,j\leq q-1}
+ =\det(\widetilde g_{i+j})_{0\leq i,j\leq q-1}
+ \qquad(q\geq1).
+ \label{eq:tail-shift-hankel-identity}
+\end{equation}
+Both sides therefore begin with
+\[
+ m,\quad r,\quad n,\quad \frac{mn+tr^2}{\ell},\ldots
+\]
+and continue according to the same Somos--4 recurrence with parameter $t$.
+This Hankel-level identity, rather than equality of the generating functions,
+is the shift property used in the design of the algebraic generating function.
+In general,
+\[
+ \widehat G(x)\ne\widetilde G(x),
+\]
+which is consistent with the fact that different coefficient sequences can
+have the same Hankel transform.
+
+\section{A recurrence for the coefficients}
 
 Using the notation of \eqref{eq:desingularization}, division of the expanded
 quadratic equation by $z^2$ yields
@@ -439,7 +469,7 @@ where $f_q=0$ for $q<0$ and $E_j=0$ for $j>3$.  For $q\geq1$,
  T_q=2mf_q+\sum_{k=1}^{q-1}f_kf_{q-k}.
  \label{eq:Tq-split}
 \end{equation}
-Under condition \eqref{eq:nondegeneracy}, the moments are therefore generated
+Under condition \eqref{eq:nondegeneracy}, the coefficients are therefore generated
 recursively by
 \begin{equation}
  f_q=-\frac{
@@ -447,22 +477,22 @@ recursively by
  +\displaystyle\sum_{j=1}^{3}A_jT_{q-j}
  +D_2f_{q-1}+D_3f_{q-2}+E_{q+2}}
  {2A_0m+D_1}.
- \label{eq:moment-recurrence}
+ \label{eq:coefficient-recurrence}
 \end{equation}
 This quadratic convolution recurrence follows directly from the algebraic
 generating-function equation.  On the exceptional locus
 $2A_0m+D_1=0$, the two desingularized branches coalesce at the origin and
-the next moment is not determined by the first-order coefficient equation;
+the next coefficient is not determined by the first-order coefficient equation;
 higher-order compatibility or a Puiseux expansion may then be required.
 
 Because $F$ is algebraic of degree at most two, it is D-finite.  Consequently,
-the same moment sequence also satisfies a fixed-width linear recurrence with
+the same coefficient sequence also satisfies a fixed-width linear recurrence with
 polynomial coefficients in the index.
 
-\section{Nonuniqueness of the moment representation}
+\section{Nonuniqueness of the coefficient sequence}
 \label{sec:nonuniqueness}
 
-The ordinary Hankel transform does not, in general, determine the moment
+The ordinary Hankel transform does not, in general, determine the coefficient
 sequence.  If only $(H_n)$ is prescribed, the factorization
 $c_{2j-1}c_{2j}$ visible in \eqref{eq:S-fraction-Hankel} leaves room for
 variation in the individual Stieltjes coefficients.  For this reason the
@@ -492,14 +522,10 @@ has generating function
  G'(z)=\frac{1}{1-z}G\!\left(\frac{z}{1-z}\right)
 \]
 and preserves the Hankel determinants.  Scalar and exponential rescalings of
-moments produce explicit normalization factors in the determinants, while
+coefficient sequences produce explicit normalization factors in the determinants, while
 affine changes of the underlying variable give further related moment
 functionals.  Equality of Hankel transforms must therefore not be replaced
 by equality of generating functions without an independent argument.
-
-No classification of the moment representations obtained after dropping the
-companion condition is attempted here.  The inverse problem of describing all
-moment sequences realizing a given ordinary Hankel sequence remains open.
 
 
 \begin{thebibliography}{99}
