@@ -24,12 +24,64 @@ We record a five-parameter quadratic algebraic generating function whose
 coefficient sequence has prescribed initial Hankel determinants
 $(\lambda,m,r,\eta)$ and whose Hankel transform belongs to the Somos--4
 family $A(1,\tau)$.  The Hankel determinants and their parameters are
-introduced first, before the explicit algebraic equation.  We then describe
-the two square-root branches, their coalescence at the origin, a
+introduced first.  We then expose the underlying Stieltjes continued-fraction
+construction, including its normalization and coefficient recurrence, before
+presenting the explicit algebraic equation.  We subsequently describe the two
+square-root branches, their coalescence at the origin, a
 desingularized coefficient recurrence, the induced shift of the Hankel
-parameters, the Hankel-transform identity used in the construction, and the
-nonuniqueness of the coefficient sequence underlying a given Hankel transform.
+parameters, and the nonuniqueness of the underlying moment representation.  We make explicit that the construction fixes this nonuniqueness by prescribing, in addition to the ordinary Hankel transform, a companion Hankel sequence equal to the same Somos--4 orbit with its first entry removed.
 \end{abstract}
+
+\section{Context and relation to earlier work}
+The relation between Hankel determinants, continued fractions, moment
+sequences, and nonlinear recurrences has a long history.  Classical
+continued-fraction treatments include Wall~\cite{Wall1948} and Jones and
+Thron~\cite{JonesThron1980}; the combinatorial theory of continued fractions
+was developed systematically by Flajolet~\cite{Flajolet1980}.  Determinantal
+evaluations and transformations relevant to Hankel matrices are discussed,
+for example, by Krattenthaler~\cite{Krattenthaler1999}, Layman~\cite{Layman2001},
+and French~\cite{French2007}.  The quadratic transformation of Sulanke and
+Xin~\cite{SulankeXin2007} and related continued-fraction methods of Gessel and
+Xin~\cite{GesselXin2006} have become particularly effective tools for proving
+structured Hankel-determinant identities.
+
+Somos recurrences originated in the investigations of Somos and were
+popularized by Gale~\cite{Gale1991}.  Their Laurent phenomenon and their
+connections with elliptic divisibility sequences and elliptic curves are
+part of a broader theory; see, among others, Fomin and
+Zelevinsky~\cite{FominZelevinsky2002}, van der Poorten and
+Swart~\cite{VanderPoortenSwart2006}, Hone~\cite{Hone2005}, and
+Hone and Swart~\cite{HoneSwart2008}.  Xin proved the original Somos--4 Hankel
+determinant conjecture by a continued-fraction recursion
+system~\cite{Xin2007}.
+
+A substantial sequence of papers by Barry studies generating functions whose
+Hankel transforms satisfy Somos-type recurrences.  These works include
+generalized Catalan recurrences~\cite{Barry2010Catalan}, generalized Narayana
+triangles~\cite{Barry2011Narayana}, Riordan--Bernstein constructions
+\cite{Barry2012Bernstein}, and Riordan pseudo-involutions, continued fractions,
+and elliptic curves~\cite{Barry2019Pseudo}.  Barry's examples and conjectures
+form an important part of the immediate background of the present
+construction.
+
+Wang and Zhang subsequently formulated a sufficient condition for an
+algebraic generating function to have an $(\alpha,\beta)$ Somos--4 Hankel
+transform, using the Sulanke--Xin machinery~\cite{WangZhang2024}.  Liu, Wang,
+and Zhang extended this condition over a rational-function field and used it
+to settle the outstanding Barry conjectures treated there; they also studied
+odd and even Somos subsequences, the Hurwitz transform, orthogonal-polynomial
+Hankel formulas, periodic Hankel determinants, and elliptic parameter
+families~\cite{LiuWangZhang2026}.
+
+The direction taken here is complementary.  Rather than beginning with a
+given generating function and deriving the parameters of its Hankel
+recurrence, we begin with prescribed initial Hankel data
+$(\lambda,m,r,\eta)$ and the Somos coefficient $\tau$, impose a companion
+Hankel orbit, and construct an explicit quadratic algebraic generating
+function realizing those data.  The explicit companion prescription is also
+what selects one moment representation among the generally nonunique
+representations having the same ordinary Hankel transform.
+
 
 \section{Hankel determinants and Somos parameters}
 
@@ -58,7 +110,132 @@ and the Hankel sequence satisfies the Somos--4 recurrence
 Thus $\tau$ is the second coefficient of the Somos family $A(1,\tau)$,
 whereas $\lambda,m,r,$ and $\eta$ select the initial Hankel determinants.
 The algebraic generating function producing these determinants is given in
-the next section.
+the next section.  The construction makes one additional choice that is easy
+to overlook: together with $(H_n)_{n\geq0}$, it fixes a companion Hankel
+sequence
+\begin{equation}
+ \widehat H_n=H_{n+1}\qquad(n\geq0).
+ \label{eq:companion-Hankel-choice}
+\end{equation}
+Thus the companion sequence is the same Somos--4 orbit with its first entry
+removed.  This second prescription is part of the definition of the selected
+moment representation; it is not a consequence of the ordinary Hankel
+determinants alone.  Section~\ref{sec:nonuniqueness} explains why prescribing
+both sequences removes the degree of freedom discussed there.
+
+\section{Behind the construction: the Stieltjes fraction}
+The quadratic equation below may be obtained by first constructing a
+Stieltjes continued fraction whose Hankel determinants follow the prescribed
+Somos--4 orbit.  Write
+\begin{equation}
+ G(x)=\cfrac{c_0}{1-\cfrac{c_1x}{1-\cfrac{c_2x}{1-\cfrac{c_3x}{\ddots}}}}.
+ \label{eq:S-fraction}
+\end{equation}
+For this normalization, the ordinary Hankel determinants are\cite{Wall1948,JonesThron1980,Flajolet1980}
+\begin{equation}
+ H_n=c_0^n\prod_{j=1}^{n-1}(c_{2j-1}c_{2j})^{n-j}.
+ \label{eq:S-fraction-Hankel}
+\end{equation}
+Thus
+\[
+ H_1=c_0,\qquad
+ H_2=c_0^2c_1c_2,\qquad
+ H_3=c_0^3c_1^2c_2^2c_3c_4,
+\]
+and similarly at higher orders.
+
+It is useful first to remove the exponential scaling caused by $H_1$.
+Set
+\begin{equation}
+ a_1=1,\qquad
+ a_2=\frac{m}{\lambda^2},\qquad
+ a_3=\frac{r}{\lambda^3},\qquad
+ a_4=\frac{\eta}{\lambda^4}.
+ \label{eq:normalized-Somos-data}
+\end{equation}
+Then $H_n=\lambda^n a_n$ for $1\leq n\leq4$, and the normalized sequence
+$(a_n)$ obeys the same Somos--4 recurrence,
+\begin{equation}
+ a_{n+4}a_n=a_{n+3}a_{n+1}+\tau a_{n+2}^2.
+ \label{eq:normalized-Somos}
+\end{equation}
+The powers of $\lambda$ in \eqref{eq:normalized-Somos-data} are essential:
+for nonunit $H_1=\lambda$, the correct normalization is
+$a_j=H_j/\lambda^j$, not $H_j/\lambda^{j-1}$.
+
+A convenient initial segment of the Stieltjes coefficients is
+\begin{align}
+ c_0&=\lambda, &
+ c_1&=a_3, &
+ c_2&=\frac{a_2}{a_3},\\
+ c_3&=\frac{a_4}{a_2a_3}, &
+ c_4&=\frac{a_3^2}{a_2a_4}, &
+ c_5&=\tau\frac{a_2a_3}{a_4}+\frac{a_2^2}{a_3}.
+ \label{eq:initial-S-coefficients}
+\end{align}
+Equivalently, in the parameters used throughout this paper,
+\begin{equation}
+ \begin{aligned}
+ c_0&=\lambda,&
+ c_1&=\frac{r}{\lambda^3},&
+ c_2&=\frac{\lambda m}{r},\\
+ c_3&=\frac{\lambda\eta}{mr},&
+ c_4&=\frac{r^2}{m\eta},&
+ c_5&=\frac{\tau mr}{\lambda\eta}+\frac{m^2}{\lambda r}.
+ \end{aligned}
+ \label{eq:initial-S-coefficients-original}
+\end{equation}
+The remaining coefficients are generated alternately by
+\begin{equation}
+ c_{2k}=\frac{1}{c_{2k-2}c_{2k-1}},\qquad
+ c_{2k+1}=c_{2k-2}+\frac{\tau}{c_{2k-1}}
+ \qquad(k\geq3).
+ \label{eq:S-coefficient-recurrence}
+\end{equation}
+In particular,
+\[
+ c_6=\frac1{c_4c_5},\qquad
+ c_7=c_4+\frac{\tau}{c_5},\qquad
+ c_8=\frac1{c_6c_7},\qquad
+ c_9=c_6+\frac{\tau}{c_7}.
+\]
+Substitution in \eqref{eq:S-fraction-Hankel} gives
+$H_j=\lambda^j a_j$ for $1\leq j\leq4$.  At the next order it gives
+\[
+ \frac{H_5}{\lambda^5}=\frac{a_3a_4c_5}{a_2}
+ =a_2a_4+\tau a_3^2,
+\]
+which is exactly the first Somos--4 step.  The alternating recurrence
+\eqref{eq:S-coefficient-recurrence} continues this mechanism.
+
+The initial coefficients in \eqref{eq:initial-S-coefficients} do more than
+reproduce the ordinary Hankel determinants.  They also implement the
+companion prescription \eqref{eq:companion-Hankel-choice}: the second product
+sequence attached to the Stieltjes fraction is fixed to be the same
+Somos--4 orbit with its first entry removed.  The ordinary Hankel transform
+determines only the products $c_{2j-1}c_{2j}$ in
+\eqref{eq:S-fraction-Hankel}; the companion sequence fixes the corresponding
+splitting into the odd and even Stieltjes coefficients.  Consequently, once
+both product sequences and the normalization $c_0=\lambda$ are prescribed,
+the Stieltjes fraction, and hence the selected moment sequence, is fully
+determined on the nondegenerate locus.  This is the particular representative
+used throughout the paper.
+
+A literal shifted determinant of the moments should nevertheless not be
+confused with the normalized companion product sequence just described.  If
+\begin{equation}
+ H_n^{(1)}=\det(g_{i+j+1})_{0\leq i,j\leq n-1},
+ \label{eq:literal-shifted-Hankel}
+\end{equation}
+then already $H_1^{(1)}=g_1=\lambda c_1$, rather than $c_1$ unless
+$\lambda=1$.  Thus the phrase ``the same orbit with its first entry removed''
+refers here to the normalized companion sequence fixed by the construction,
+not, without normalization, to the literal determinant
+\eqref{eq:literal-shifted-Hankel}.
+
+The next step, is to eliminate the recursively
+defined continued-fraction tail and thereby obtain the explicit quadratic
+algebraic equation for $G$.  
 
 \section{The algebraic generating function}
 
@@ -213,46 +390,16 @@ Hence shifting the Hankel sequence induces the parameter map
  \left(m,r,n,\frac{mn+tr^2}{\ell},t\right).
  \label{eq:parameter-shift}
 \end{equation}
-
-The point of this shift in the present construction is the following
-Hankel-transform identity.  Remove the first coefficient of
-$G_{0;\ell,m,r,n,t}$ and shift the remaining series to the origin:
-\begin{equation}
- \widehat G(x)
- =\frac{G_{0;\ell,m,r,n,t}(x)-g_0}{x}
- =\sum_{q\geq0}g_{q+1}x^q.
- \label{eq:coefficient-tail}
-\end{equation}
-Also form the generating function with shifted parameters,
-\begin{equation}
- \widetilde G(x)
- =G_{0;m,r,n,(mn+tr^2)/\ell,t}(x)
- =\sum_{q\geq0}\widetilde g_qx^q.
- \label{eq:shifted-parameter-gf}
-\end{equation}
-Although the two coefficient sequences are generally different, their
-Hankel transforms are identical:
-\begin{equation}
- \det(g_{i+j+1})_{0\leq i,j\leq q-1}
- =\det(\widetilde g_{i+j})_{0\leq i,j\leq q-1}
- \qquad(q\geq1).
- \label{eq:tail-shift-hankel-identity}
-\end{equation}
-Both sides therefore begin with
+This concerns the Hankel transforms only.  In particular, it does not imply
+an identity of generating functions such as
 \[
- m,\quad r,\quad n,\quad \frac{mn+tr^2}{\ell},\ldots
+ \frac{G_{0;\ell,m,r,n,t}(x)-g_0}{x}
+ =G_{0;m,r,n,(mn+tr^2)/\ell,t}(x).
 \]
-and continue according to the same Somos--4 recurrence with parameter $t$.
-This Hankel-level identity, rather than equality of the generating functions,
-is the shift property used in the design of the algebraic generating function.
-In general,
-\[
- \widehat G(x)\ne\widetilde G(x),
-\]
-which is consistent with the fact that different coefficient sequences can
-have the same Hankel transform.
+Distinct moment sequences, and hence distinct generating functions, may have
+the same Hankel transform.
 
-\section{A recurrence for the coefficients}
+\section{A recurrence for the moments}
 
 Using the notation of \eqref{eq:desingularization}, division of the expanded
 quadratic equation by $z^2$ yields
@@ -292,7 +439,7 @@ where $f_q=0$ for $q<0$ and $E_j=0$ for $j>3$.  For $q\geq1$,
  T_q=2mf_q+\sum_{k=1}^{q-1}f_kf_{q-k}.
  \label{eq:Tq-split}
 \end{equation}
-Under condition \eqref{eq:nondegeneracy}, the coefficients are therefore generated
+Under condition \eqref{eq:nondegeneracy}, the moments are therefore generated
 recursively by
 \begin{equation}
  f_q=-\frac{
@@ -300,24 +447,43 @@ recursively by
  +\displaystyle\sum_{j=1}^{3}A_jT_{q-j}
  +D_2f_{q-1}+D_3f_{q-2}+E_{q+2}}
  {2A_0m+D_1}.
- \label{eq:coefficient-recurrence}
+ \label{eq:moment-recurrence}
 \end{equation}
 This quadratic convolution recurrence follows directly from the algebraic
 generating-function equation.  On the exceptional locus
 $2A_0m+D_1=0$, the two desingularized branches coalesce at the origin and
-the next coefficient is not determined by the first-order coefficient equation;
+the next moment is not determined by the first-order coefficient equation;
 higher-order compatibility or a Puiseux expansion may then be required.
 
 Because $F$ is algebraic of degree at most two, it is D-finite.  Consequently,
-the same coefficient sequence also satisfies a fixed-width linear recurrence with
+the same moment sequence also satisfies a fixed-width linear recurrence with
 polynomial coefficients in the index.
 
-\section{Nonuniqueness of the coefficient sequence}
+\section{Nonuniqueness of the moment representation}
+\label{sec:nonuniqueness}
 
-The Hankel transform does not in general determine the coefficient sequence.
-The five-parameter algebraic generating function should therefore be viewed as
-a representative of a larger equivalence class, rather than as the unique
-generating function of a Somos orbit.  For example, the binomial transform
+The ordinary Hankel transform does not in general determine the moment
+sequence.  If only $(H_n)$ is prescribed, the factorization
+$c_{2j-1}c_{2j}$ visible in \eqref{eq:S-fraction-Hankel} leaves freedom in the
+individual Stieltjes coefficients.  The five-parameter algebraic generating
+function should therefore not be interpreted as the unique moment
+representation determined by the ordinary Somos--4 Hankel orbit alone.
+
+The construction in this paper removes precisely this freedom by imposing
+the additional companion condition \eqref{eq:companion-Hankel-choice}.  In
+other words, we prescribe two product sequences: the first is the Somos--4
+sequence $(H_n)$, and the second is the same sequence with its first value
+removed.  Together with $c_0=\lambda$, these two prescriptions determine the
+odd and even Stieltjes coefficients separately through
+\eqref{eq:initial-S-coefficients} and
+\eqref{eq:S-coefficient-recurrence}.  Hence the algebraic generating function
+presented in Section~3 is the fully specified representative selected by
+those two Hankel-level requirements.  This choice was already built into the
+initial Stieltjes coefficients in Section~2; stating it explicitly here makes
+clear how the apparent degree of freedom is eliminated.
+
+Other moment sequences can still share the first, ordinary Hankel transform
+when the companion condition is not imposed.  For example, the binomial transform, a standard Hankel-transform-preserving operation\cite{Layman2001,French2007},
 \begin{equation}
  g'_q=\sum_{k=0}^{q}\binom{q}{k}g_k
  \label{eq:binomial-transform}
@@ -326,13 +492,130 @@ has generating function
 \[
  G'(z)=\frac{1}{1-z}G\!\left(\frac{z}{1-z}\right)
 \]
-and preserves the Hankel determinants.  Scalar and exponential rescalings of the coefficients produce explicit
-normalization factors in the determinants, and substitutions in the generating
-function give further related coefficient sequences.  Equality of Hankel transforms must therefore not be replaced
+and preserves the Hankel determinants.  Scalar and exponential rescalings of
+moments produce explicit normalization factors in the determinants, while
+affine changes of the underlying variable give further related moment
+functionals.  Equality of Hankel transforms must therefore not be replaced
 by equality of generating functions without an independent argument.
 
-No classification of these equivalent coefficient sequences is attempted
-here.  The inverse problem of describing all coefficient sequences realizing
-a given Hankel sequence remains open.
+No classification of the moment representations obtained after dropping the
+companion condition is attempted here.  The inverse problem of describing all
+moment sequences realizing a given ordinary Hankel sequence remains open.
+
+
+\begin{thebibliography}{99}
+
+\bibitem{Barry2010Catalan}
+P.~Barry,
+\newblock Generalized Catalan numbers, Hankel transforms and Somos--4 sequences,
+\newblock \emph{Journal of Integer Sequences} \textbf{13} (2010), Article 10.7.2.
+
+\bibitem{Barry2011Narayana}
+P.~Barry,
+\newblock On a generalization of the Narayana triangle,
+\newblock \emph{Journal of Integer Sequences} \textbf{14} (2011), Article 11.4.5.
+
+\bibitem{Barry2012Bernstein}
+P.~Barry,
+\newblock Riordan--Bernstein polynomials, Hankel transforms and Somos sequences,
+\newblock \emph{Journal of Integer Sequences} \textbf{15} (2012), Article 12.8.2.
+
+\bibitem{Barry2019Pseudo}
+P.~Barry,
+\newblock Riordan pseudo-involutions, continued fractions and Somos--4 sequences,
+\newblock \emph{Journal of Integer Sequences} \textbf{22} (2019), Article 19.6.1;
+\newblock arXiv:1807.05794.
+
+\bibitem{Flajolet1980}
+P.~Flajolet,
+\newblock Combinatorial aspects of continued fractions,
+\newblock \emph{Discrete Mathematics} \textbf{32} (1980), 125--161.
+
+\bibitem{FominZelevinsky2002}
+S.~Fomin and A.~Zelevinsky,
+\newblock The Laurent phenomenon,
+\newblock \emph{Advances in Applied Mathematics} \textbf{28} (2002), 119--144.
+
+\bibitem{French2007}
+C.~French,
+\newblock Transformations preserving the Hankel transform,
+\newblock \emph{Journal of Integer Sequences} \textbf{10} (2007), Article 07.7.3.
+
+\bibitem{Gale1991}
+D.~Gale,
+\newblock The strange and surprising saga of the Somos sequences,
+\newblock \emph{The Mathematical Intelligencer} \textbf{13} (1991), no.~1, 40--42.
+
+\bibitem{GesselXin2006}
+I.~M. Gessel and G.~Xin,
+\newblock The generating function of ternary trees and continued fractions,
+\newblock \emph{Electronic Journal of Combinatorics} \textbf{13} (2006), Research Paper 53.
+
+\bibitem{Hone2005}
+A.~N.~W. Hone,
+\newblock Elliptic curves and quadratic recurrence sequences,
+\newblock \emph{Bulletin of the London Mathematical Society} \textbf{37} (2005), 161--171.
+
+\bibitem{HoneSwart2008}
+A.~N.~W. Hone and C.~Swart,
+\newblock Integrality and the Laurent phenomenon for Somos--4 sequences,
+\newblock \emph{Mathematical Proceedings of the Cambridge Philosophical Society}
+\textbf{145} (2008), 65--85.
+
+\bibitem{JonesThron1980}
+W.~B. Jones and W.~J. Thron,
+\newblock \emph{Continued Fractions: Analytic Theory and Applications},
+\newblock Encyclopedia of Mathematics and its Applications, vol.~11,
+Addison--Wesley, 1980.
+
+\bibitem{Krattenthaler1999}
+C.~Krattenthaler,
+\newblock Advanced determinant calculus,
+\newblock \emph{S\'eminaire Lotharingien de Combinatoire} \textbf{42} (1999), Article B42q.
+
+\bibitem{Layman2001}
+J.~W. Layman,
+\newblock The Hankel transform and some of its properties,
+\newblock \emph{Journal of Integer Sequences} \textbf{4} (2001), Article 01.1.5.
+
+\bibitem{LiuWangZhang2026}
+F.~Liu, Y.~Wang, and Z.~Zhang,
+\newblock Hankel transform and $(\alpha,\beta)$ Somos--4 sequences,
+\newblock arXiv:2608.08703 [math.CO], 2026,
+\newblock \url{https://arxiv.org/abs/2608.08703}.
+
+\bibitem{OvsienkoPedon2024}
+V.~Ovsienko and E.~Pedon,
+\newblock Continued fractions for $q$-deformed real numbers,
+$\{-1,0,1\}$-Hankel determinants, and Somos--Gale--Robinson sequences,
+\newblock \emph{Advances in Applied Mathematics} \textbf{162} (2024), Article 102788.
+
+\bibitem{SulankeXin2007}
+R.~A. Sulanke and G.~Xin,
+\newblock Hankel determinants for some common lattice paths,
+\newblock \emph{Advances in Applied Mathematics} \textbf{40} (2008), 149--167.
+
+\bibitem{VanderPoortenSwart2006}
+A.~J. van der Poorten and C.~S. Swart,
+\newblock Recurrence relations for elliptic sequences: every Somos--4 is a Somos--$k$,
+\newblock \emph{Bulletin of the London Mathematical Society} \textbf{38} (2006), 546--554.
+
+\bibitem{Wall1948}
+H.~S. Wall,
+\newblock \emph{Analytic Theory of Continued Fractions},
+\newblock Van Nostrand, New York, 1948.
+
+\bibitem{WangZhang2024}
+Y.~Wang and Z.~Zhang,
+\newblock A sufficient condition for $(\alpha,\beta)$ Somos--4 Hankel determinants,
+\newblock \emph{Discrete Mathematics} (2024);
+\newblock arXiv:2305.05995.
+
+\bibitem{Xin2007}
+G.~Xin,
+\newblock Proof of the Somos--4 Hankel determinants conjecture,
+\newblock \emph{Advances in Applied Mathematics} \textbf{42} (2009), 152--156.
+
+\end{thebibliography}
 
 \end{document}
