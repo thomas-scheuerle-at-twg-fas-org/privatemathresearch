@@ -234,10 +234,107 @@ refers here to the normalized companion sequence fixed by the construction,
 not, without normalization, to the literal determinant
 \eqref{eq:literal-shifted-Hankel}.
 
-The next step is to eliminate the recursively defined continued-fraction tail
-and thereby obtain the explicit quadratic algebraic equation for $G$.
+The next step is to eliminate the recursively defined continued-fraction
+tail. The following isolated calculation explains why this elimination closes
+quadratically and hence provides the conceptual bridge to the explicit equation
+in Section~\ref{sec:algebraic-gf}.
+
+\subsection{Quadratic closure of the recurrent tail}
+\label{subsec:tail-closure}
+For a sequence $(d_n)_{n\geq1}$, write
+\begin{equation}
+ T_n(x)=\cfrac{1}{1-\cfrac{d_nx}{1-\cfrac{d_{n+1}x}{1-\ddots}}},
+ \qquad T_n=\frac{1}{1-d_nxT_{n+1}}.
+ \label{eq:tail-fraction}
+\end{equation}
+The recurrence in \eqref{eq:S-coefficient-recurrence} becomes transparent
+after the tail is started at $c_4$. Put
+\begin{equation}
+ d_n=c_{n+3},\qquad b=d_1=c_4,\qquad d=d_2=c_5,\qquad t=\tau.
+ \label{eq:tail-reindexing}
+\end{equation}
+Then $d_1=b$, $d_2=d$, $d_3=1/(bd)$, and thereafter
+\begin{equation}
+ d_n=\frac1{d_{n-1}d_{n-2}}\quad(n\geq3\text{ odd}),\qquad
+ d_n=\frac{t}{d_{n-2}}+d_{n-3}\quad(n\geq4\text{ even}).
+ \label{eq:isolated-tail-recurrence}
+\end{equation}
+Thus the alternating recurrence can be studied independently of the first
+three levels of the original Stieltjes fraction.
+
+\begin{proposition}[Quadratic equation for the recurrent tail]
+\label{prop:tail-quadratic}
+Let $T=T_1$ be the formal continued fraction defined by
+\eqref{eq:tail-fraction}--\eqref{eq:isolated-tail-recurrence}. Then $T(0)=1$ and
+\begin{equation}
+ \mathcal A(x)T^2+\mathcal B(x)T+\mathcal C(x)=0,
+ \label{eq:tail-quadratic}
+\end{equation}
+where
+\begin{align}
+ \mathcal A(x)&=-\bigl((b^2+d+2)t+b\bigr)x^2+(bt+1)x,
+ \label{eq:tail-A}\\
+ \mathcal B(x)&=bdt\,x^2+\bigl(-bt+b^2d+d^2b-1\bigr)x-bd,
+ \label{eq:tail-B}\\
+ \mathcal C(x)&=bd-bd^2x.
+ \label{eq:tail-C}
+\end{align}
+\end{proposition}
+
+\begin{proof}
+Removing one level of a Stieltjes fraction is a fractional-linear
+transformation,
+\begin{equation}
+ T_{n+1}=\frac{T_n-1}{d_nxT_n}.
+ \label{eq:tail-extraction}
+\end{equation}
+Consequently, quadratic relations are preserved under tail extraction. More
+explicitly, if $Q_n(Y)$ is quadratic and $Q_n(T_n)=0$, then a polynomial for
+the next tail is
+\begin{equation}
+ Q_{n+1}(Y)=(1-d_nxY)^2
+ Q_n\!\left(\frac1{1-d_nxY}\right),
+ \label{eq:quadratic-transport}
+\end{equation}
+after removal of any nonzero common factor. Substitution of
+\eqref{eq:isolated-tail-recurrence} into successive applications of
+\eqref{eq:quadratic-transport} uses only
+\begin{equation}
+ d_nd_{n-1}d_{n-2}=1\quad(n\text{ odd}),\qquad
+ d_nd_{n-2}=t+d_{n-3}d_{n-2}\quad(n\text{ even}).
+ \label{eq:tail-compatibility}
+\end{equation}
+On collecting the coefficients of $Y^2,Y,$ and $1$, these identities cancel
+the newly introduced tail coefficient and return the same quadratic family.
+Initializing with $d_1=b$, $d_2=d$, and $d_3=1/(bd)$ gives
+\eqref{eq:tail-A}--\eqref{eq:tail-C}. At $x=0$,
+\eqref{eq:tail-quadratic} reduces to $bd(1-T)=0$, so the continued-fraction
+branch is the branch with $T(0)=1$.
+\end{proof}
+
+This proposition gives a short derivation of the algebraic nature of the full
+generating function. Let $T=T_4$ denote the tail of \eqref{eq:S-fraction}
+beginning with $c_4$. The first three levels are recovered by
+\begin{equation}
+ T_3=\frac1{1-c_3xT},\qquad
+ T_2=\frac1{1-c_2xT_3},\qquad
+ T_1=\frac1{1-c_1xT_2},\qquad G=c_0T_1.
+ \label{eq:recover-full-fraction}
+\end{equation}
+Each step is again a M\"obius transformation. Substituting
+\eqref{eq:recover-full-fraction} into \eqref{eq:tail-quadratic}, followed by
+$c_0=\lambda$ and the values in
+\eqref{eq:initial-S-coefficients-original}, therefore produces a quadratic
+polynomial in $G$. Clearing denominators and collecting powers of $z$ yields
+exactly the polynomials in \eqref{eq:A}--\eqref{eq:C}. This explains
+structurally why the recursively defined infinite fraction gives a quadratic
+algebraic generating function: the recurrence is the compatibility condition
+that keeps the continued-fraction tails inside a quadratic family, while the
+omitted initial levels only conjugate that family by fractional-linear maps.
 
 \section{The algebraic generating function}
+\label{sec:algebraic-gf}
+
 
 Define the polynomials $A(z),B(z),C(z)$ by
 \begin{align}
