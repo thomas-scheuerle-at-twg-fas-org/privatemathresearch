@@ -29,8 +29,7 @@ Cpoly(l, j, m, r, t, y) =
 {
   -l^2*m*r*(t*(l^2*j + m^2) + l*r)*y^2
   + (l^3*m^2*r^2*t + l^4*r^3
-     + j*(m - 1)*(j*(-15*l^4 + 85*l^3 - 225*l^2 + 274*l - 120)
-       - l^3*m^2 - 3*(l-1)*(l-2)*(l-3)*(l-4)*(l-5)))*y
+     - l^3*j*(m - 1)*(l^2*j + m^2))*y
   + l^4*j*m*(m - 1)*r;
 };
 
@@ -103,6 +102,26 @@ check_recurrence(v, l, j, m, r, t) =
   );
 
   ok;
+};
+
+verify_section4_correction() =
+{
+  my(l = 6, j = 7, m = 3, r = 5, t = 11);
+  my(oldC1 = l^3*m^2*r^2*t + l^4*r^3
+    + j*(m - 1)*(j*(-15*l^4 + 85*l^3 - 225*l^2 + 274*l - 120)
+      - l^3*m^2 - 3*(l-1)*(l-2)*(l-3)*(l-4)*(l-5)));
+  my(newC1 = l^3*m^2*r^2*t + l^4*r^3 - l^3*j*(m - 1)*(l^2*j + m^2));
+  my(diff = oldC1 - newC1);
+  my(expected = j*(m - 1)*(j - 3)*(l - 1)*(l - 2)*(l - 3)*(l - 4)*(l - 5));
+
+  if (diff != expected,
+    print("Section 4 correction check failed: diff = ", diff, ", expected = ", expected);
+    return(0)
+  );
+
+  print("Section 4 correction check: diff = ", diff, " = ", expected,
+        " for (l,j,m,r,t) = (", l, ",", j, ",", m, ",", r, ",", t, ")");
+  1;
 };
 
 run_one_test(l, j, m, r, t, nterms, verbose = 0) =
@@ -281,4 +300,5 @@ run_all_tests(nterms = 24, num_random = 80, verbose = 0) =
 };
 
 \\ Execute when script is read.
+verify_section4_correction();
 run_all_tests();
