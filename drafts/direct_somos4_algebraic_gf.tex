@@ -29,11 +29,15 @@ continued-fraction construction, its normalization, and the coefficient
 recurrence, before writing down the explicit algebraic equation.  After that
 we discuss the two square-root branches, their coalescence at the origin,
 a desingularized coefficient recurrence, the induced shift in the Hankel
-parameters, and the nonuniqueness of the underlying moment representation.
+parameters, and the nonuniqueness of the underlying coefficient-sequence representation.
 The essential point is that the construction removes this ambiguity by
 prescribing, in addition to the ordinary Hankel transform, a companion Hankel
-sequence equal to the same Somos--4 orbit with its first term removed.
+sequence obtained from the same Somos--4 orbit by a normalized two-step shift.
 \end{abstract}
+
+\section*{Acknowledgments}
+I am grateful to Florian Lengyel for reading an earlier version of this manuscript and for pointing out important errors, and to Michael Somos for pointing out important suggestions for improvement.
+
 
 \section{Context and relation to earlier work}
 The relation between Hankel determinants, continued fractions, moment
@@ -79,9 +83,9 @@ The point of view here is different.  Instead of beginning with a given
 generating function and deriving the parameters of its Hankel recurrence, we
 start with prescribed initial Hankel data $(\lambda,m,r,\eta)$ and the Somos
 coefficient $\tau$, impose a companion Hankel orbit, and construct an explicit
-quadratic algebraic generating function realizing those data.  The companion
-prescription is what selects one moment representation from among the
-generally nonunique representations having the same ordinary Hankel transform.
+quadratic algebraic generating function realizing those data.  The normalized two-step companion prescription is what selects one coefficient
+sequence from among the generally nonunique sequences having the same ordinary
+Hankel transform.
 
 
 \section{Hankel determinants and Somos parameters}
@@ -112,16 +116,18 @@ Thus $\tau$ is the second coefficient of the Somos family $A(1,\tau)$,
 whereas $\lambda,m,r,$ and $\eta$ select the initial Hankel determinants.
 The algebraic generating function producing these determinants is given in
 the next section.  The construction makes one additional choice that is easy
-to overlook: together with $(H_n)_{n\geq0}$, it fixes a companion Hankel
-sequence
+to overlook: together with $(H_n)_{n\geq0}$, it fixes the normalized companion
+Hankel sequence
 \begin{equation}
- \widehat H_n=H_{n+1}\qquad(n\geq0).
+ \widehat H_n=\det(g_{i+j+1})_{0\leq i,j\leq n-1}
+ =\frac{H_{n+2}}{\lambda^2}\qquad(n\geq1).
  \label{eq:companion-Hankel-choice}
 \end{equation}
-Thus the companion sequence is the same Somos--4 orbit with its first entry
-removed.  This second prescription is part of the definition of the selected
-moment representation; it is not a consequence of the ordinary Hankel
-determinants alone.  Section~\ref{sec:nonuniqueness} explains why prescribing
+Thus the companion is obtained by advancing the Somos--4 orbit by two indices
+and applying the normalization factor $\lambda^{-2}$.  Its first term is
+$\widehat H_1=g_1=r/\lambda^2$, not $H_2=m$.  This second prescription is part
+of the definition of the selected coefficient sequence; it is not a
+consequence of the ordinary Hankel determinants alone.  Section~\ref{sec:nonuniqueness} explains why prescribing
 both sequences removes the degree of freedom discussed there.
 
 \section{Behind the construction: the Stieltjes fraction}
@@ -210,30 +216,26 @@ which is exactly the first Somos--4 step.  The alternating recurrence
 \eqref{eq:S-coefficient-recurrence} continues this mechanism.
 
 The initial coefficients in \eqref{eq:initial-S-coefficients} do more than
-reproduce the ordinary Hankel determinants.  They also implement the
-companion prescription \eqref{eq:companion-Hankel-choice}: the second product
-sequence attached to the Stieltjes fraction is fixed to be the same
-Somos--4 orbit with its first entry removed.  The ordinary Hankel transform
-determines only the products $c_{2j-1}c_{2j}$ in
+reproduce the ordinary Hankel determinants.  The standard shifted-Hankel
+product formula for the Stieltjes fraction gives
+\begin{equation}
+ \det(g_{i+j+1})_{0\leq i,j\leq n-1}
+ =\frac{H_{n+2}}{\lambda^2}\qquad(n\geq1).
+ \label{eq:literal-shifted-Hankel}
+\end{equation}
+Indeed, the first case is
+\[
+ g_1=c_0c_1=\lambda\frac{r}{\lambda^3}=\frac{r}{\lambda^2}.
+\]
+Hence the second product sequence attached to the Stieltjes fraction is the
+normalized two-step companion in \eqref{eq:companion-Hankel-choice}.  The
+ordinary Hankel transform determines only the products $c_{2j-1}c_{2j}$ in
 \eqref{eq:S-fraction-Hankel}; the companion sequence fixes the corresponding
 splitting into the odd and even Stieltjes coefficients.  Consequently, once
 both product sequences and the normalization $c_0=\lambda$ are prescribed,
-the Stieltjes fraction, and hence the selected moment sequence, is fully
+the Stieltjes fraction, and hence the selected coefficient sequence, is fully
 determined on the nondegenerate locus.  This is the particular representative
 used throughout the paper.
-
-A literal shifted determinant of the moments should nevertheless not be
-confused with the normalized companion product sequence just described.  If
-\begin{equation}
- H_n^{(1)}=\det(g_{i+j+1})_{0\leq i,j\leq n-1},
- \label{eq:literal-shifted-Hankel}
-\end{equation}
-then already $H_1^{(1)}=g_1=\lambda c_1$, rather than $c_1$ unless
-$\lambda=1$.  Thus the phrase ``the same orbit with its first entry removed''
-refers here to the normalized companion sequence fixed by the construction,
-not, without normalization, to the literal determinant
-\eqref{eq:literal-shifted-Hankel}.
-
 The next step is to eliminate the recursively defined continued-fraction
 tail. The following isolated calculation explains why this elimination closes
 quadratically and hence provides the conceptual bridge to the explicit equation
@@ -272,7 +274,7 @@ Let $T=T_1$ be the formal continued fraction defined by
 \end{equation}
 where
 \begin{align}
- \mathcal A(x)&=-\bigl((b^2+d+2)t+b\bigr)x^2+(bt+1)x,
+ \mathcal A(x)&=(bt+1)x-b\bigl((b+d)t+1\bigr)x^2,
  \label{eq:tail-A}\\
  \mathcal B(x)&=bdt\,x^2+\bigl(-bt+b^2d+d^2b-1\bigr)x-bd,
  \label{eq:tail-B}\\
@@ -363,7 +365,6 @@ Define the polynomials $A(z),B(z),C(z)$ by
  &+\lambda^4\eta m(m-1)r.
  \label{eq:C}
 \end{align}
-
 The generating function is the formal-power-series branch of
 \begin{equation}
  A(z)G(z)^2+B(z)G(z)+C(z)=0
@@ -458,73 +459,50 @@ The next coefficient equation is
 Since $f_0=g_1=m$, the prescribed value of $m$ selects one of the two
 branches of the desingularized quadratic.
 
-\section{Hankel-level shift of the parameters}
-
-To display the shift independently of the letters used above, let
-\[
- G_{0;\ell,m,r,n,t}(x)=\sum_{q\geq0}g_qx^q
-\]
-denote the selected formal-power-series solution of \eqref{eq:quadratic}
-after the substitutions
-\[
- \lambda=\ell,\qquad \eta=n,\qquad \tau=t.
-\]
+\section{The normalized two-step companion}
+Let $G_{0;\ell,m,r,n,t}(x)=\sum_{q\geq0}g_qx^q$ denote the selected solution.
 Its Hankel determinants satisfy
 \begin{equation}
  (H_1,H_2,H_3,H_4)=(\ell,m,r,n),\qquad
  H_{q+4}H_q=H_{q+3}H_{q+1}+tH_{q+2}^2.
  \label{eq:parameter-meaning}
 \end{equation}
-The first Somos step gives
+The next two values are
+\begin{align}
+ H_5&=\frac{mn+tr^2}{\ell}, \label{eq:fifth-Hankel}\\
+ H_6&=\frac{rH_5+tn^2}{m}
+ =\frac{r(mn+tr^2)+t\ell n^2}{\ell m}. \label{eq:sixth-Hankel}
+\end{align}
+Remove the first coefficient and shift the remaining series to the origin:
 \begin{equation}
- H_5=\frac{H_2H_4+tH_3^2}{H_1}
-     =\frac{mn+tr^2}{\ell}.
- \label{eq:fifth-Hankel}
-\end{equation}
-Hence shifting the Hankel sequence induces the parameter map
-\begin{equation}
- (\ell,m,r,n,t)\longmapsto
- \left(m,r,n,\frac{mn+tr^2}{\ell},t\right).
- \label{eq:parameter-shift}
-\end{equation}
-
-The point of this shift in the present construction is the following
-Hankel-transform identity.  Remove the first coefficient of
-$G_{0;\ell,m,r,n,t}$ and shift the remaining series to the origin:
-\begin{equation}
- \widehat G(x)
- =\frac{G_{0;\ell,m,r,n,t}(x)-g_0}{x}
+ \widehat G(x)=\frac{G_{0;\ell,m,r,n,t}(x)-g_0}{x}
  =\sum_{q\geq0}g_{q+1}x^q.
  \label{eq:coefficient-tail}
 \end{equation}
-Also form the generating function with shifted parameters,
-\begin{equation}
- \widetilde G(x)
- =G_{0;m,r,n,(mn+tr^2)/\ell,t}(x)
- =\sum_{q\geq0}\widetilde g_qx^q.
- \label{eq:shifted-parameter-gf}
-\end{equation}
-Although the two coefficient sequences are generally different, their
-Hankel transforms are identical:
+Its Hankel transform is
 \begin{equation}
  \det(g_{i+j+1})_{0\leq i,j\leq q-1}
- =\det(\widetilde g_{i+j})_{0\leq i,j\leq q-1}
- \qquad(q\geq1).
+ =\frac{H_{q+2}}{\ell^2}\qquad(q\geq1).
  \label{eq:tail-shift-hankel-identity}
 \end{equation}
-Both sides therefore begin with
+It therefore begins with
 \[
- m,\quad r,\quad n,\quad \frac{mn+tr^2}{\ell},\ldots
+ \frac{r}{\ell^2},\quad \frac{n}{\ell^2},\quad
+ \frac{mn+tr^2}{\ell^3},\quad
+ \frac{r(mn+tr^2)+t\ell n^2}{\ell^3m},\ldots .
 \]
-and continue according to the same Somos--4 recurrence with parameter $t$.
-This Hankel-level identity, rather than equality of the generating functions,
-is the shift property used in the design of the algebraic generating function.
-In general,
-\[
- \widehat G(x)\ne\widetilde G(x),
-\]
-which is consistent with the fact that different coefficient sequences can
-have the same Hankel transform.
+This is the orbit $(H_{q+2})_{q\geq1}$ multiplied by the constant
+normalization $\ell^{-2}$.  Since Somos--4 is homogeneous of degree two, the
+normalized companion satisfies the same recurrence with parameter $t$.
+Equivalently, it has the initial parameter tuple
+\begin{equation}
+ \left(\frac{r}{\ell^2},\frac{n}{\ell^2},
+ \frac{mn+tr^2}{\ell^3},
+ \frac{r(mn+tr^2)+t\ell n^2}{\ell^3m},t\right).
+ \label{eq:two-step-parameter-shift}
+\end{equation}
+The assertion is an identity of Hankel transforms, not necessarily of the
+underlying coefficient sequences.  
 
 \section{A recurrence for the coefficients}
 
