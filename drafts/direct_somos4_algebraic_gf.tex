@@ -32,7 +32,7 @@ a desingularized coefficient recurrence, the induced shift in the Hankel
 parameters, and the nonuniqueness of the underlying coefficient-sequence representation.
 The essential point is that the construction removes this ambiguity by
 prescribing, in addition to the ordinary Hankel transform, a companion Hankel
-sequence obtained from the same Somos--4 orbit by a normalized two-step shift.
+sequence obtained from the same Somos--4 orbit by a two-step shift.
 \end{abstract}
 
 \section*{Acknowledgments}
@@ -83,7 +83,7 @@ The point of view here is different.  Instead of beginning with a given
 generating function and deriving the parameters of its Hankel recurrence, we
 start with prescribed initial Hankel data $(\lambda,m,r,\eta)$ and the Somos
 coefficient $\tau$, impose a companion Hankel orbit, and construct an explicit
-quadratic algebraic generating function realizing those data.  The normalized two-step companion prescription is what selects one coefficient
+quadratic algebraic generating function realizing those data.  The two-step companion prescription is what selects one coefficient
 sequence from among the generally nonunique sequences having the same ordinary
 Hankel transform.
 
@@ -116,16 +116,16 @@ Thus $\tau$ is the second coefficient of the Somos family $A(1,\tau)$,
 whereas $\lambda,m,r,$ and $\eta$ select the initial Hankel determinants.
 The algebraic generating function producing these determinants is given in
 the next section.  The construction makes one additional choice that is easy
-to overlook: together with $(H_n)_{n\geq0}$, it fixes the normalized companion
+to overlook: together with $(H_n)_{n\geq0}$, it fixes the companion
 Hankel sequence
 \begin{equation}
  \widehat H_n=\det(g_{i+j+1})_{0\leq i,j\leq n-1}
- =\frac{H_{n+2}}{\lambda^2}\qquad(n\geq1).
+ =H_{n+2}\qquad(n\geq1).
  \label{eq:companion-Hankel-choice}
 \end{equation}
 Thus the companion is obtained by advancing the Somos--4 orbit by two indices
-and applying the normalization factor $\lambda^{-2}$.  Its first term is
-$\widehat H_1=g_1=r/\lambda^2$, not $H_2=m$.  This second prescription is part
+without applying any additional normalization factor.  Its first term is
+$\widehat H_1=g_1=H_3=r$, not $H_2=m$.  This second prescription is part
 of the definition of the selected coefficient sequence; it is not a
 consequence of the ordinary Hankel determinants alone.  Section~\ref{sec:nonuniqueness} explains why prescribing
 both sequences removes the degree of freedom discussed there.
@@ -173,8 +173,8 @@ $a_j=H_j/\lambda^j$, not $H_j/\lambda^{j-1}$.
 A convenient initial segment of the Stieltjes coefficients is
 \begin{align}
  c_0&=\lambda, &
- c_1&=a_3, &
- c_2&=\frac{a_2}{a_3},\\
+ c_1&=\lambda^2a_3, &
+ c_2&=\frac{a_2}{\lambda^2a_3},\\
  c_3&=\frac{a_4}{a_2a_3}, &
  c_4&=\frac{a_3^2}{a_2a_4}, &
  c_5&=\tau\frac{a_2a_3}{a_4}+\frac{a_2^2}{a_3}.
@@ -184,8 +184,8 @@ Equivalently, in the parameters used throughout this paper,
 \begin{equation}
  \begin{aligned}
  c_0&=\lambda,&
- c_1&=\frac{r}{\lambda^3},&
- c_2&=\frac{\lambda m}{r},\\
+ c_1&=\frac{r}{\lambda},&
+ c_2&=\frac{m}{\lambda r},\\
  c_3&=\frac{\lambda\eta}{mr},&
  c_4&=\frac{r^2}{m\eta},&
  c_5&=\frac{\tau mr}{\lambda\eta}+\frac{m^2}{\lambda r}.
@@ -220,15 +220,15 @@ reproduce the ordinary Hankel determinants.  The standard shifted-Hankel
 product formula for the Stieltjes fraction gives
 \begin{equation}
  \det(g_{i+j+1})_{0\leq i,j\leq n-1}
- =\frac{H_{n+2}}{\lambda^2}\qquad(n\geq1).
+ =H_{n+2}\qquad(n\geq1).
  \label{eq:literal-shifted-Hankel}
 \end{equation}
 Indeed, the first case is
 \[
- g_1=c_0c_1=\lambda\frac{r}{\lambda^3}=\frac{r}{\lambda^2}.
+ g_1=c_0c_1=\lambda\frac{r}{\lambda}=r.
 \]
 Hence the second product sequence attached to the Stieltjes fraction is the
-normalized two-step companion in \eqref{eq:companion-Hankel-choice}.  The
+two-step companion in \eqref{eq:companion-Hankel-choice}.  The
 ordinary Hankel transform determines only the products $c_{2j-1}c_{2j}$ in
 \eqref{eq:S-fraction-Hankel}; the companion sequence fixes the corresponding
 splitting into the odd and even Stieltjes coefficients.  Consequently, once
@@ -371,7 +371,7 @@ The generating function is the formal-power-series branch of
  \label{eq:quadratic}
 \end{equation}
 selected by the initial conditions implicit in
-\eqref{eq:initial-Hankel}, beginning with $g_0=\lambda$ and $g_1=m$.
+\eqref{eq:initial-Hankel}, beginning with $g_0=\lambda$ and $g_1=r$.
 
 \begin{remark}[The apparently mysterious integer coefficients]
 The polynomial occurring in \eqref{eq:C} is simply
@@ -426,7 +426,7 @@ Both algebraic branches therefore coalesce at $X=\lambda$ when $z=0$, and
 The simple-root form of the formal implicit-function theorem is not
 applicable at the origin.  The desired branch is instead selected by
 expanding the square root and requiring the prescribed coefficients,
-beginning with $g_0=\lambda$ and $g_1=m$.
+beginning with $g_0=\lambda$ and $g_1=r$.
 
 Set
 \begin{equation}
@@ -456,10 +456,10 @@ The next coefficient equation is
  A_0f_0^2+D_1f_0+E_2=0.
  \label{eq:first-coefficient}
 \end{equation}
-Since $f_0=g_1=m$, the prescribed value of $m$ selects one of the two
+Since $f_0=g_1=r$, the prescribed value of $r$ selects one of the two
 branches of the desingularized quadratic.
 
-\section{The normalized two-step companion}
+\section{The two-step companion}
 Let $G_{0;\ell,m,r,n,t}(x)=\sum_{q\geq0}g_qx^q$ denote the selected solution.
 Its Hankel determinants satisfy
 \begin{equation}
@@ -482,23 +482,21 @@ Remove the first coefficient and shift the remaining series to the origin:
 Its Hankel transform is
 \begin{equation}
  \det(g_{i+j+1})_{0\leq i,j\leq q-1}
- =\frac{H_{q+2}}{\ell^2}\qquad(q\geq1).
+ =H_{q+2}\qquad(q\geq1).
  \label{eq:tail-shift-hankel-identity}
 \end{equation}
 It therefore begins with
 \[
- \frac{r}{\ell^2},\quad \frac{n}{\ell^2},\quad
- \frac{mn+tr^2}{\ell^3},\quad
- \frac{r(mn+tr^2)+t\ell n^2}{\ell^3m},\ldots .
+ r,\quad n,\quad
+ \frac{mn+tr^2}{\ell},\quad
+ \frac{r(mn+tr^2)+t\ell n^2}{\ell m},\ldots .
 \]
-This is the orbit $(H_{q+2})_{q\geq1}$ multiplied by the constant
-normalization $\ell^{-2}$.  Since Somos--4 is homogeneous of degree two, the
-normalized companion satisfies the same recurrence with parameter $t$.
+This is exactly the two-step advanced orbit $(H_{q+2})_{q\geq1}$.  It therefore satisfies the same recurrence with parameter $t$.
 Equivalently, it has the initial parameter tuple
 \begin{equation}
- \left(\frac{r}{\ell^2},\frac{n}{\ell^2},
- \frac{mn+tr^2}{\ell^3},
- \frac{r(mn+tr^2)+t\ell n^2}{\ell^3m},t\right).
+ \left(r,n,
+ \frac{mn+tr^2}{\ell},
+ \frac{r(mn+tr^2)+t\ell n^2}{\ell m},t\right).
  \label{eq:two-step-parameter-shift}
 \end{equation}
 The assertion is an identity of Hankel transforms, not necessarily of the
@@ -514,17 +512,17 @@ quadratic equation by $z^2$ yields
 \end{equation}
 The branch condition is
 \begin{equation}
- A_0m^2+D_1m+E_2=0,
+ A_0r^2+D_1r+E_2=0,
  \label{eq:branch-selection}
 \end{equation}
 and the branch is simple precisely when
 \begin{equation}
- 2A_0m+D_1\ne0.
+ 2A_0r+D_1\ne0.
  \label{eq:nondegeneracy}
 \end{equation}
 Equivalently,
 \begin{equation}
- (2A_0m+D_1)^2=D_1^2-4A_0E_2.
+ (2A_0r+D_1)^2=D_1^2-4A_0E_2.
  \label{eq:branch-discriminant}
 \end{equation}
 
@@ -541,7 +539,7 @@ Coefficient extraction from \eqref{eq:desingularized-quadratic} gives
 \end{equation}
 where $f_q=0$ for $q<0$ and $E_j=0$ for $j>3$.  For $q\geq1$,
 \begin{equation}
- T_q=2mf_q+\sum_{k=1}^{q-1}f_kf_{q-k}.
+ T_q=2rf_q+\sum_{k=1}^{q-1}f_kf_{q-k}.
  \label{eq:Tq-split}
 \end{equation}
 Under condition \eqref{eq:nondegeneracy}, the coefficients are therefore generated
@@ -551,12 +549,12 @@ recursively by
  A_0\displaystyle\sum_{k=1}^{q-1}f_kf_{q-k}
  +\displaystyle\sum_{j=1}^{3}A_jT_{q-j}
  +D_2f_{q-1}+D_3f_{q-2}+E_{q+2}}
- {2A_0m+D_1}.
+ {2A_0r+D_1}.
  \label{eq:coefficient-recurrence}
 \end{equation}
 This quadratic convolution recurrence follows directly from the algebraic
 generating-function equation.  On the exceptional locus
-$2A_0m+D_1=0$, the two desingularized branches coalesce at the origin and
+$2A_0r+D_1=0$, the two desingularized branches coalesce at the origin and
 the next coefficient is not determined by the first-order coefficient equation;
 higher-order compatibility or a Puiseux expansion may then be required.
 
@@ -577,13 +575,13 @@ moment representation attached to an ordinary Somos--4 Hankel orbit.
 The construction in this paper removes this freedom by imposing the additional
 companion condition \eqref{eq:companion-Hankel-choice}.  In other words, we
 prescribe two product sequences: the first is the Somos--4 sequence $(H_n)$,
-and the second is the same sequence with its first value removed.  Together
+and the second is the same sequence advanced by two determinant indices.  Together
 with $c_0=\lambda$, these two prescriptions determine the odd and even
 Stieltjes coefficients separately through \eqref{eq:initial-S-coefficients}
 and \eqref{eq:S-coefficient-recurrence}.  Hence the algebraic generating
-function in Section~3 is the fully specified representative selected by those
+function in Section~\ref{sec:algebraic-gf} is the fully specified representative selected by those
 two Hankel-level requirements.  This choice is already built into the initial
-Stieltjes coefficients in Section~2; making it explicit here clarifies how the
+Stieltjes coefficients above; making it explicit here clarifies how the
 apparent degree of freedom is eliminated.
 
 Other moment sequences can still share the first, ordinary Hankel transform
