@@ -166,8 +166,8 @@ run_one_test(l, j, m, r, t, nterms, verbose = 0) =
 
 build_stress_tests(num_random = 1000, seed = 20266904) =
 {
-  my(pool_all = [-12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
-  my(pool_large = [-12, -11, -10, -9, -8, -7, -6, 6, 7, 8, 9, 10, 11, 12]);
+  my(pool_all = [-12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 18, 20, 33, 77, 111]);
+  my(pool_large = [-12, -11, -10, -9, -8, -7, -6, 6, 7, 8, 9, 10, 11, 12, 15, 18, 33, 77, 111]);
   my(tests = List());
   my(base = [
     [1, 1, 1, 1, 1],
@@ -226,7 +226,7 @@ build_stress_tests(num_random = 1000, seed = 20266904) =
   Vec(tests);
 };
 
-run_all_tests(nterms = 24, num_random = 80, verbose = 0) =
+run_all_tests(nterms = 24, num_random = 580, verbose = 0) =
 {
   my(tests, all_ok = 1, pass_count = 0, fail_count = 0, skip_count = 0);
   my(enforced_count = 0, fail_tuples = List(), root_error_count = 0, root_error_tuples = List());
