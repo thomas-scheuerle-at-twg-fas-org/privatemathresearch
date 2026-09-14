@@ -20,17 +20,30 @@ from an Algebraic Generating Function}
 \maketitle
 
 \begin{abstract}
-We record a five-parameter quadratic algebraic generating function whose
-coefficient sequence has prescribed initial Hankel determinants
-$(\lambda,m,r,\eta)$ and whose Hankel transform lies in the Somos--4
-family $A(1,\tau)$.  We begin by introducing the Hankel data and the
-corresponding parameters.  We then describe the underlying Stieltjes
-continued-fraction construction, its normalization, and the coefficient
-recurrence, before writing down the explicit algebraic equation.  After that
-we discuss the two square-root branches, their coalescence at the origin,
-a desingularized coefficient recurrence, the induced shift in the Hankel
-parameters, and the nonuniqueness of the underlying coefficient-sequence representation.
-The essential point is that the construction removes this ambiguity by
+Let
+\[
+G(z)=\sum_{n\ge 0} g_n z^n
+\]
+be a formal power series, and let
+\[
+H_n=\det(g_{i+j})_{0\le i,j\le n-1},\qquad H_0=1.
+\]
+We consider the five-parameter family in which
+\[
+H_1=\lambda,\qquad H_2=m,\qquad H_3=r,\qquad H_4=\eta,
+\]
+and the Hankel sequence satisfies the Somos--4 recurrence
+\[
+H_{n+4}H_n=H_{n+3}H_{n+1}+\tau H_{n+2}^2.
+\]
+We construct a quadratic algebraic generating function whose coefficient
+sequence has these initial Hankel determinants and whose Hankel transform lies
+in the family $A(1,\tau)$.  The construction begins with a Stieltjes
+continued fraction, passes to a normalized form, and determines the
+coefficients by a paired-Hankel reconstruction.  The resulting algebraic
+equation is then obtained by eliminating the continued-fraction tail.  The
+two algebraic branches coalesce at the origin, and the desired branch is
+selected by the initial conditions. The essential point is that the construction removes this ambiguity by
 prescribing, in addition to the ordinary Hankel transform, a companion Hankel
 sequence obtained from the same Somos--4 orbit by a two-step shift.
 \end{abstract}
@@ -40,34 +53,34 @@ I am grateful to Florian Lengyel for reading an earlier version of this manuscri
 
 
 \section{Context and relation to earlier work}
-The problem considered here is an inverse Hankel-realization problem.  Starting
-from prescribed initial determinants
-$(H_1,H_2,H_3,H_4)=(\lambda,m,r,\eta)$ and the positive-order Somos--4
-recurrence with coefficient $\tau$, we construct an explicit formal power
-series whose leading Hankel minors realize the resulting $A(1,\tau)$ orbit.
-The construction also prescribes the once-shifted minors by
-$\widehat H_n=H_{n+2}$ for $n\geq1$.  This paired-Hankel normalization selects
-the odd and even Stieltjes coefficients separately and leads to an alternating
-tail recurrence with an exact quadratic closure.
+The present note is concerned with an inverse Hankel-realization problem.  We
+start from prescribed initial determinants
+\[
+(H_1,H_2,H_3,H_4)=(\lambda,m,r,\eta)
+\]
+and a Somos--4 recurrence with parameter $\tau$, and we construct a formal
+power series whose leading Hankel minors realize the corresponding
+$A(1,\tau)$ orbit.  In addition, the construction fixes the once-shifted
+minors, and this paired-Hankel normalization determines the odd and even
+Stieltjes coefficients separately.  The resulting alternating tail recurrence
+closes quadratically, and after restoring the initial levels one obtains an
+explicit algebraic equation for the generating function.
 
-Two related directions occur in the literature.  In the forward direction one
-begins with a generating function and determines whether its Hankel transform
-satisfies a Somos recurrence.  Xin's continued-fraction proof of the original
-Somos--4 Hankel determinant conjecture~\cite{Xin2007}, Barry's families of
-generating functions and conjectures
-\cite{Barry2010Catalan,Barry2011Narayana,Barry2012Bernstein,Barry2019Pseudo,Barry2022Conjectures},
-and the sufficient conditions of Wang and Zhang~\cite{WangZhang2024} and Liu,
-Wang, and Zhang~\cite{LiuWangZhang2026} belong to this direction.
+This is the inverse counterpart to the better-known forward problem: given a
+generating function, determine whether its Hankel transform satisfies a Somos
+recurrence.  The latter has been studied, for example, by Xin, Barry,
+Wang--Zhang, and Liu--Wang--Zhang.  The present construction takes the
+opposite direction and seeks a direct realization of prescribed Somos--4
+Hankel data.
 
-The inverse direction starts with Somos data and seeks a determinant or moment
-realization.  Chang, Hu, and Xin construct Hankel solutions after a gauge
-normalization of adjacent terms~\cite{ChangHuXin2015}.  Hone develops
-genus-one continued-fraction and Hankel formulae, including gauge factors and
-an additional moment parameter~\cite{Hone2021}.  Chang and Liu treat generic
-bilateral initial data for quadratic orthogonal pairs and obtain algebraic
-series, coefficient recurrences, and Hankel representations
-\cite{ChangLiu2026}.  These works provide the closest setting for the present
-inverse construction.
+Seeking literature on the inverse problem, we find:  Chang, Hu, and Xin
+construct Hankel solutions after a gauge normalization of adjacent
+terms~\cite{ChangHuXin2015}.  Hone develops genus-one continued-fraction and
+Hankel formulae, including gauge factors and an additional moment
+parameter~\cite{Hone2021}.  Chang and Liu treat generic bilateral initial
+conditions for quadratic orthogonal pairs and obtain algebraic series,
+coefficient recurrences, and Hankel representations~\cite{ChangLiu2026}.
+These works provide the closest setting for the present construction.
 
 The contribution of this note is a direct Stieltjes-fraction realization of
 generic $A(1,\tau)$ data in a particular positive-order paired-Hankel
@@ -83,8 +96,8 @@ moment sequences, and Hankel determinants; see Wall~\cite{Wall1948}, Jones and
 Thron~\cite{JonesThron1980}, Flajolet~\cite{Flajolet1980},
 Krattenthaler~\cite{Krattenthaler1999,Krattenthaler2005},
 Layman~\cite{Layman2001}, and French~\cite{French2007}.  The quadratic
-transformation of Sulanke and Xin~\cite{SulankeXin2007} and the related methods
-of Gessel and Xin~\cite{GesselXin2006} are particularly effective for
+transformation of Sulanke and Xin~\cite{SulankeXin2007} and the related
+methods of Gessel and Xin~\cite{GesselXin2006} are particularly effective for
 structured Hankel identities.  The wider Somos context includes the Laurent
 phenomenon and elliptic dynamics
 \cite{Gale1991,FominZelevinsky2002,VanderPoortenSwart2006,Hone2005,HoneSwart2008}.
@@ -639,29 +652,32 @@ in this paper is understood within this nondegenerate S-fraction chart.
 \section{Nonuniqueness of the coefficient sequence}
 \label{sec:nonuniqueness}
 
-The ordinary Hankel transform does not, in general, determine the coefficient
+The ordinary Hankel transform does not, in general, determine a coefficient
 sequence.  If only $(H_n)$ is prescribed, the factorization
 $c_{2j-1}c_{2j}$ visible in \eqref{eq:S-fraction-Hankel} leaves room for
-variation in the individual Stieltjes coefficients.  For this reason the
+variation in the individual Stieltjes coefficients.  For this reason a
 five-parameter algebraic generating function should not be read as the unique
 moment representation attached to an ordinary Somos--4 Hankel orbit.
 
-The construction in this paper removes this freedom by imposing the additional
-companion condition \eqref{eq:companion-Hankel-choice}.  In other words, we
-prescribe two product sequences: the first is the Somos--4 sequence $(H_n)$,
-and the second is the same sequence advanced by two determinant indices.  Together
-with $c_0=\lambda$, these two prescriptions determine the odd and even
-Stieltjes coefficients separately through \eqref{eq:initial-S-coefficients}
-and \eqref{eq:S-coefficient-recurrence}.  Hence the algebraic generating
-function in Section~\ref{sec:algebraic-gf} is the fully specified representative selected by those
-two Hankel-level requirements.  This choice is already built into the initial
-Stieltjes coefficients above; making it explicit here clarifies how the
-apparent degree of freedom is eliminated.
+The construction in this paper removes this ambiguity by imposing the
+additional companion condition \eqref{eq:companion-Hankel-choice}.  In other
+words, we prescribe two product sequences: the first is the Somos--4 sequence
+$(H_n)$, and the second is the same sequence advanced by two determinant
+indices.  Together with $c_0=\lambda$, these two prescriptions determine the
+odd and even Stieltjes coefficients separately through
+\eqref{eq:initial-S-coefficients} and \eqref{eq:S-coefficient-recurrence}.
+Hence the algebraic generating function in Section~\ref{sec:algebraic-gf} is
+the fully specified representative selected by those two Hankel-level
+requirements.  This choice is already built into the initial Stieltjes
+coefficients above; making it explicit here clarifies how the apparent degree
+of freedom is eliminated.
 
-Other moment sequences can still share the first, ordinary Hankel transform
-when the companion condition is not imposed.  For example, the binomial transform, a standard Hankel-transform-preserving operation\cite{Layman2001,French2007},
+Other moment sequences can still share the first ordinary Hankel transform
+when the companion condition is not imposed.  For example, the binomial
+transform, a standard Hankel-transform-preserving operation
+\cite{Layman2001,French2007},
 \begin{equation}
- g'_q=\sum_{k=0}^{q}\binom{q}{k}g_k
+ g'_q=\sum_{k=0}^{q}\binom{q}{k}g_k,
  \label{eq:binomial-transform}
 \end{equation}
 has generating function
@@ -669,10 +685,11 @@ has generating function
  G'(z)=\frac{1}{1-z}G\!\left(\frac{z}{1-z}\right)
 \]
 and preserves the Hankel determinants.  Scalar and exponential rescalings of
-coefficient sequences produce explicit normalization factors in the determinants, while
-affine changes of the underlying variable give further related moment
-functionals.  Equality of Hankel transforms must therefore not be replaced
-by equality of generating functions without an independent argument.
+coefficient sequences produce explicit normalization factors in the
+determinants, while affine changes of the underlying variable give further
+related moment functionals.  Equality of Hankel transforms must therefore not
+be replaced by equality of generating functions without an independent
+argument.
 
 \section*{Disclosure on authoring and verification tools}
 The text of this manuscript was revised and partially rewritten with the
