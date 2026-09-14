@@ -40,57 +40,54 @@ I am grateful to Florian Lengyel for reading an earlier version of this manuscri
 
 
 \section{Context and relation to earlier work}
-The relation between Hankel determinants, continued fractions, moment
-sequences, and nonlinear recurrences has a long history.  Classical
-continued-fraction treatments include Wall~\cite{Wall1948} and Jones and
-Thron~\cite{JonesThron1980}; the combinatorial theory of continued fractions
-was developed systematically by Flajolet~\cite{Flajolet1980}.  Determinantal
-evaluations and transformations relevant to Hankel matrices are discussed,
-for example, by Krattenthaler~\cite{Krattenthaler1999}, Layman~\cite{Layman2001},
-and French~\cite{French2007}.  The quadratic transformation of Sulanke and
-Xin~\cite{SulankeXin2007} and related continued-fraction methods of Gessel and
-Xin~\cite{GesselXin2006} have become particularly effective tools for proving
-structured Hankel-determinant identities.
+The problem considered here is an inverse Hankel-realization problem.  Starting
+from prescribed initial determinants
+$(H_1,H_2,H_3,H_4)=(\lambda,m,r,\eta)$ and the positive-order Somos--4
+recurrence with coefficient $\tau$, we construct an explicit formal power
+series whose leading Hankel minors realize the resulting $A(1,\tau)$ orbit.
+The construction also prescribes the once-shifted minors by
+$\widehat H_n=H_{n+2}$ for $n\geq1$.  This paired-Hankel normalization selects
+the odd and even Stieltjes coefficients separately and leads to an alternating
+tail recurrence with an exact quadratic closure.
 
-Somos recurrences came from the work of Somos and were made widely known by
-Gale~\cite{Gale1991}.  Their Laurent phenomenon and their connections with
-elliptic divisibility sequences and elliptic curves have been discussed by
-many authors; see, for example, Fomin and Zelevinsky~\cite{FominZelevinsky2002},
-van der Poorten and Swart~\cite{VanderPoortenSwart2006},
-Hone~\cite{Hone2005}, and Hone and Swart~\cite{HoneSwart2008}.  Related inverse
-Hankel and continued-fraction constructions include Chang, Hu, and
-Xin~\cite{ChangHuXin2015}, Hone~\cite{Hone2021}, and Chang and
-Liu~\cite{ChangLiu2026}.  Xin proved
-the original Somos--4 Hankel determinant conjecture by a continued-fraction
-recursion system~\cite{Xin2007}.
+Two related directions occur in the literature.  In the forward direction one
+begins with a generating function and determines whether its Hankel transform
+satisfies a Somos recurrence.  Xin's continued-fraction proof of the original
+Somos--4 Hankel determinant conjecture~\cite{Xin2007}, Barry's families of
+generating functions and conjectures
+\cite{Barry2010Catalan,Barry2011Narayana,Barry2012Bernstein,Barry2019Pseudo,Barry2022Conjectures},
+and the sufficient conditions of Wang and Zhang~\cite{WangZhang2024} and Liu,
+Wang, and Zhang~\cite{LiuWangZhang2026} belong to this direction.
 
-A substantial body of work by Barry studies generating functions whose Hankel
-transforms satisfy Somos-type recurrences.  This includes generalized Catalan
-recurrences~\cite{Barry2010Catalan}, generalized Narayana
-triangles~\cite{Barry2011Narayana}, Riordan--Bernstein constructions
-\cite{Barry2012Bernstein}, and Riordan pseudo-involutions, continued fractions,
-and elliptic curves~\cite{Barry2019Pseudo}.  Barry's examples and conjectures
-form an important part of the immediate background of the present
-construction.
+The inverse direction starts with Somos data and seeks a determinant or moment
+realization.  Chang, Hu, and Xin construct Hankel solutions after a gauge
+normalization of adjacent terms~\cite{ChangHuXin2015}.  Hone develops
+genus-one continued-fraction and Hankel formulae, including gauge factors and
+an additional moment parameter~\cite{Hone2021}.  Chang and Liu treat generic
+bilateral initial data for quadratic orthogonal pairs and obtain algebraic
+series, coefficient recurrences, and Hankel representations
+\cite{ChangLiu2026}.  These works provide the closest setting for the present
+inverse construction.
 
-Wang and Zhang subsequently gave a sufficient condition for an algebraic
-generating function to have an $(\alpha,\beta)$ Somos--4 Hankel transform,
-using the Sulanke--Xin machinery~\cite{WangZhang2024}.  Liu, Wang, and Zhang
-then extended this condition over a rational-function field and used it to
-settle the outstanding Barry conjectures treated there; they also studied odd
-and even Somos subsequences, the Hurwitz transform, orthogonal-polynomial
-Hankel formulas, periodic Hankel determinants, and elliptic parameter
-families~\cite{LiuWangZhang2026}.
+The contribution of this note is a direct Stieltjes-fraction realization of
+generic $A(1,\tau)$ data in a particular positive-order paired-Hankel
+normalization.  Here $H_0=1$ is the empty-determinant convention, while the
+recurrence starts at $n=1$, so the four initial determinants remain
+independent.  The ordinary and once-shifted determinant prescriptions recover
+the Stieltjes coefficients, and their alternating recurrence is compatible
+with a quadratic family of continued-fraction tails.  Restoring the initial
+levels then gives the explicit quadratic equation recorded below.
 
-The point of view here is different.  Instead of beginning with a given
-generating function and deriving the parameters of its Hankel recurrence, we
-start with prescribed initial Hankel data $(\lambda,m,r,\eta)$ and the Somos
-coefficient $\tau$, impose a companion Hankel orbit, and construct an explicit
-quadratic algebraic generating function realizing those data.  The two-step companion prescription is what selects one coefficient
-sequence from among the generally nonunique sequences having the same ordinary
-Hankel transform.
-
-
+The underlying tools come from the classical theory of continued fractions,
+moment sequences, and Hankel determinants; see Wall~\cite{Wall1948}, Jones and
+Thron~\cite{JonesThron1980}, Flajolet~\cite{Flajolet1980},
+Krattenthaler~\cite{Krattenthaler1999,Krattenthaler2005},
+Layman~\cite{Layman2001}, and French~\cite{French2007}.  The quadratic
+transformation of Sulanke and Xin~\cite{SulankeXin2007} and the related methods
+of Gessel and Xin~\cite{GesselXin2006} are particularly effective for
+structured Hankel identities.  The wider Somos context includes the Laurent
+phenomenon and elliptic dynamics
+\cite{Gale1991,FominZelevinsky2002,VanderPoortenSwart2006,Hone2005,HoneSwart2008}.
 \section{Hankel determinants and Somos parameters}
 
 Let
@@ -436,8 +433,6 @@ $(u,v)\mapsto(v,(v+\tau)/(uv^2))$ preserves
 $uv+u^{-1}+v^{-1}+\tau(uv)^{-1}$.  Substitution of
 $u=\lambda r/m^2$ and $v=m\eta/r^2$ yields \eqref{eq:J-invariant}.
 
-selected by the initial conditions implicit in
-\eqref{eq:initial-Hankel}, beginning with $g_0=\lambda$ and $g_1=r$.
 
 
 
@@ -517,8 +512,14 @@ The next coefficient equation is
  A_0f_0^2+D_1f_0+E_2=0.
  \label{eq:first-coefficient}
 \end{equation}
-Since $f_0=g_1=r$, the prescribed value of $r$ selects one of the two
-branches of the desingularized quadratic.
+The quadratic in \eqref{eq:first-coefficient} factors as
+\begin{equation}
+ A_0f_0^2+D_1f_0+E_2
+ =\lambda^2\eta mr(f_0-r)\bigl((m-1)f_0-mr\bigr).
+ \label{eq:first-coefficient-factorization}
+\end{equation}
+Thus the prescribed value $f_0=g_1=r$ selects the required branch.  When
+$m\ne1$, the other slope is $mr/(m-1)$.
 
 \section{The two-step companion}
 Let $G_{0;\ell,m,r,n,t}(x)=\sum_{q\geq0}g_qx^q$ denote the selected solution.
@@ -614,14 +615,15 @@ recursively by
  \label{eq:coefficient-recurrence}
 \end{equation}
 This quadratic convolution recurrence follows directly from the algebraic
-generating-function equation.  On the exceptional locus
-$2A_0r+D_1=0$, the two desingularized branches coalesce at the origin and
-the next coefficient is not determined by the first-order coefficient equation;
-higher-order compatibility or a Puiseux expansion may then be required.
-
-Because $F$ is algebraic of degree at most two, it is D-finite.  Consequently,
-the same coefficient sequence also satisfies a fixed-width linear recurrence with
-polynomial coefficients in the index.
+generating-function equation.  On the selected branch,
+\begin{equation}
+ 2A_0r+D_1=-\lambda^2\eta mr^2,
+ \label{eq:selected-branch-denominator}
+\end{equation}
+so condition \eqref{eq:nondegeneracy} holds throughout the nondegenerate
+S-fraction chart.  Because $F$ is algebraic of degree at most two, it is
+D-finite.  Consequently, the same coefficient sequence also satisfies a
+fixed-width linear recurrence with polynomial coefficients in the index.
 
 \section{Base field and nondegeneracy}
 The generic construction is over the rational-function field
