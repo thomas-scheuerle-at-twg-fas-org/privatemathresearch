@@ -16,13 +16,13 @@
 
 \title{A Somos-Type Constraint on Hankel Determinants and\\Jacobi Recurrence Coefficients}
 \author{Thomas Scheuerle \and Michael Somos}
-\date{September 14, 2026}
+\date{September 14, 2026 (revised)}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Assuming that a sequence arises as the shifted Hankel transform of the coefficient sequence of a Stieltjes continued fraction, we translate a Somos-type quartic relation into a constraint on the recurrence coefficients of the associated monic orthogonal polynomials. We prove a characterization: the shifted Hankel determinants satisfy the Somos-type relation if and only if consecutive off-diagonal Jacobi coefficients satisfy a fixed symmetric biquadratic equation. Equivalently, the Somos constraint imposes an algebraic law on successive ratios of squared norms. The diagonal Jacobi coefficients do not occur in this condition. We also give a corrected five-parameter quadratic algebraic generating function whose coefficient Hankel determinants realize the Somos--4 family $A(1,\tau)$ with prescribed initial determinants $(\lambda,m,r,\eta)$.  Its construction is derived from a paired-Hankel reconstruction of a Stieltjes fraction and a quadratic closure of the recurrent tail.  The once-shifted coefficient sequence has companion Hankel determinants $\widehat H_n=H_{n+2}$, so removal of the constant coefficient advances the Somos orbit by two determinant indices.  This is an identity of Hankel transforms, not in general an identity between independently parameterized generating functions.  
+Assuming that a sequence arises as the shifted Hankel transform of the coefficient sequence of a Stieltjes continued fraction, we translate a Somos-type quartic relation into a constraint on the recurrence coefficients of the associated monic orthogonal polynomials. We prove a characterization: the shifted Hankel determinants satisfy the Somos-type relation if and only if consecutive off-diagonal Jacobi coefficients satisfy a fixed symmetric biquadratic equation. Equivalently, the Somos constraint imposes an algebraic law on successive ratios of squared norms. The diagonal Jacobi coefficients do not occur in this condition. We also give a corrected five-parameter quadratic algebraic generating function whose coefficient Hankel determinants realize the Somos--4 family $A(1,\tau)$ with prescribed initial determinants $(\lambda,m,r,\eta)$.  Its construction is derived from a paired-Hankel reconstruction of a Stieltjes fraction and a quadratic closure of the recurrent tail.  The once-shifted coefficient sequence has companion Hankel determinants $\widehat H_n=H_{n+2}$, so removal of the constant coefficient advances the Somos orbit by two determinant indices.  This is an identity of Hankel transforms, not in general an identity between independently parameterized generating functions. Finally, we place Hankel determinants, Jacobi coefficients, convergent amplitudes, and the QRT first integral in one tau-function hierarchy.  
 \end{abstract}
 
 \section*{Preface and motivation}
@@ -1319,6 +1319,27 @@ Equation \eqref{eq:convergent-difference} yields
  \qquad b_n=\frac{E_n}{E_{n-1}}.
  \label{eq:error-amplitude-product}
 \end{equation}
+\begin{proposition}[Tau-function form of the convergent amplitudes]
+\label{prop:tau-amplitudes}
+Let $a_0=1$ and $b_n=a_{n-1}a_{n+1}/a_n^2$. Then
+\begin{equation}
+ E_n=\prod_{k=1}^n b_k=\frac{a_0a_{n+1}}{a_1a_n}
+ =\frac{a_{n+1}}{a_1a_n}.
+ \label{eq:error-amplitude-Hankel}
+\end{equation}
+\end{proposition}
+\begin{proof}
+The product telescopes, since every interior Hankel factor cancels.
+\end{proof}
+\begin{corollary}
+\begin{equation}
+ p_4=\frac{E_{n+1}}{E_{n-1}}+p_1\left(\frac{E_{n-1}}{E_n}+\frac{E_n}{E_{n+1}}\right)+p_2\frac{E_{n-1}}{E_{n+1}}.
+\end{equation}
+\end{corollary}
+\begin{proof}
+Substitute $b_n=E_n/E_{n-1}$ in the first integral.
+\end{proof}
+
 The Somos biquadratic is therefore equivalent to
 \begin{equation}
  \left(\frac{E_n}{E_{n-1}}\right)^2
@@ -1345,6 +1366,35 @@ compatible with this refined limit rather than inferred from the unscaled
 diagonal specialization.
 \end{remark}
 
+\section{Unified Tau-Function Interpretation}
+The preceding constructions have a common tau-function description.
+\begin{theorem}[Equivalent projections]
+For a nonzero sequence $(a_n)$ with $a_0=1$, put
+\[
+b_n=\frac{a_{n-1}a_{n+1}}{a_n^2},\qquad E_n=\frac{a_{n+1}}{a_1a_n}.
+\]
+The Somos--4 recurrence for $a_n$, the QRT recurrence for $b_n$, the fixed
+biquadratic relation for consecutive $b_n$, and the amplitude relation
+\eqref{eq:error-amplitude-Somos} are equivalent wherever all quotients exist.
+For shifted Hankel determinants, $b_n$ is the off-diagonal Jacobi coefficient;
+for zero-diagonal prefix convergents, $E_n$ is the leading increment.
+\end{theorem}
+\begin{proof}
+Divide the Somos recurrence by $a_n^2$, use the conserved quantity
+\eqref{eq:32}, and finally substitute $b_n=E_n/E_{n-1}$.
+\end{proof}
+Thus
+\[
+\text{Hankel tau-functions }a_n\longrightarrow b_n\longrightarrow
+\text{QRT orbit and genus-one curve},\qquad
+E_n=\frac{a_{n+1}}{a_1a_n},\quad b_n=\frac{E_n}{E_{n-1}}.
+\]
+In the inverse construction, $J$ is the organizing invariant: it is computed
+from the initial Hankel data, equals the QRT first integral, and parametrizes
+the residual curve $E_J$ from the algebraic discriminant. Determining an
+explicit birational identification with the Jacobi biquadratic remains a
+separate research problem.
+
 \section{Zero-Diagonal Jacobi Matrices and a Possible Volterra Lift}
 The diagonal Jacobi coefficients are not constrained by the Somos identity. One may therefore make the canonical choice $\widehat d_n=0$, giving
 \begin{equation}
@@ -1367,7 +1417,7 @@ There exists a lift of the birational Jacobi map $T(u_n,u_{n+1})=(u_{n+1},u_{n+2
 \item the biquadratic first integral $I$ is obtained from a spectral invariant of the lifted transformation.
 \end{enumerate}
 \end{conjecture}
-The example A377264 is particularly suggestive in this context. A first step toward proving the conjecture would be to determine the translation point induced by $T$ on the Weierstrass model. A second would be to lift this translation to the factorization variables and compare the resulting transformation with known Volterra and modified-Volterra Darboux maps.
+The example A377264 is particularly suggestive in this context. A first step is to determine the translation point induced by $T$ on the Weierstrass model. The paired-Hankel formulas then sharpen the second step: determine the induced map on the explicit Stieltjes coordinates in \eqref{eq:paired-reconstruction-special} and compare the resulting transformation with known Volterra and modified-Volterra Darboux maps.
 
 \begin{thebibliography}{99}
 
