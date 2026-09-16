@@ -10,13 +10,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage[nameinlink,noabbrev]{cleveref}
 \setlength{\emergencystretch}{3em}
-\definecolor{todocolor}{RGB}{145,45,45}
 \definecolor{codegray}{RGB}{245,245,245}
-\newcommand{\editorialnote}[1]{%
-  \par\smallskip\noindent
-  \fcolorbox{todocolor}{codegray}{%
-    \parbox{0.94\linewidth}{\textbf{Editorial note.} #1}}%
-  \par\smallskip}
 \newcommand{\workflowstep}[1]{\subsection{Workflow Step #1}}
 \newcommand{\taupar}{\tau}
 \newcommand{\taumod}{\tau_{\mathrm{mod}}}
@@ -36,8 +30,10 @@ Theta Representations of Somos--4 Sequences\\[0.4em]
 \large A Constructive Workflow}
 \author{Thomas Scheuerle}
 \date{}
+
 \begin{document}
 \maketitle
+
 \begin{abstract}
 A direct five-parameter algebraic generating function can be constructed
 whose Hankel transform follows a prescribed nondegenerate Somos--4 orbit.
@@ -48,8 +44,8 @@ Its discriminant contains the genus-one curve
 The elliptic-function theory behind Somos--4 sequences is classical; the
 practical difficulty lies in moving from concrete recurrence data to a
 numerical sigma- or theta-function representation without losing track of
-normalizations.  The relevant ingredients are scattered across several
-sources and conventions.  This paper brings them together into one
+normalizations. The relevant ingredients are scattered across several
+sources and conventions. This paper brings them together into one
 constructive and reproducible workflow:
 \[
  (\lambda,m,r,\eta,\taupar)
@@ -62,70 +58,81 @@ constructive and reproducible workflow:
  \longmapsto \theta_1.
 \]
 The emphasis is on normalization choices, computational checks, and an
-executable PARI/GP implementation.  No new proof of the classical
+executable PARI/GP implementation. No new proof of the classical
 sigma-function representation is intended; the contribution is a coherent
-end-to-end procedure that starts from the algebraic generating function
-and ends with a verified sigma or theta description.
+end-to-end procedure that starts from the algebraic generating function and
+ends with a verified sigma or theta description.
 \end{abstract}
+
 \section{Introduction}
 The relation between Somos--4 recurrences, elliptic curves, and elliptic
-functions is well established through the work of Gale, Somos, van der
-Poorten, Swart, Hone, and others.  In particular, generic Somos--4 orbits
-admit representations in terms of the Weierstrass sigma function.
-Nevertheless, a reader beginning with a concrete sequence still faces a
-substantial practical problem: the relevant constructions occur in
-different normalizations, coordinate systems, and parametrizations, and
-the intermediate steps needed for a numerical implementation are rarely
+functions is classical; see, in particular, \cite{Ward1948,Hone2005,
+VanderPoortenSwart2006,HoneSwart2008}. Generic Somos--4 orbits admit
+representations in terms of the Weierstrass sigma function
+\cite{Hone2005}. Nevertheless, a reader beginning with a concrete sequence
+still faces a substantial practical problem: the relevant constructions
+occur in different normalizations, coordinate systems, and parametrizations,
+and the intermediate steps needed for a numerical implementation are rarely
 presented together.
+
 The purpose of this paper is not to prove a new elliptic-function theorem.
-Rather, it is to make the established theory directly usable.  Our
-starting point is the direct algebraic generating function constructed in
-\cite{Scheuerle2026}.  Its discriminant naturally produces a genus-one
-curve associated with the Somos--4 data.  From there we describe how to
-obtain a Weierstrass model, compute the period lattice, identify the
-translation point, determine the Abel--Jacobi parameters, and finally
-write explicit sigma- and theta-function representations.
+Rather, it is to make the established theory directly usable. Our starting
+point is the direct algebraic generating function constructed in
+\cite{Scheuerle2026}. Its discriminant naturally produces a genus-one curve
+associated with the Somos--4 data. From there we describe how to obtain a
+Weierstrass model, compute the period lattice, identify the translation point,
+determine the Abel--Jacobi parameters, and finally write explicit sigma- and
+theta-function representations. The continued-fraction and Hankel viewpoint
+is closely related to the genus-one construction in \cite{Hone2020}.
+
 The paper is organized as a mathematical workflow rather than a
-theorem--proof sequence.  Classical facts are stated with references and
-are not reproved.  The main concern is to keep the conventions aligned
-and to expose the checks that catch a wrong branch, period, sign, or
-scaling.  PARI/GP fragments accompany the construction, and the appendix
-contains a complete script.
+theorem--proof sequence. Classical facts are stated with references and are
+not reproved. The main concern is to keep the conventions aligned and to
+expose the checks that catch a wrong branch, period, sign, or scaling.
+PARI/GP fragments accompany the construction, and the appendix contains a
+complete verification script.
+
 \subsection{Scope and contribution}
 This paper provides:
 \begin{itemize}[leftmargin=2em]
   \item one route from the five input parameters to an elliptic curve;
-  \item an explicit record of the normalization choices needed to pass
-    from a quartic model to sigma and theta functions;
+  \item an explicit record of the normalization choices needed to pass from
+        a quartic model to sigma and theta functions;
   \item computational checkpoints at each stage;
-  \item worked examples comparing recurrence, algebraic-generating-function,
-    sigma-function, and theta-function evaluations; and
+  \item worked examples comparing recurrence and sigma-function evaluations,
+        together with a fully explicit theta conversion; and
   \item an end-to-end PARI/GP workflow suitable for adaptation.
 \end{itemize}
-It does not claim a new proof of the classical Somos--4 sigma formula, a
-new integrability result, or a new theorem on elliptic curves.
+It does not claim a new proof of the classical Somos--4 sigma formula, a new
+integrability result, or a new theorem on elliptic curves.
+
 \section{Input data and the direct algebraic generating function}
 \label{sec:input}
 Let
 \[
   G(z)=\sum_{n\ge 0}g_nz^n
 \]
-be the algebraic generating function constructed in
-\cite{Scheuerle2026}.  It satisfies
+be the algebraic generating function constructed in \cite{Scheuerle2026}.
+It satisfies
 \[
   A(z)G(z)^2+B(z)G(z)+C(z)=0,
 \]
 where the polynomials $A,B,C$ depend explicitly on
-\[
-  (\lambda,m,r,\eta,\taupar).
-\]
-The associated Hankel transform is initialized by
+$(\lambda,m,r,\eta,\taupar)$. Its associated Hankel transform is initialized by
 \[
   H_1=\lambda,\qquad H_2=m,\qquad H_3=r,\qquad H_4=\eta,
 \]
-and follows the corresponding Somos--4 orbit with recurrence parameter
-$\taupar$ in the normalization of \cite{Scheuerle2026}.
-The discriminant factors as
+and satisfies
+\begin{equation}
+  H_{n+4}H_n=H_{n+3}H_{n+1}+\taupar H_{n+2}^2.
+  \label{eq:somos4}
+\end{equation}
+Throughout the main workflow we assume that all displayed denominators and
+sigma factors are nonzero and that the elliptic discriminant is nonzero.
+Exceptional cases are interpreted on the projective curve or by continuation
+in the parameters.
+
+The generating-function discriminant factors as
 \[
  B(z)^2-4A(z)C(z)
  = (\lambda^2\eta m r^2z)^2
@@ -140,25 +147,26 @@ where
   +\frac{\taupar mr}{\lambda\eta}.
   \label{eq:J}
 \end{equation}
-Removing the square prefactor and applying the reciprocal change of
-variable suggested by the residual polynomial gives the quartic model
+Removing the square prefactor and applying the reciprocal change of variable
+suggested by the residual polynomial gives the quartic model
 \begin{equation}
   \EJ:\qquad y^2=(X^2-JX+\taupar)^2-4X.
   \label{eq:quartic}
 \end{equation}
 The subsequent workflow begins with \cref{eq:J,eq:quartic}.
+
 \section{What information is already contained in the discriminant?}
 \label{sec:discriminant}
-The factorization above provides the conceptual bridge between the
-algebraic and transcendental descriptions.  Once the irrelevant square
-factor is removed, the generating-function discriminant supplies a
-quartic genus-one model depending only on $(J,\taupar)$.  Thus the five
-input parameters determine the initial placement and normalization of the
-orbit, while the curve itself is encoded by the reduced pair
-$(J,\taupar)$.
-This observation should be interpreted carefully.  The discriminant
-already contains the elliptic curve, but it does not by itself fix every
-choice needed for a numerical theta representation.  One must still:
+The factorization above provides the conceptual bridge between the algebraic
+and transcendental descriptions. Once the irrelevant square factor is
+removed, the generating-function discriminant supplies a quartic genus-one
+model depending only on $(J,\taupar)$. Thus the five input parameters determine
+the initial placement and normalization of the orbit, while the curve itself
+is encoded by the reduced pair $(J,\taupar)$.
+
+This observation should be interpreted carefully. The discriminant already
+contains the elliptic curve, but it does not by itself fix every choice needed
+for a numerical theta representation. One must still:
 \begin{enumerate}[leftmargin=2.3em]
   \item choose and verify a birational map to a Weierstrass model;
   \item adopt an ordering and orientation for the periods;
@@ -167,22 +175,25 @@ choice needed for a numerical theta representation.  One must still:
   \item determine the elementary exponential factors; and
   \item check the result against the original recurrence.
 \end{enumerate}
-In this precise sense, the theta function is hidden in the discriminant,
-but extracting it requires a controlled sequence of normalizations.
+In this precise sense, the theta function is hidden in the discriminant, but
+extracting it requires a controlled sequence of normalizations.
+
 \section{The constructive workflow}
 \label{sec:workflow}
+
 \workflowstep{1: Compute the invariant and construct the quartic}
-Given $(\lambda,m,r,\eta,\taupar)$, compute $J$ using \cref{eq:J} and
-form the quartic \cref{eq:quartic}.  Before proceeding, test that the
-quartic is nonsingular.  Equivalently, its polynomial discriminant must
-be nonzero.  Degenerate inputs require a separate rational or singular
-analysis and are outside the principal workflow.
+Given $(\lambda,m,r,\eta,\taupar)$, compute $J$ using \cref{eq:J} and form the
+quartic \cref{eq:quartic}. Before proceeding, test that the quartic is
+nonsingular. Equivalently, its polynomial discriminant must be nonzero.
+Degenerate inputs require a separate rational or singular analysis and are
+outside the principal workflow.
+
 \paragraph{Checkpoint.}
 Expand the two sides of the generating-function discriminant identity and
 verify exact equality in the coefficient field.
+
 \workflowstep{2: Convert the quartic to Weierstrass form}
-Choose as origin the point at infinity characterized by $y/X^2\to1$.
-Put
+Choose as origin the point at infinity characterized by $y/X^2\to1$. Put
 \begin{equation}
   U=\frac{y+X^2-JX+\taupar}{2},
   \qquad
@@ -217,11 +228,10 @@ where, with $a=J^2-4\taupar$,
   \label{eq:g2g3}
 \end{equation}
 
-The inverse affine formulas are equally simple.  First set
-\begin{equation}
-  U=u-\frac{J^2-4\taupar}{12},
-  \qquad V=v.
-\end{equation}
+The inverse affine formulas are equally simple. First set
+\[
+  U=u-\frac{J^2-4\taupar}{12},\qquad V=v.
+\]
 For $U\ne0$,
 \begin{equation}
   X=\frac{V+JU+1}{2U},
@@ -229,15 +239,14 @@ For $U\ne0$,
   y=2U-X^2+JX-\taupar.
   \label{eq:cubic-to-quartic}
 \end{equation}
-Substitution verifies both compositions identically on their affine
-charts.  The denominator $U$ vanishes at the two cubic points
-$(U,V)=(0,1)$ and $(0,-1)$.  In the projective correspondence these are
-two points omitted by the affine inverse chart.  The chosen origin
-$y/X^2\to1$ maps to the cubic point at infinity.  The other quartic point
-at infinity maps to $(U,V)=(0,1)$, while $(U,V)=(0,-1)$ maps to the finite
-quartic point $(X,y)=(0,-\taupar)$.  Thus the sole affine exceptional set
-of the inverse formula is $U=0$; it is resolved by using the projective
-models.
+Substitution verifies both compositions identically on their affine charts.
+The denominator $U$ vanishes at the two cubic points $(U,V)=(0,1)$ and
+$(0,-1)$. In the projective correspondence these are two points omitted by
+the affine inverse chart. The chosen origin $y/X^2\to1$ maps to the cubic
+point at infinity. The other quartic point at infinity maps to $(U,V)=(0,1)$,
+while $(U,V)=(0,-1)$ maps to the finite quartic point
+$(X,y)=(0,-\taupar)$. Thus the sole affine exceptional set of the inverse
+formula is $U=0$; it is resolved by using the projective models.
 
 The polynomial discriminant of the quartic in $X$ is
 \begin{equation}
@@ -252,23 +261,22 @@ where
    +16\taupar^3-27.
   \label{eq:elliptic-discriminant}
 \end{equation}
-Consequently, over a field of characteristic zero, the birational
-elliptic model is nonsingular precisely when $\Delta\ne0$; no additional
-parameter values are excluded.
+Consequently, over a field of characteristic zero, the birational elliptic
+model is nonsingular precisely when $\Delta\ne0$; no additional parameter
+values are excluded.
 
 \paragraph{Checkpoint.}
-Reduce the identity
+Reduce
 \[
   V^2-\bigl(4U^3+(J^2-4\taupar)U^2+2JU+1\bigr)
 \]
 modulo $y^2-(X^2-JX+\taupar)^2+4X$ and verify that the remainder is zero.
-Verify the two inverse compositions, the discriminant identity
-\cref{eq:quartic-discriminant}, and
+Verify the two inverse compositions, \cref{eq:quartic-discriminant}, and
 \[
   j=1728\frac{g_2^3}{\Delta}.
 \]
-\workflowstep{3: Compute and normalize the period lattice}
 
+\workflowstep{3: Compute and normalize the period lattice}
 Let $e_1,e_2,e_3$ be the distinct roots of
 \[
   4u^3-g_2u-g_3=0.
@@ -284,33 +292,25 @@ $du/v$ over an oriented homology basis:
   \qquad
   2\omega_2=\oint_{\gamma_2}\frac{du}{v}.
 \]
-The cycles are oriented and, if necessary, replaced by an equivalent
-basis so that
+The cycles are oriented and, if necessary, replaced by an equivalent basis so
+that
 \[
   \operatorname{Im}\left(\frac{\omega_2}{\omega_1}\right)>0.
 \]
-We then set
-\[
-  \taumod=\frac{\omega_2}{\omega_1}.
-\]
-Only the lattice is intrinsic; the ordered pair
-$(2\omega_1,2\omega_2)$ depends on the chosen homology basis.  This
-choice must therefore be retained unchanged in the later definitions of
+We then set $\taumod=\omega_2/\omega_1$. Only the lattice is intrinsic; the
+ordered pair $(2\omega_1,2\omega_2)$ depends on the chosen homology basis.
+This choice must therefore be retained unchanged in the later definitions of
 elliptic logarithms, sigma functions, and theta functions.
 
 For real input data with $\Delta>0$, the three roots are real and may be
-ordered as
-\[
-  e_1>e_2>e_3.
-\]
-In this case define
+ordered as $e_1>e_2>e_3$. Define
 \[
   k^2=\frac{e_2-e_3}{e_1-e_3},
   \qquad
   k'^2=1-k^2=\frac{e_1-e_2}{e_1-e_3}.
 \]
-With the positive real square root of $e_1-e_3$, a convenient
-rectangular half-period basis is
+With the positive real square root of $e_1-e_3$, a convenient rectangular
+half-period basis is
 \begin{equation}
   \omega_1=\frac{K(k)}{\sqrt{e_1-e_3}},
   \qquad
@@ -319,47 +319,36 @@ rectangular half-period basis is
 \end{equation}
 where
 \[
-  K(k)=\int_0^{\pi/2}
-       \frac{d\phi}{\sqrt{1-k^2\sin^2\phi}}
+  K(k)=\int_0^{\pi/2}\frac{d\phi}{\sqrt{1-k^2\sin^2\phi}}.
 \]
-is the complete elliptic integral of the first kind.  Consequently,
-\[
-  \taumod
-  =i\frac{K(k')}{K(k)}
-\]
-lies in the upper half-plane.
+Consequently, $\taumod=iK(k')/K(k)$ lies in the upper half-plane.
 
-For general complex parameters, or for real parameters with only one
-real root, it is preferable to compute the periods from integrals over a
-chosen pair of branch cuts rather than to impose the ordering used in
-\cref{eq:periods-three-real-roots}.  The resulting basis is then
-normalized by an element of $\mathrm{SL}_2(\mathbb Z)$ so that
-$\operatorname{Im}(\taumod)>0$.  A direct elliptic-curve period routine
-provides an independent numerical check, but the complete-integral and
-cycle-integral descriptions are taken as the primary mathematical
-definition.
+For general complex parameters, or for real parameters with only one real
+root, it is preferable to compute the periods from integrals over a chosen
+pair of branch cuts rather than to impose the ordering used in
+\cref{eq:periods-three-real-roots}. The resulting basis is then normalized by
+an element of $\mathrm{SL}_2(\mathbb Z)$ so that
+$\operatorname{Im}(\taumod)>0$. A direct elliptic-curve period routine
+provides an independent numerical check \cite{PARIGPManual,DLMF23}.
 
 \paragraph{Checkpoint.}
-First verify numerically that
+Verify
 \[
-  4(u-e_1)(u-e_2)(u-e_3)=4u^3-g_2u-g_3.
+  4(u-e_1)(u-e_2)(u-e_3)=4u^3-g_2u-g_3,
+  \qquad \operatorname{Im}(\taumod)>0.
 \]
-Then confirm
-\[
-  \operatorname{Im}(\taumod)>0.
-\]
-Finally reconstruct the invariants from the normalized lattice and check
-that they agree with the original $g_2$ and $g_3$ to the working
-precision.  In the three-real-root case, also compare the periods from
-\cref{eq:periods-three-real-roots} with periods obtained by direct
-numerical integration of $du/v$.
+Then reconstruct the invariants from the normalized lattice and check that
+they agree with the original $g_2$ and $g_3$ to the working precision. In the
+three-real-root case, also compare \cref{eq:periods-three-real-roots} with
+direct numerical integration of $du/v$.
+
 \workflowstep{4: Determine the elliptic translation point}
 Introduce the gauge-invariant recurrence variables
 \begin{equation}
   x_n=\frac{H_{n-1}H_{n+1}}{H_n^2}.
   \label{eq:qrt-variable}
 \end{equation}
-The Somos--4 recurrence implies the second-order QRT map
+The Somos--4 recurrence \cref{eq:somos4} implies the second-order QRT map
 \begin{equation}
   x_{n+2}x_nx_{n+1}^2=x_{n+1}+\taupar,
   \qquad
@@ -372,8 +361,7 @@ and the quantity
   +\frac{\taupar}{x_nx_{n+1}}
   \label{eq:qrt-invariant}
 \end{equation}
-is independent of $n$.  Its value is precisely $J$ from
-\cref{eq:J}.  Indeed, for the initial data of \cref{sec:input},
+is independent of $n$. Its value is precisely $J$ from \cref{eq:J}. Indeed,
 \[
   x_2=\frac{\lambda r}{m^2},
   \qquad
@@ -407,69 +395,77 @@ identity, one QRT step is
   P=\left(\frac{J^2-4\taupar}{12},1\right).
   \label{eq:translation-point}
 \end{equation}
-Thus the translation point is determined directly by $(J,\taupar)$ and
-does not have to be recovered numerically from several iterates.  A direct
-check uses the next QRT value from \cref{eq:qrt-map}, constructs $Q_{n+1}$
-from \cref{eq:qrt-to-quartic,eq:qrt-state-on-weierstrass}, and verifies
-$Q_{n+1}-Q_n=P$ by the Weierstrass group law.  The formula is valid on the
-open chart where the quantities displayed above are defined; exceptional
-or vanishing recurrence values are handled by the projective curve and
-continuation in the parameters.
+Thus the translation point is determined directly by $(J,\taupar)$ and need
+not be recovered numerically from several iterates. A direct check constructs
+$Q_{n+1}$ from \cref{eq:qrt-map,eq:qrt-to-quartic,
+eq:qrt-state-on-weierstrass} and verifies
+$Q_{n+1}-Q_n=P$ by the Weierstrass group law. The formula is valid on the open
+chart where the displayed expressions are defined; exceptional or vanishing
+recurrence values are handled projectively or by continuation.
 
-There is also a continued-fraction interpretation.  On the quartic model,
-the two points at infinity differ by a fixed divisor class.  Advancing one
-line of the genus-one continued fraction translates the Jacobian by that
-class.  With the origin chosen in Workflow Step~2, the second point at
-infinity maps to $(U,V)=(0,1)$, hence to the point $P$ in
-\cref{eq:translation-point}.  The QRT and continued-fraction routes
-therefore give the same increment, rather than two independently
-normalized candidates.
+There is also a continued-fraction interpretation. On the quartic model, the
+two points at infinity differ by a fixed divisor class. Advancing one line of
+the genus-one continued fraction translates the Jacobian by that class
+\cite{Hone2020}. With the origin chosen in Workflow Step~2, the second point at
+infinity maps to $(U,V)=(0,1)$, hence to $P$ in
+\cref{eq:translation-point}. The QRT and continued-fraction routes therefore
+give the same increment.
 
-For the classical data
-$H_1=H_2=H_3=H_4=1$ and $\taupar=1$, one has $J=4$ and
+For the classical data $H_1=H_2=H_3=H_4=1$ and $\taupar=1$, one has $J=4$ and
 \[
   E_J:\quad v^2=4u^3-4u+1,
   \qquad P=(1,1).
 \]
-Furthermore, $x_2=x_3=1$ and \cref{eq:qrt-map} gives $x_4=2$.
-The corresponding points are
+Furthermore, $x_2=x_3=1$ and \cref{eq:qrt-map} gives $x_4=2$. The
+corresponding points are
 \[
   Q_2=(0,1),
   \qquad Q_3=(-1,-1),
 \]
-and the group law gives $Q_3-Q_2=(1,1)=P$.  On the quartic side,
-$P$ is the image of the second point at infinity, so the
-continued-fraction divisor shift yields the same point.
+and the group law gives $Q_3-Q_2=(1,1)=P$.
 
 \paragraph{Checkpoint.}
 For several consecutive pairs $(x_n,x_{n+1})$, verify
 \cref{eq:qrt-invariant}, map the states to $Q_n$, and check
-$Q_{n+1}-Q_n=P$.  As a quick structural test, confirm directly that
-$P$ lies on \cref{eq:weierstrass}; in the intermediate coordinates it is
-the point $(U,V)=(0,1)$.
+$Q_{n+1}-Q_n=P$. As a quick structural test, confirm directly that $P$ lies
+on \cref{eq:weierstrass}; in the intermediate coordinates it is
+$(U,V)=(0,1)$.
+
 \workflowstep{5: Compute Abel--Jacobi coordinates}
-Map $Q_0$ and $P$ to the Weierstrass model.  Choose lifts $z_0$ and
-$\delta$ in $\mathbb C$ satisfying
+Choose lifts $z_2$ and $\delta$ in $\mathbb C$ satisfying
 \[
-  (\wp(z_0),\wp'(z_0))=Q_0,
+  (\wp(z_2),\wp'(z_2))=Q_2,
   \qquad
   (\wp(\delta),\wp'(\delta))=P,
 \]
 or, equivalently,
 \[
-  z_0=\int_{\infty}^{Q_0}\frac{du}{v},
+  z_2=\int_{\infty}^{Q_2}\frac{du}{v},
   \qquad
-  \delta=\int_{\infty}^{P}\frac{du}{v}
-  \pmod{\Lambda}.
+  \delta=\int_{\infty}^{P}\frac{du}{v}\pmod{\Lambda}.
 \]
-The lifts are not unique.  Their representatives should be reduced to a
+Then set
+\begin{equation}
+  z_0=z_2-3\delta \pmod{\Lambda}.
+  \label{eq:z0-from-z2}
+\end{equation}
+The lifts are not unique. Their representatives should be reduced to a
 stated fundamental parallelogram, with signs fixed by the $v$-coordinates.
+With the normalization used in the companion script, the geometric point
+indexed by $Q_n$ is represented by
+\[
+  z_n=z_0+(n+1)\delta,
+\]
+so that $Q_{n+1}-Q_n=P$ is encoded by the increment $\delta$ in the Abel--Jacobi
+parameter.
+
 \paragraph{Checkpoint.}
 For several integers $n$, verify that
 \[
-  (\wp(z_0+n\delta),\wp'(z_0+n\delta))
+  (\wp(z_0+(n+1)\delta),\wp'(z_0+(n+1)\delta))
 \]
 agrees with the Weierstrass image of $Q_n$.
+
 \workflowstep{6: Fix the sigma-function normalization}
 In the convention used here, the classical sigma-function solution of a
 nondegenerate Somos--4 recurrence is
@@ -478,32 +474,28 @@ nondegenerate Somos--4 recurrence is
   \frac{\sigma(z_0+n\delta)}{\sigma(\delta)^{n^2}}.
   \label{eq:sigma}
 \end{equation}
-The sign of $\delta$ is fixed in Workflow Steps~4 and~5 by requiring that
-$Q_{n+1}=Q_n+P$ and
-$(\wp(\delta),\wp'(\delta))=P$.  The indexing is fixed by
+This is the normalization of the general sigma representation proved in
+\cite{Hone2005}. The sign of $\delta$ is fixed in Workflow Steps~4 and~5 by
+requiring $Q_{n+1}=Q_n+P$ and $(\wp(\delta),\wp'(\delta))=P$. With the
+convention used here, the Abel--Jacobi coordinate of $Q_n$ is
 \begin{equation}
-  (\wp(z_0+n\delta),\wp'(z_0+n\delta))=Q_n.
+  z_n=z_0+(n+1)\delta,
+  \qquad
+  (\wp(z_n),\wp'(z_n))=Q_n.
   \label{eq:sigma-indexing}
 \end{equation}
-In particular, the initial recurrence data determine $Q_2$ from
-$x_2=\lambda r/m^2$ and $x_3=m\eta/r^2$.  If $z_2$ is the chosen elliptic
-logarithm of $Q_2$, then the lift appearing in \cref{eq:sigma} is
-\begin{equation}
-  z_0=z_2-2\delta \pmod{\Lambda}.
-  \label{eq:z0-from-z2}
-\end{equation}
-This shift is essential: using $z_2$ itself as $z_0$ would displace the
-sigma formula by two recurrence indices.
+In particular, the initial recurrence data determine $Q_2$ from $x_2$ and
+$x_3$, so $z_0$ is obtained from \cref{eq:z0-from-z2}. This shift is
+essential: using $z_2$ itself as $z_0$ would displace the sigma formula by
+three recurrence indices.
 
 For brevity, put
 \begin{equation}
-  S_n=
-  \frac{\sigma(z_0+n\delta)}{\sigma(\delta)^{n^2}}.
+  S_n=\frac{\sigma(z_0+n\delta)}{\sigma(\delta)^{n^2}}.
   \label{eq:Sn}
 \end{equation}
-Assuming the displayed sigma factors are nonzero, the first two initial
-conditions $H_1=\lambda$ and $H_2=m$ determine the elementary gauge
-constants uniquely:
+Assuming the displayed sigma factors are nonzero, $H_1=\lambda$ and $H_2=m$
+determine the gauge constants uniquely:
 \begin{equation}
   B=\frac{mS_1}{\lambda S_2},
   \qquad
@@ -519,9 +511,7 @@ Equivalently,
           {m\,\sigma(\delta)^2\sigma(z_0+\delta)^2}.
   \label{eq:A-explicit}
 \end{align}
-The remaining initial values do not supply two further independent gauge
-constants.  Instead, they are consistency conditions for the chosen
-curve, translation point, elliptic logarithms, and indexing:
+The remaining initial values are consistency conditions:
 \begin{equation}
   r=A B^3S_3,
   \qquad
@@ -529,160 +519,198 @@ curve, translation point, elliptic logarithms, and indexing:
   \label{eq:sigma-initial-checks}
 \end{equation}
 Thus all four initial values are used: the first two fix $A$ and $B$, while
-the third and fourth test the geometric data and the branch choices.
+the third and fourth test the geometric data and branch choices.
 
-The exponent $n^2$ in \cref{eq:sigma} is also fixed by the sigma addition
-formula
+The exponent $n^2$ in \cref{eq:sigma} is fixed by the sigma addition formula
 \begin{equation}
   \frac{\sigma(z+\delta)\sigma(z-\delta)}
        {\sigma(z)^2\sigma(\delta)^2}
   =\wp(\delta)-\wp(z).
   \label{eq:sigma-addition}
 \end{equation}
-Indeed, substitution of \cref{eq:sigma} into
-$x_n=H_{n-1}H_{n+1}/H_n^2$ cancels $A$ and $B$ and gives
+Substitution of \cref{eq:sigma} into \cref{eq:qrt-variable} gives
 \begin{equation}
   x_n=
-  \frac{\sigma(z_0+(n-1)\delta)
-        \sigma(z_0+(n+1)\delta)}
+  \frac{\sigma(z_0+(n-1)\delta)\sigma(z_0+(n+1)\delta)}
        {\sigma(z_0+n\delta)^2\sigma(\delta)^2}
   =\wp(\delta)-\wp(z_0+n\delta).
   \label{eq:xn-sigma}
 \end{equation}
-This identity links the sigma normalization directly to the QRT variables
-and provides a sensitive check of the sign and index conventions.
+This identity links the sigma normalization directly to the QRT variables.
 
 \paragraph{Checkpoint.}
-First verify \cref{eq:sigma-initial-checks} at the working precision.
-Then compare values from \cref{eq:sigma} with exact recurrence values for
-a range of positive and, where defined, negative indices.  Independently
-check \cref{eq:xn-sigma} against the rational QRT iterates; this detects an
-incorrect sign of $\delta$, an index shift in $z_0$, or an inconsistent
-period representative.
+First verify \cref{eq:sigma-initial-checks}. Then compare
+\cref{eq:sigma} with exact recurrence values for a range of positive and,
+where defined, negative indices. Independently check \cref{eq:xn-sigma}; this
+detects an incorrect sign of $\delta$, an index shift in $z_0$, or an
+inconsistent period representative.
+
 \workflowstep{7: Convert the sigma formula to theta form}
-For the chosen period basis, use
+For the chosen ordered half-periods, define
+\[
+  \taumod=\frac{\omega_2}{\omega_1},
+  \qquad
+  \eta_1=\zeta(\omega_1),
+  \qquad
+  \vartheta'_1=\theta_1'(0\mid\taumod),
+  \qquad
+  c=\frac{2\omega_1}{\pi\vartheta'_1}.
+\]
+The classical sigma--theta identity is
 \begin{equation}
  \sigma(z)=
  \exp\!\left(\frac{\eta_1z^2}{2\omega_1}\right)
- \frac{2\omega_1}{\pi\theta_1'(0\mid\taumod)}
+ c\,
  \theta_1\!\left(\frac{\pi z}{2\omega_1}\,\middle|\,\taumod\right),
  \label{eq:sigma-theta}
 \end{equation}
-with $\eta_1=\zeta(\omega_1)$.  Substitution into \cref{eq:sigma}
-collects the exponential factors into constants of the form
-\[
-  K_0 q_0^{n^2}r_0^n,
-\]
-leading to
+with the standard analytic normalization of $\theta_1$; see
+\cite{WhittakerWatson,DLMF23}. Put
+\begin{equation}
+  A_0=\frac{\pi\delta}{2\omega_1},
+  \qquad
+  B_0=\frac{\pi z_0}{2\omega_1}.
+  \label{eq:theta-arguments}
+\end{equation}
+Substituting \cref{eq:sigma-theta} into \cref{eq:sigma} and collecting the
+constant, linear, and quadratic powers of $n$ gives the explicit theta form
 \begin{equation}
   H_n=K_0q_0^{n^2}r_0^n
-  \theta_1(A_0n+B_0\mid\taumod).
+  \theta_1(A_0n+B_0\mid\taumod),
   \label{eq:theta}
 \end{equation}
-All constants in \cref{eq:theta} must be given in terms of
-$\omega_1,\eta_1,z_0,\delta,A,B$ and the theta normalization used by the
-software.
+where
+\begin{align}
+  K_0&=Ac\exp\!\left(\frac{\eta_1z_0^2}{2\omega_1}\right),
+  \label{eq:K0}\\
+  q_0&=\exp\!\left(\frac{\eta_1\delta^2}{2\omega_1}\right)\sigma(\delta)^{-1}
+       =\bigl(c\,\theta_1(A_0\mid\taumod)\bigr)^{-1},
+  \label{eq:q0}\\
+  r_0&=B\exp\!\left(\frac{\eta_1z_0\delta}{\omega_1}\right).
+  \label{eq:r0}
+\end{align}
+The exponential in \cref{eq:q0} is essential. Equivalently, applying
+\cref{eq:sigma-theta} at $z=\delta$ gives the second expression for $q_0$.
+
 \paragraph{Checkpoint.}
-Evaluate \cref{eq:sigma} and \cref{eq:theta} independently and compare
-them before comparing either expression with the recurrence.
+Evaluate \cref{eq:sigma} and \cref{eq:theta} independently and compare them
+before comparing either expression with the recurrence. Software libraries
+often use different argument scalings or nomes for Jacobi theta functions;
+therefore \cref{eq:sigma-theta,eq:theta-arguments} should be treated as the
+normalization contract for any implementation.
+
 \section{Algorithm summary}
 \begin{enumerate}[label=\textbf{Step \arabic*.},leftmargin=2.7em]
-  \item Read $(\lambda,m,r,\eta,\taupar)$ and test the required
-        nonvanishing assumptions.
+  \item Read $(\lambda,m,r,\eta,\taupar)$ and test the required nonvanishing
+        assumptions.
   \item Compute $J$ from \cref{eq:J}.
   \item Construct $\EJ$ and test nonsingularity.
-  \item Compute a birational Weierstrass model and retain both maps.
+  \item Compute the birational Weierstrass model and retain both maps.
   \item Compute $(g_2,g_3)$ and check curve invariants.
   \item Compute $(\omega_1,\omega_2)$ and normalize the period basis.
-  \item Construct consecutive QRT states and recover the fixed point $P$.
+  \item Construct consecutive QRT states and verify the fixed point $P$.
   \item Compute and normalize $z_0$ and $\delta$.
-  \item Determine the constants in the sigma representation from the
-        initial data.
-  \item Convert the result to theta form using \cref{eq:sigma-theta}.
-  \item Validate all four descriptions: recurrence, generating function,
-        sigma form, and theta form.
+  \item Determine $A$ and $B$ from the initial data and check $H_3,H_4$.
+  \item Convert the result to theta form using
+        \cref{eq:sigma-theta,eq:theta-arguments,eq:K0,eq:q0,eq:r0}.
+  \item Validate recurrence, generating-function discriminant, sigma form,
+        and theta form.
 \end{enumerate}
+
 \section{Numerical examples}
 \label{sec:examples}
+
 \subsection{The classical Somos--4 sequence}
-For the classical seed
+For
 \[
   (\lambda,m,r,\eta,\taupar)=(1,1,1,1,1),
 \]
-the companion script computes the invariant
+the companion script computes
 \[
-  J=\operatorname{somos}_J(1,1,1,1,1)=4,
-\qquad
+  J=4,
+  \qquad
   (g_2,g_3,\Delta)=(4,-1,37).
 \]
-The corresponding quartic model is therefore
+The corresponding quartic is
 \[
-  y^2=(X^2-4X+1)^2-4X,
+  y^2=(X^2-4X+1)^2-4X.
 \]
-and the period lattice computed by PARI/GP at 80 decimal digits of
-working precision is
+One compatible pair of half-periods, obtained at 80 decimal digits of working
+precision and oriented so that $\operatorname{Im}(\omega_2/\omega_1)>0$, is
 \[
-  \omega_1=2.9934586462319596298,
+  \omega_1=1.4967293231159798149,
   \qquad
-  \omega_2=-2.4513893819867900609\,i.
+  \omega_2=1.2256946909933950304\,i.
 \]
-Under the normalization used by \texttt{ellperiods}, the basis is chosen
-with the standard positive-imaginary convention for the lattice ratio, and
-the Abel--Jacobi parameters returned by the script are
+The corresponding Abel--Jacobi parameters are
 \[
   z_0=-2.7887781458561870232+1.2256946909933950304\,i,
   \qquad
   \delta=1.8591854305707913488.
 \]
-The sigma-normalization constants produced by the same run are
+The sigma-normalization constants are
 \[
   A=-0.23674493915977148+0.06797467161582982\,i,
-  \qquad
+\]
+\[
   B=1.24599348339577469+3.55401276446268772\,i.
 \]
-With these values the direct sigma evaluation gives the classical numerical
-sequence
+Although these constants and lifts are complex, their combination in
+\cref{eq:sigma} gives real integral values to numerical precision. The result
+is
 \[
-  1,1,1,2,3,7,23,59,\ldots,
+  H_1,H_2,\ldots=1,1,1,1,2,3,7,23,59,\ldots,
 \]
-which is the expected Somos--4 orbit in the indexing convention used by the
-current normalization.  This is the concrete output from the script in the
-present sandbox; it is intended as a reproducible check of the workflow and
-as a calibration point for the subsequent index convention choices in the
-elliptic sigma normalization.
+the classical Somos--4 sequence, OEIS A006720 \cite{OEISA006720}.
+
 \subsection{A nontrivial member of the five-parameter family}
-A second example should use nonunit values of
-$(\lambda,m,r,\eta,\taupar)$ and should avoid accidental symmetry or
-complex multiplication.  Its purpose is to demonstrate that the workflow
-is not specialized to the classical sequence.
-\editorialnote{Choose the example only after the complete script is stable.
-Prefer small rational input data for which exact checks remain possible
-before numerical period evaluation.}
+For $(\lambda,m,r,\eta,\taupar)=(2,1,1,3,2)$, exact arithmetic gives
+\[
+  J=\frac{43}{6},
+  \qquad
+  (g_2,g_3,\Delta)=
+  \left(\frac{2213809}{15552},
+  -\frac{3291850729}{10077696},
+  \frac{1161689}{324}\right).
+\]
+The first terms of the orbit are
+\[
+  2,1,1,3,\frac{5}{2},\frac{41}{2},74,\frac{2051}{6},
+  \frac{43103}{6},\frac{335987}{9},\ldots.
+\]
+This nonunit rational seed shows that the exact algebraic part of the workflow
+remains consistent away from the symmetric seed $(1,1,1,1,1)$ before the
+numerical period and sigma evaluation is performed.
+
 \section{Computational reliability and reproducibility}
-The workflow mixes exact algebra and high-precision complex analysis.
-The following practices are recommended:
+The workflow mixes exact algebra and high-precision complex analysis. The
+following practices are recommended:
 \begin{itemize}[leftmargin=2em]
-  \item perform discriminant factorization and birational-map checks
-        exactly whenever the input data are rational;
+  \item perform discriminant factorization and birational-map checks exactly
+        whenever the input data are rational;
   \item postpone floating-point conversion until period computation;
-  \item state the numerical precision and period-basis convention;
+  \item state whether reported periods are full periods or half-periods;
+  \item state the orientation and period-basis convention;
   \item reduce Abel--Jacobi arguments consistently modulo the same lattice;
-  \item test signs with the second Weierstrass coordinate, not only with
-        the $u$-coordinate; and
+  \item test signs with the second Weierstrass coordinate, not only the
+        $u$-coordinate;
+  \item compare the sigma and theta representations independently; and
   \item validate several consecutive and nonconsecutive indices.
 \end{itemize}
-These checks are not cosmetic.  A wrong sign of $\delta$, a shifted lift
-of $z_0$, or a modularly equivalent but inconsistently transformed period
-basis can produce formulas that appear plausible for a few terms while
-failing globally.
+These checks are not cosmetic. A wrong sign of $\delta$, a shifted lift of
+$z_0$, or a modularly equivalent but inconsistently transformed period basis
+can produce formulas that appear plausible for a few terms while failing
+globally.
+
 \section{Discussion and future directions}
 The discriminant of the direct algebraic generating function provides a
 particularly transparent entry point into the elliptic geometry of a
-Somos--4 orbit.  The present workflow is intended to make that geometry
+Somos--4 orbit. The present workflow is intended to make that geometry
 computationally accessible rather than to re-establish the classical
-elliptic-function theory.  Once completed, it may also clarify which
-parts of the transcendental representation are intrinsic to the curve
-and which record the initial point, indexing, and normalization.
+elliptic-function theory. It also clarifies which parts of the transcendental
+representation are intrinsic to the curve and which record the initial
+point, indexing, and normalization.
+
 Natural extensions include:
 \begin{itemize}[leftmargin=2em]
   \item direct extraction of the translation point from paired-Hankel or
@@ -691,43 +719,36 @@ Natural extensions include:
         $(J,\taupar)$;
   \item arithmetic analysis of special parameter choices;
   \item analogous workflows for Somos--5 and Somos--6; and
-  \item higher-genus generalizations where sigma functions replace their
-        elliptic counterparts.
+  \item higher-genus generalizations involving Kleinian sigma functions.
 \end{itemize}
+
 \section{Conclusion}
-The central message is practical: the elliptic curve needed for a
-sigma- or theta-function description is already present in the
-discriminant of the direct algebraic generating function.  What remains
-is a sequence of explicit, verifiable conversions.  By collecting those
-conversions, fixing their conventions, and implementing them in one
-script, the scattered classical theory can be turned into a usable tool
-for concrete Somos--4 sequences.
+The elliptic curve needed for a sigma- or theta-function description is
+already present in the discriminant of the direct algebraic generating
+function. What remains is a sequence of explicit, verifiable conversions. By
+collecting those conversions, fixing their conventions, and implementing
+them in one script, the scattered classical theory becomes a usable tool for
+concrete Somos--4 sequences.
+
 \appendix
 \section{PARI/GP companion implementation}
 \label{app:pari}
-The appendix is intentionally more substantial than a mere skeleton.  The
-code below is written so that the same normalization used in the text is
-carried through the exact algebraic checks, the period calculation, and the
-elliptic sigma evaluation.  It is designed to be copied directly into a
-PARI/GP session and to produce a reproducible numerical verification of the
-workflow.
-
-The implementation uses the elliptic primitives available in the current
-sandbox: \texttt{ellinit}, \texttt{ellperiods}, \texttt{ellwp},
-\texttt{ellpointtoz}, and \texttt{ellsigma}.  In this particular PARI/GP
-build there is no separate \texttt{elltheta} helper.  The theta form is
-therefore checked indirectly through the sigma-function identity and the
-period lattice, which is exactly the normalization required for the final
-comparison with the recurrence.  PARI/GP is a particularly strong choice
-here because it combines exact algebra and high-precision elliptic
-numerics in one environment.
+The code below carries the normalization used in the text through the exact
+algebraic checks, the period calculation, the QRT translation check, and the
+elliptic sigma evaluation. PARI/GP represents
+\[
+  v^2=4u^3-g_2u-g_3
+\]
+by
+\[
+  Y^2=u^3-\frac{g_2}{4}u-\frac{g_3}{4},
+  \qquad Y=\frac{v}{2}.
+\]
+Thus a text point $(u,v)$ is supplied to PARI/GP as $[u,v/2]$. The functions
+used below are documented in \cite{PARIGPManual}.
 
 \begin{lstlisting}[style=parigp]
-\\ PARI/GP companion for the algebraic-to-sigma workflow of Somos--4 data.
-\\ The script is scientific and executable: it checks the discriminant factor-
-\\ ization, converts the quartic to Weierstrass form, computes periods, identifies
-\\ the translation point, and confirms the sigma representation against the
-\\ original Somos--4 recurrence.
+\\ PARI/GP companion for the algebraic-to-sigma workflow.
 
 somos_J(lambda, m, r, eta, tau) =
 {
@@ -740,32 +761,32 @@ somos_J(lambda, m, r, eta, tau) =
 quartic_poly(J, tau, X) = (X^2 - J*X + tau)^2 - 4*X;
 
 qrt_invariant(x, y, tau) = x*y + 1/x + 1/y + tau/(x*y);
-
 qrt_step(x, y, tau) = [y, (y + tau)/(x*y^2)];
+qrt_step_pair(x, y, tau) = qrt_step(x, y, tau);
 
 somos_recurrence_step(v, tau) =
 {
   my(n = #v);
   if (n < 4, error("Need at least four values to advance the Somos-4 orbit"));
   if (v[n-3] == 0, error("Zero denominator in Somos-4 recurrence"));
-  (v[n-1]*v[n-3] + tau*v[n-2]^2) / v[n-3];
+  (v[n]*v[n-2] + tau*v[n-1]^2) / v[n-3];
 };
 
 somos_orbit(lambda, m, r, eta, tau, N) =
 {
-  my(v = [lambda, m, r, eta]);
+  my(v = List([lambda, m, r, eta]));
+  if (N < 1, return([]));
   for (n = 5, N,
     listput(v, somos_recurrence_step(v, tau));
   );
-  v;
+  Vec(v)[1..min(N, #v)];
 };
 
 quartic_to_weierstrass(X, Y, J, tau) =
 {
   my(U = (Y + X^2 - J*X + tau)/2);
   my(V = U*(2*X - J) - 1);
-  my(u = U + (J^2 - 4*tau)/12);
-  [u, V];
+  [U + (J^2 - 4*tau)/12, V];
 };
 
 weierstrass_to_quartic(u, v, J, tau) =
@@ -773,8 +794,7 @@ weierstrass_to_quartic(u, v, J, tau) =
   my(U = u - (J^2 - 4*tau)/12);
   if (U == 0, error("Affine inverse map hits the excluded U = 0 chart"));
   my(X = (v + J*U + 1)/(2*U));
-  my(Y = 2*U - X^2 + J*X - tau);
-  [X, Y];
+  [X, 2*U - X^2 + J*X - tau];
 };
 
 weierstrass_invariants(J, tau) =
@@ -782,47 +802,55 @@ weierstrass_invariants(J, tau) =
   my(a = J^2 - 4*tau);
   my(g2 = a^2/12 - 2*J);
   my(g3 = -a^3/216 + a*J/6 - 1);
-  my(Delta = g2^3 - 27*g3^2);
-  [g2, g3, Delta];
+  [g2, g3, g2^3 - 27*g3^2];
 };
 
 ell_curve_from_J(J, tau) =
 {
   my(w = weierstrass_invariants(J, tau));
-  my(g2 = w[1], g3 = w[2]);
-  ellinit([0,0,0,-g2/4,-g3/4]);
+  ellinit([0, 0, 0, -w[1]/4, -w[2]/4]);
 };
 
 fixed_translation_point(J, tau) =
 {
   my(a = J^2 - 4*tau);
-  [a/12, 1/2];
+  [a/12, 1/2];       \\ PARI coordinates [u,v/2]
 };
+
+translation_point_on_curve(J, tau) = fixed_translation_point(J, tau);
 
 curve_point_from_qrt(x, y, J, tau) =
 {
-  my(X = x*y);
-  my(Y = x - y);
-  my(P = quartic_to_weierstrass(X, Y, J, tau));
-  my(u = P[1], v = P[2]);
-  [u, v/2];
+  my(P = quartic_to_weierstrass(x*y, x-y, J, tau));
+  [P[1], P[2]/2];    \\ PARI coordinates [u,v/2]
 };
 
-sigma_lattice_from_J(J, tau) =
+check_discriminant(J, tau) =
 {
-  my(E = ell_curve_from_J(J, tau));
-  ellperiods(E);
-};
-
-check_discriminant_factorization(lambda, m, r, eta, tau) =
-{
-  my(J = somos_J(lambda, m, r, eta, tau));
-  my(g2g3 = weierstrass_invariants(J, tau));
-  my(g2 = g2g3[1], g3 = g2g3[2]);
-  my(Delta = g2g3[3]);
+  my(w = weierstrass_invariants(J, tau));
   my(F = quartic_poly(J, tau, 'X));
-  my(disc = poldisc(F, 'X));
-  [disc, 256*Delta, abs(disc - 256*Delta)];
+  [poldisc(F, 'X), 256*w[3], poldisc(F, 'X) - 256*w[3]];
+};
+
+check_quartic_weierstrass(J, tau) =
+{
+  my(w = weierstrass_invariants(J, tau));
+  my(E = ell_curve_from_J(J, tau));
+  my(W = ellperiods(E));
+  my(omega1 = W[1]/2, omega2 = -W[2]/2);
+  my(tau_mod = omega2/omega1);
+
+  print("J = ", J, "; g2 = ", w[1], "; g3 = ", w[2], "; Delta = ", w[3]);
+  print("PARI full periods W = ", W);
+  print("Reference half-periods: omega1 = ", omega1, ", omega2 = ", omega2);
+  print("tau_mod = ", tau_mod);
+  print("discriminant check = ", check_discriminant(J, tau));
+
+  if (imag(tau_mod) <= 0,
+    print("Warning: tau_mod is not in the upper half-plane.");
+  );
+
+  abs(check_discriminant(J, tau)[3]) < 1e-30;
 };
 
 verify_qrt_translation(lambda, m, r, eta, tau, nsteps = 6) =
@@ -831,130 +859,118 @@ verify_qrt_translation(lambda, m, r, eta, tau, nsteps = 6) =
   my(E = ell_curve_from_J(J, tau));
   my(x = lambda*r/m^2, y = m*eta/r^2);
   my(P = fixed_translation_point(J, tau));
-  my(zP = ellpointtoz(E, P));
-  for (n = 1, nsteps,
+  for (k = 1, nsteps,
     my(Qn = curve_point_from_qrt(x, y, J, tau));
     my(next = qrt_step(x, y, tau));
     my(Qnp1 = curve_point_from_qrt(next[1], next[2], J, tau));
-    my(zn = ellpointtoz(E, Qn));
-    my(znp1 = ellpointtoz(E, Qnp1));
-    print("step ", n, ": invariant = ", qrt_invariant(x, y, tau),
-          ", Q_{n+1}-Q_n = P ? ", abs(znp1 - zn - zP) < 1e-25);
+    print("step ", k,
+          ": invariant error = ", qrt_invariant(x, y, tau) - J,
+          ", translation exact = ", ellsub(E, Qnp1, Qn) == P);
     x = next[1];
     y = next[2];
   );
 };
 
+sigma_lattice_from_J(J, tau) =
+{
+  my(E = ell_curve_from_J(J, tau));
+  ellperiods(E);
+};
+
 sigma_representation(lambda, m, r, eta, tau, z0, delta) =
 {
-  my(J = somos_J(lambda, m, r, eta, tau));
-  my(L = sigma_lattice_from_J(J, tau));
+  my(L = sigma_lattice_from_J(somos_J(lambda, m, r, eta, tau), tau));
   my(sd = ellsigma(L, delta));
-  my(s1 = ellsigma(L, z0 + delta));
-  my(s2 = ellsigma(L, z0 + 2*delta));
-  my(B = m*s1*sd^3 / (lambda*s2));
-  my(A = lambda^2*s2 / (m*sd^2*s1^2));
-  [A, B, sd, s1, s2];
+  my(S1 = ellsigma(L, z0 + delta));
+  my(S2 = ellsigma(L, z0 + 2*delta));
+  my(B = m*S1*sd^3 / (lambda*S2));
+  my(A = lambda^2*S2 / (m*sd^2*S1^2));
+  [A, B, sd, S1, S2];
+};
+
+sigma_parameters(lambda, m, r, eta, tau) =
+{
+  my(J = somos_J(lambda, m, r, eta, tau));
+  my(E = ell_curve_from_J(J, tau));
+  my(x2 = lambda*r/m^2, x3 = m*eta/r^2);
+  my(Q2 = curve_point_from_qrt(x2, x3, J, tau));
+  my(P = fixed_translation_point(J, tau));
+  my(L = ellperiods(E));
+  my(delta = ellpointtoz(E, P));
+  my(z2 = ellpointtoz(E, Q2));
+  \\ In the H_1-started normalization, Q_n corresponds to z0 + (n+1)*delta.
+  my(z0 = z2 - 3*delta);
+  my(sd = ellsigma(L, delta));
+  my(S1 = ellsigma(L, z0 + delta)/sd);
+  my(S2 = ellsigma(L, z0 + 2*delta)/sd^4);
+  my(B = m*S1/(lambda*S2));
+  my(A = lambda^2*S2/(m*S1^2));
+  [E, L, z0, delta, A, B];
+};
+
+sigma_value(sigpar, n) =
+{
+  my(L = sigpar[2], z0 = sigpar[3], delta = sigpar[4]);
+  my(A = sigpar[5], B = sigpar[6]);
+  A*B^n*ellsigma(L, z0 + n*delta)/ellsigma(L, delta)^(n^2);
 };
 
 somos_sigma_value(lambda, m, r, eta, tau, z0, delta, n) =
 {
-  my(J = somos_J(lambda, m, r, eta, tau));
-  my(L = sigma_lattice_from_J(J, tau));
-  my(A, B, sd, s1, s2);
-  [A, B, sd, s1, s2] = sigma_representation(lambda, m, r, eta, tau, z0, delta);
-  A * B^(n-1) * ellsigma(L, z0 + (n-1)*delta) / sd^((n-1)^2);
+  my(L = sigma_lattice_from_J(somos_J(lambda, m, r, eta, tau), tau));
+  my(A, B, sd, S1, S2);
+  [A, B, sd, S1, S2] = sigma_representation(lambda, m, r, eta, tau, z0, delta);
+  A*B^n*ellsigma(L, z0 + n*delta)/sd^(n^2);
 };
 
-workflow_demo(lambda, m, r, eta, tau, prec = 80) =
+workflow_demo(lambda, m, r, eta, tau, N = 10, prec = 80) =
 {
   default(realprecision, prec);
   my(J = somos_J(lambda, m, r, eta, tau));
-  my(E = ell_curve_from_J(J, tau));
-  my(L = ellperiods(E));
-  my(x2 = lambda*r/m^2, x3 = m*eta/r^2);
-  my(Q2 = curve_point_from_qrt(x2, x3, J, tau));
-  my(next = qrt_step(x2, x3, tau));
-  my(Q3 = curve_point_from_qrt(next[1], next[2], J, tau));
-  my(P = fixed_translation_point(J, tau));
-  my(zP = ellpointtoz(E, P));
-  my(z2 = ellpointtoz(E, Q2));
-  my(z3 = ellpointtoz(E, Q3));
-  my(delta = zP);
-  my(z0 = z2 - 2*delta);
-  my(A, B, sd, s1, s2);
-  [A, B, sd, s1, s2] = sigma_representation(lambda, m, r, eta, tau, z0, delta);
-  my(H = vector(8, n, somos_sigma_value(lambda, m, r, eta, tau, z0, delta, n)));
-
+  my(w = weierstrass_invariants(J, tau));
+  if (w[3] == 0, error("Singular quartic / elliptic curve"));
+  my(sigpar = sigma_parameters(lambda, m, r, eta, tau));
+  my(exact = somos_orbit(lambda, m, r, eta, tau, N));
+  my(approx = vector(N, n, sigma_value(sigpar, n)));
+  my(err = vector(N, n, abs(approx[n] - exact[n])));
   print("J = ", J);
-  print("period lattice = ", L);
-  print("z0 = ", z0);
-  print("delta = ", delta);
-  print("A = ", A, "; B = ", B);
-  print("sigma values H_1..H_8 = ", H);
-
-  my(exact = [lambda, m, r, eta, (m*r + tau*r^2)/(lambda),
-              (r*(m*eta + tau*r^2) + tau*lambda*eta^2)/(lambda*m),
-              (m*eta + tau*r^2) ... ]);
-  print("This classical example should return the first terms of the Somos--4 orbit");
-  [J, L, z0, delta, A, B, H];
+  print("[g2,g3,Delta] = ", w);
+  print("ellperiods(E) = ", ellperiods(sigpar[1]));
+  print("z0 = ", sigpar[3], "; delta = ", sigpar[4]);
+  print("A = ", sigpar[5], "; B = ", sigpar[6]);
+  print("exact orbit = ", exact);
+  print("sigma orbit = ", approx);
+  print("absolute errors = ", err);
+  [J, w, ellperiods(sigpar[1]), sigpar, exact, approx, err];
 };
 
-\\ Classical example: 1,1,1,1,1
-\\ In the classical normalization the initial Somos--4 orbit is 1,1,1,1,2,3,7,23,...
-\\ and the curve is obtained from J = 4.
+demo_sigma_workflow() =
+{
+  workflow_demo(1, 1, 1, 1, 1, 8, 80);
+};
+
+check_sigma_workflow_classical() =
+{
+  workflow_demo(1, 1, 1, 1, 1, 10, 80);
+};
 
 classical_example() =
 {
-  default(realprecision, 80);
-  my(lambda = 1, m = 1, r = 1, eta = 1, tau = 1);
-  my(J = somos_J(lambda, m, r, eta, tau));
-  my(E = ell_curve_from_J(J, tau));
-  my(L = ellperiods(E));
-  my(x2 = lambda*r/m^2, x3 = m*eta/r^2);
-  my(Q2 = curve_point_from_qrt(x2, x3, J, tau));
-  my(next = qrt_step(x2, x3, tau));
-  my(Q3 = curve_point_from_qrt(next[1], next[2], J, tau));
-  my(P = fixed_translation_point(J, tau));
-  my(zP = ellpointtoz(E, P));
-  my(z2 = ellpointtoz(E, Q2));
-  my(delta = zP);
-  my(z0 = z2 - 2*delta);
-  my(A, B, sd, s1, s2);
-  [A, B, sd, s1, s2] = sigma_representation(lambda, m, r, eta, tau, z0, delta);
-  my(H = vector(8, n, A * B^(n-1) * ellsigma(L, z0 + (n-1)*delta) / sd^((n-1)^2)));
-  print("J = ", J);
-  print("z0 = ", z0, "; delta = ", delta);
-  print("A = ", A, "; B = ", B);
-  print("H_1..H_8 = ", H);
-  print("expected = ", [1, 1, 1, 1, 2, 3, 7, 23]);
-  [J, z0, delta, A, B, H];
+  workflow_demo(1, 1, 1, 1, 1, 10, 80);
+};
+
+nonunit_example() =
+{
+  workflow_demo(2, 1, 1, 3, 2, 10, 80);
 };
 \end{lstlisting}
 
-This code can be used as a direct numerical companion to the workflow in the
-main text.  The exact checks are separated from the period computation:
-
-\begin{enumerate}[leftmargin=2.4em]
-  \item compute the invariant $J$ and the quartic\,$y^2=(X^2-JX+\tau)^2-4X$;
-  \item check that the quartic discriminant matches $256\Delta$;
-  \item pass to the fixed Weierstrass model $Y^2=X^3-aX-b$ via the explicit
-        birational map;
-  \item compute the lattice and confirm $\operatorname{Im}(\tau_\mathrm{mod})>0$;
-  \item recover the translation point $P$ and the QRT states $Q_n$;
-  \item compute $z_0$ and $\delta$ by elliptic logarithms;
-  \item evaluate the sigma representation and compare it to the recurrence.
-\end{enumerate}
-
-A minimal driver is then simply
-\begin{lstlisting}[style=parigp]
-classical_example();
-\end{lstlisting}
-
-and the script prints the computed period data, the translation point, and the
-sigma values.  It is particularly useful for checking the two places where the
-workflow is most fragile in practice: the correct choice of the translation
-point $P$ and the consistent indexing convention for $z_0$ and $\delta$.
+The script deliberately performs the recurrence and sigma evaluations through
+separate code paths. The displayed error vector is therefore a direct check
+of the indexing, elliptic logarithms, period convention, and gauge factors.
+The theta representation can be checked independently in software that
+implements the standard $\theta_1(z\mid\tau)$ convention by using
+\cref{eq:theta-arguments,eq:K0,eq:q0,eq:r0}.
 
 \section{Verification checklist}
 \begin{enumerate}[leftmargin=2.4em]
@@ -965,41 +981,86 @@ point $P$ and the consistent indexing convention for $z_0$ and $\delta$.
   \item The period basis has $\operatorname{Im}(\taumod)>0$.
   \item The computed point difference $Q_{n+1}-Q_n$ is independent of $n$.
   \item The signs of elliptic logarithms agree with the $v$-coordinates.
-  \item Sigma values satisfy the initial conditions and recurrence.
-  \item Theta values agree independently with the sigma values.
+  \item Sigma values satisfy all four initial conditions and the recurrence.
+  \item Theta values agree independently with sigma values.
   \item Reported numerical errors are compatible with the working precision.
 \end{enumerate}
-\section{Statement on AI assistance and computational tools}
-This manuscript was drafted with the assistance of AI tools.  The prose was
-rewritten with AI support to improve style, clarity, and continuity, and the
-mathematical formulas were transferred into proper \LaTeX{} with AI-assisted
-editing.  AI tools were also used in implementing and polishing the
-verification scripts in PARI/GP based on the mathematical content of the
-paper.
 
-PARI/GP deserves explicit recognition here: it is a compact and powerful
-system for exact algebra, symbolic manipulation, and high-precision elliptic
-computation, and it is well suited to the kind of end-to-end workflow used in
-this paper.
+\section{Statement on AI assistance and computational tools}
+This manuscript was prepared with AI-assisted language editing, \LaTeX{}
+formatting, and development of verification code. The author reviewed the
+mathematical statements, normalization choices, references, and numerical
+outputs. PARI/GP was used for exact algebra and high-precision elliptic
+computations; its relevant conventions are documented in
+\cite{PARIGPManual}.
+
 \bibliographystyle{plain}
 \begin{thebibliography}{99}
+
 \bibitem{Scheuerle2026}
 Thomas Scheuerle,
 \newblock \emph{Direct Generation of a Somos--4 Sequence from an Algebraic
 Generating Function},
-\newblock arXiv:2609.15754, 2026.
+\newblock arXiv:2609.15754 [math.CO], 2026.
+\newblock \url{https://arxiv.org/abs/2609.15754}.
+
 \bibitem{Hone2005}
 A.~N.~W. Hone,
-\newblock \emph{Elliptic Curves and Quadratic Recurrence Sequences}.
-\newblock [Complete bibliographic data to be verified.]
+\newblock Elliptic curves and quadratic recurrence sequences,
+\newblock \emph{Bulletin of the London Mathematical Society} 37 (2005),
+161--171.
+\newblock \url{https://doi.org/10.1112/S0024609304004163}.
+
 \bibitem{HoneSwart2008}
-A.~N.~W. Hone and C. Swart,
-\newblock \emph{Integrality and the Laurent phenomenon for Somos--4
-sequences}.
-\newblock [Complete bibliographic data to be verified.]
+A.~N.~W. Hone and C.~S. Swart,
+\newblock Integrality and the Laurent phenomenon for Somos 4 and Somos 5
+sequences,
+\newblock \emph{Mathematical Proceedings of the Cambridge Philosophical
+Society} 145 (2008), 65--85.
+\newblock \url{https://doi.org/10.1017/S030500410800114X}.
+
 \bibitem{VanderPoortenSwart2006}
-A.~J. van der Poorten and C. Swart,
-\newblock \emph{Recurrence relations for elliptic sequences}.
-\newblock [Complete bibliographic data to be verified.]
+A.~J. van der Poorten and C.~S. Swart,
+\newblock Recurrence relations for elliptic sequences: every Somos 4 is a
+Somos $k$,
+\newblock \emph{Bulletin of the London Mathematical Society} 38 (2006),
+546--554.
+\newblock \url{https://doi.org/10.1112/S0024609306018534}.
+
+\bibitem{Ward1948}
+Morgan Ward,
+\newblock Memoir on elliptic divisibility sequences,
+\newblock \emph{American Journal of Mathematics} 70 (1948), 31--74.
+
+\bibitem{Hone2020}
+A.~N.~W. Hone,
+\newblock Continued fractions and Hankel determinants from hyperelliptic
+curves,
+\newblock \emph{Communications on Pure and Applied Mathematics} 73 (2020),
+2310--2347.
+\newblock \url{https://doi.org/10.1002/cpa.21923}.
+
+\bibitem{WhittakerWatson}
+E.~T. Whittaker and G.~N. Watson,
+\newblock \emph{A Course of Modern Analysis}, 4th ed.,
+\newblock Cambridge University Press, Cambridge, 1927; reprinted 1996.
+
+\bibitem{DLMF23}
+NIST Digital Library of Mathematical Functions,
+\newblock Chapter 23: Weierstrass elliptic and modular functions,
+\newblock \url{https://dlmf.nist.gov/23}, accessed September 16, 2026.
+
+\bibitem{PARIGPManual}
+The PARI Group,
+\newblock \emph{User's Guide to PARI/GP},
+\newblock \url{https://pari.math.u-bordeaux.fr/doc.html}, accessed
+September 16, 2026.
+
+\bibitem{OEISA006720}
+N.~J.~A. Sloane and The OEIS Foundation Inc.,
+\newblock \emph{The On-Line Encyclopedia of Integer Sequences, A006720:
+Somos--4 sequence},
+\newblock \url{https://oeis.org/A006720}, accessed September 16, 2026.
+
 \end{thebibliography}
 \end{document}

@@ -1,16 +1,4 @@
-\\ PARI/GP companion for the algebraic-to-sigma workflow of Somos--4 data.
-\\ This script implements the geometric normalization described in the draft
-\\ "From Direct Algebraic Generating Functions to Elliptic Sigma and Theta
-\\ Representations of Somos--4 Sequences".
-\\
-\\ The functions below are deliberately written in a way that separates the
-\\ exact algebraic checks from the numerical elliptic analysis.  This makes the
-\\ script useful both as a verification tool and as a scientific appendix that
-\\ remains human-readable.
-
-\\ ---------------------------------------------------------------------------
-\\ Basic Somos data and the first invariant J
-\\ ---------------------------------------------------------------------------
+\\ PARI/GP companion for the algebraic-to-sigma workflow.
 
 somos_J(lambda, m, r, eta, tau) =
 {
@@ -22,54 +10,41 @@ somos_J(lambda, m, r, eta, tau) =
 
 quartic_poly(J, tau, X) = (X^2 - J*X + tau)^2 - 4*X;
 
-quadric_recurrence(x, y, tau) =
-{
-  y = y;
-  [y, (y + tau)/(x*y^2)];
-};
+qrt_invariant(x, y, tau) = x*y + 1/x + 1/y + tau/(x*y);
+qrt_step(x, y, tau) = [y, (y + tau)/(x*y^2)];
+qrt_step_pair(x, y, tau) = qrt_step(x, y, tau);
 
 somos_recurrence_step(v, tau) =
 {
   my(n = #v);
-  if (n < 4,
-    error("Need at least four values to advance the Somos-4 orbit")
-  );
-  if (v[n-3] == 0,
-    error("Zero denominator in Somos-4 recurrence")
-  );
+  if (n < 4, error("Need at least four values to advance the Somos-4 orbit"));
+  if (v[n-3] == 0, error("Zero denominator in Somos-4 recurrence"));
   (v[n]*v[n-2] + tau*v[n-1]^2) / v[n-3];
 };
 
 somos_orbit(lambda, m, r, eta, tau, N) =
 {
   my(v = List([lambda, m, r, eta]));
+  if (N < 1, return([]));
   for (n = 5, N,
     listput(v, somos_recurrence_step(v, tau));
   );
-  Vec(v);
+  Vec(v)[1..min(N, #v)];
 };
-
-\\ ---------------------------------------------------------------------------
-\\ Quartic-to-Weierstrass normalization
-\\ ---------------------------------------------------------------------------
 
 quartic_to_weierstrass(X, Y, J, tau) =
 {
   my(U = (Y + X^2 - J*X + tau)/2);
   my(V = U*(2*X - J) - 1);
-  my(u = U + (J^2 - 4*tau)/12);
-  [u, V];
+  [U + (J^2 - 4*tau)/12, V];
 };
 
 weierstrass_to_quartic(u, v, J, tau) =
 {
   my(U = u - (J^2 - 4*tau)/12);
-  if (U == 0,
-    error("Affine inverse map hits the excluded U = 0 chart")
-  );
+  if (U == 0, error("Affine inverse map hits the excluded U = 0 chart"));
   my(X = (v + J*U + 1)/(2*U));
-  my(Y = 2*U - X^2 + J*X - tau);
-  [X, Y];
+  [X, 2*U - X^2 + J*X - tau];
 };
 
 weierstrass_invariants(J, tau) =
@@ -77,82 +52,55 @@ weierstrass_invariants(J, tau) =
   my(a = J^2 - 4*tau);
   my(g2 = a^2/12 - 2*J);
   my(g3 = -a^3/216 + a*J/6 - 1);
-  my(Delta = g2^3 - 27*g3^2);
-  [g2, g3, Delta];
+  [g2, g3, g2^3 - 27*g3^2];
 };
 
 ell_curve_from_J(J, tau) =
 {
   my(w = weierstrass_invariants(J, tau));
-  my(g2 = w[1], g3 = w[2]);
-  ellinit([0,0,0,-g2/4,-g3/4]);
-};
-
-translation_point_on_curve(J, tau) =
-{
-  my(a = J^2 - 4*tau);
-  [a/12, 1/2];
-};
-
-curve_point_from_qrt(x, y, J, tau) =
-{
-  my(X = x*y);
-  my(Y = x - y);
-  my(P = quartic_to_weierstrass(X, Y, J, tau));
-  my(u = P[1], v = P[2]);
-  [u, v/2];
-};
-
-check_quartic_weierstrass(J, tau) =
-{
-  my(g2g3 = weierstrass_invariants(J, tau));
-  my(g2 = g2g3[1], g3 = g2g3[2]);
-  my(E = ell_curve_from_J(J, tau));
-  my(W = ellperiods(E));    \\ PARI full periods
-  my(omega1 = W[1]/2, omega2 = -W[2]/2);  \\ reference-oriented half-periods
-  my(tau_mod = omega2/omega1);
-  my(Delta = g2^3 - 27*g3^2);
-
-  print("J = ", J, "; g2 = ", g2, "; g3 = ", g3, "; Delta = ", Delta);
-  print("PARI full periods W = ", W);
-  print("Reference half-periods: omega1 = ", omega1, ", omega2 = ", omega2);
-  print("tau_mod = ", tau_mod);
-
-  if (imag(tau_mod) <= 0,
-    print("Warning: tau_mod is not in the upper half-plane.");
-  );
-
-  print("poldisc = ", poldisc(quartic_poly(J, tau, 'X), 'X));
-  print("256*Delta = ", 256*Delta);
-
-  abs(poldisc(quartic_poly(J, tau, 'X), 'X) - 256*Delta) < 1e-30;
-};
-
-\\ ---------------------------------------------------------------------------
-\\ QRT dynamics and fixed translation point
-\\ ---------------------------------------------------------------------------
-
-qrt_invariant(x, y, tau) = x*y + 1/x + 1/y + tau/(x*y);
-
-qrt_state_from_seed(lambda, m, r, eta) =
-{
-  my(x2 = lambda*r/m^2);
-  my(x3 = m*eta/r^2);
-  [x2, x3];
-};
-
-qrt_step_pair(x, y, tau) =
-{
-  my(z = y);
-  my(w = (y + tau)/(x*y^2));
-  [z, w];
+  ellinit([0, 0, 0, -w[1]/4, -w[2]/4]);
 };
 
 fixed_translation_point(J, tau) =
 {
   my(a = J^2 - 4*tau);
-  my(P = [a/12, 1/2]);
-  P;
+  [a/12, 1/2];       \\ PARI coordinates [u,v/2]
+};
+
+translation_point_on_curve(J, tau) = fixed_translation_point(J, tau);
+
+curve_point_from_qrt(x, y, J, tau) =
+{
+  my(P = quartic_to_weierstrass(x*y, x-y, J, tau));
+  [P[1], P[2]/2];    \\ PARI coordinates [u,v/2]
+};
+
+check_discriminant(J, tau) =
+{
+  my(w = weierstrass_invariants(J, tau));
+  my(F = quartic_poly(J, tau, 'X));
+  [poldisc(F, 'X), 256*w[3], poldisc(F, 'X) - 256*w[3]];
+};
+
+check_quartic_weierstrass(J, tau) =
+{
+  my(w = weierstrass_invariants(J, tau));
+  my(E = ell_curve_from_J(J, tau));
+  my(W = ellperiods(E));
+  my(omega1 = W[1]/2, omega2 = -W[2]/2);
+  my(tau_mod = omega2/omega1);
+
+  print("J = ", J, "; g2 = ", w[1], "; g3 = ", w[2], "; Delta = ", w[3]);
+  print("PARI full periods W = ", W);
+  print("Reference half-periods: omega1 = ", omega1, ", omega2 = ", omega2);
+  print("tau_mod = ", tau_mod);
+  print("discriminant check = ", check_discriminant(J, tau));
+
+  if (imag(tau_mod) <= 0,
+    print("Warning: tau_mod is not in the upper half-plane.");
+  );
+
+  abs(check_discriminant(J, tau)[3]) < 1e-30;
 };
 
 verify_qrt_translation(lambda, m, r, eta, tau, nsteps = 6) =
@@ -161,23 +109,17 @@ verify_qrt_translation(lambda, m, r, eta, tau, nsteps = 6) =
   my(E = ell_curve_from_J(J, tau));
   my(x = lambda*r/m^2, y = m*eta/r^2);
   my(P = fixed_translation_point(J, tau));
-
-  for (n = 1, nsteps,
-    my(cur = [x, y]);
-    my(next = qrt_step_pair(x, y, tau));
+  for (k = 1, nsteps,
     my(Qn = curve_point_from_qrt(x, y, J, tau));
+    my(next = qrt_step(x, y, tau));
     my(Qnp1 = curve_point_from_qrt(next[1], next[2], J, tau));
-    my(translation_check = (ellsub(E, Qnp1, Qn) == P));
+    print("step ", k,
+          ": invariant error = ", qrt_invariant(x, y, tau) - J,
+          ", translation exact = ", ellsub(E, Qnp1, Qn) == P);
     x = next[1];
     y = next[2];
-    print("step ", n, ": invariant = ", qrt_invariant(cur[1], cur[2], tau),
-          ", Q_{n+1}-Q_n = P ? ", translation_check);
   );
 };
-
-\\ ---------------------------------------------------------------------------
-\\ Sigma normalization and recurrence checks
-\\ ---------------------------------------------------------------------------
 
 sigma_lattice_from_J(J, tau) =
 {
@@ -188,112 +130,86 @@ sigma_lattice_from_J(J, tau) =
 sigma_representation(lambda, m, r, eta, tau, z0, delta) =
 {
   my(L = sigma_lattice_from_J(somos_J(lambda, m, r, eta, tau), tau));
-  my(sigma_delta = ellsigma(L, delta));
-  my(sigma_1 = ellsigma(L, z0 + delta));
-  my(sigma_2 = ellsigma(L, z0 + 2*delta));
+  my(sd = ellsigma(L, delta));
+  my(S1 = ellsigma(L, z0 + delta));
+  my(S2 = ellsigma(L, z0 + 2*delta));
+  my(B = m*S1*sd^3 / (lambda*S2));
+  my(A = lambda^2*S2 / (m*sd^2*S1^2));
+  [A, B, sd, S1, S2];
+};
 
-  my(B = m*sigma_1*sigma_delta^3 / (lambda*sigma_2));
-  my(A = lambda^2*sigma_2 / (m*sigma_delta^2*sigma_1^2));
-  [A, B, sigma_delta, sigma_1, sigma_2];
+sigma_parameters(lambda, m, r, eta, tau) =
+{
+  my(J = somos_J(lambda, m, r, eta, tau));
+  my(E = ell_curve_from_J(J, tau));
+  my(x2 = lambda*r/m^2, x3 = m*eta/r^2);
+  my(Q2 = curve_point_from_qrt(x2, x3, J, tau));
+  my(P = fixed_translation_point(J, tau));
+  my(L = ellperiods(E));
+  my(delta = ellpointtoz(E, P));
+  my(z2 = ellpointtoz(E, Q2));
+  \\ In the H_1-started normalization, Q_n corresponds to z0 + (n+1)*delta.
+  my(z0 = z2 - 3*delta);
+  my(sd = ellsigma(L, delta));
+  my(S1 = ellsigma(L, z0 + delta)/sd);
+  my(S2 = ellsigma(L, z0 + 2*delta)/sd^4);
+  my(B = m*S1/(lambda*S2));
+  my(A = lambda^2*S2/(m*S1^2));
+  [E, L, z0, delta, A, B];
+};
+
+sigma_value(sigpar, n) =
+{
+  my(L = sigpar[2], z0 = sigpar[3], delta = sigpar[4]);
+  my(A = sigpar[5], B = sigpar[6]);
+  A*B^n*ellsigma(L, z0 + n*delta)/ellsigma(L, delta)^(n^2);
 };
 
 somos_sigma_value(lambda, m, r, eta, tau, z0, delta, n) =
 {
   my(L = sigma_lattice_from_J(somos_J(lambda, m, r, eta, tau), tau));
-  my(sigma_delta = ellsigma(L, delta));
-  my(A, B, sd, s1, s2);
-  [A, B, sd, s1, s2] = sigma_representation(lambda, m, r, eta, tau, z0, delta);
-  A * B^n * ellsigma(L, z0 + n*delta) / sigma_delta^(n^2);
+  my(A, B, sd, S1, S2);
+  [A, B, sd, S1, S2] = sigma_representation(lambda, m, r, eta, tau, z0, delta);
+  A*B^n*ellsigma(L, z0 + n*delta)/sd^(n^2);
+};
+
+workflow_demo(lambda, m, r, eta, tau, N = 10, prec = 80) =
+{
+  default(realprecision, prec);
+  my(J = somos_J(lambda, m, r, eta, tau));
+  my(w = weierstrass_invariants(J, tau));
+  if (w[3] == 0, error("Singular quartic / elliptic curve"));
+  my(sigpar = sigma_parameters(lambda, m, r, eta, tau));
+  my(exact = somos_orbit(lambda, m, r, eta, tau, N));
+  my(approx = vector(N, n, sigma_value(sigpar, n)));
+  my(err = vector(N, n, abs(approx[n] - exact[n])));
+  print("J = ", J);
+  print("[g2,g3,Delta] = ", w);
+  print("ellperiods(E) = ", ellperiods(sigpar[1]));
+  print("z0 = ", sigpar[3], "; delta = ", sigpar[4]);
+  print("A = ", sigpar[5], "; B = ", sigpar[6]);
+  print("exact orbit = ", exact);
+  print("sigma orbit = ", approx);
+  print("absolute errors = ", err);
+  [J, w, ellperiods(sigpar[1]), sigpar, exact, approx, err];
+};
+
+demo_sigma_workflow() =
+{
+  workflow_demo(1, 1, 1, 1, 1, 8, 80);
 };
 
 check_sigma_workflow_classical() =
 {
-  my(lambda = 1, m = 1, r = 1, eta = 1, tau = 1);
-  my(J = somos_J(lambda, m, r, eta, tau));
-  my(E = ell_curve_from_J(J, tau));
-  my(L = ellperiods(E));
-  my(x2 = lambda*r/m^2, x3 = m*eta/r^2);
-  my(Q2 = curve_point_from_qrt(x2, x3, J, tau));
-  my(next = qrt_step_pair(x2, x3, tau));
-  my(Q3 = curve_point_from_qrt(next[1], next[2], J, tau));
-  my(P = fixed_translation_point(J, tau));
-  my(zP = ellpointtoz(E, P));
-  my(z2 = ellpointtoz(E, Q2));
-  my(z3 = ellpointtoz(E, Q3));
-  my(delta = zP);
-  my(z0 = z2 - 3*delta);
-
-  my(A, B, sd, s1, s2);
-  [A, B, sd, s1, s2] = sigma_representation(lambda, m, r, eta, tau, z0, delta);
-  my(H = List());
-  for (n = 1, 10,
-    my(hn = A * B^n * ellsigma(L, z0 + n*delta) / sd^(n^2));
-    listput(H, hn);
-  );
-
-  print("H1..H10 from sigma formula = ", Vec(H));
-  print("Exact Somos values           = ", [1,1,1,1,2,3,7,23,59,314]);
-  print("J = ", J, "; translation point = ", P);
-  print("z0 = ", z0, "; delta = ", delta);
-
-  [Vec(H), E, L, z0, delta, J];
+  workflow_demo(1, 1, 1, 1, 1, 10, 80);
 };
 
-\\ ---------------------------------------------------------------------------
-\\ Executable demonstration driver
-\\ ---------------------------------------------------------------------------
-
-demo_sigma_workflow() =
-{
-  default(realprecision, 80);
-  my(lambda = 1, m = 1, r = 1, eta = 1, tau = 1);
-  my(J = somos_J(lambda, m, r, eta, tau));
-  my(g2g3 = weierstrass_invariants(J, tau));
-  my(E = ell_curve_from_J(J, tau));
-  my(L = ellperiods(E));
-  my(x2 = lambda*r/m^2, x3 = m*eta/r^2);
-  my(Q2 = curve_point_from_qrt(x2, x3, J, tau));
-  my(next = qrt_step_pair(x2, x3, tau));
-  my(Q3 = curve_point_from_qrt(next[1], next[2], J, tau));
-  my(P = fixed_translation_point(J, tau));
-  my(zP = ellpointtoz(E, P));
-  my(z2 = ellpointtoz(E, Q2));
-  my(z3 = ellpointtoz(E, Q3));
-  my(delta = zP);
-  my(z0 = z2 - 3*delta);
-
-  my(A, B, sd, s1, s2);
-  [A, B, sd, s1, s2] = sigma_representation(lambda, m, r, eta, tau, z0, delta);
-
-  my(H = vector(8, n,
-    A * B^n * ellsigma(L, z0 + n*delta) / sd^(n^2)
-  ));
-
-  print("Generative data: lambda=", lambda, ", m=", m, ", r=", r,
-        ", eta=", eta, ", tau=", tau);
-  print("J = ", J);
-  print("g2, g3, Delta = ", g2g3);
-  print("z0 = ", z0);
-  print("delta = ", delta);
-  print("A = ", A, "; B = ", B);
-  print("H_1..H_8 from sigma formula = ", H);
-  print("Exact Somos values            = ", [1,1,1,1,2,3,7,23]);
-
-  my(ok = 1);
-  for (n = 1, 8,
-    if (abs(H[n] - [1,1,1,1,2,3,7,23][n]) > 1e-30,
-      ok = 0;
-    );
-  );
-  if (ok,
-    print("sigma check: PASS"),
-    print("sigma check: FAIL")
-  );
-
-  [J, g2g3, E, L, z0, delta, A, B, H];
-};
 classical_example() =
 {
-  demo_sigma_workflow();
+  workflow_demo(1, 1, 1, 1, 1, 10, 80);
 };
-\\ End of script
+
+nonunit_example() =
+{
+  workflow_demo(2, 1, 1, 3, 2, 10, 80);
+};
