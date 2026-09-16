@@ -37,16 +37,16 @@ somos_recurrence_step(v, tau) =
   if (v[n-3] == 0,
     error("Zero denominator in Somos-4 recurrence")
   );
-  (v[n-1]*v[n-3] + tau*v[n-2]^2) / v[n-3];
+  (v[n]*v[n-2] + tau*v[n-1]^2) / v[n-3];
 };
 
 somos_orbit(lambda, m, r, eta, tau, N) =
 {
-  my(v = [lambda, m, r, eta]);
+  my(v = List([lambda, m, r, eta]));
   for (n = 5, N,
     listput(v, somos_recurrence_step(v, tau));
   );
-  v;
+  Vec(v);
 };
 
 \\ ---------------------------------------------------------------------------
@@ -108,14 +108,18 @@ check_quartic_weierstrass(J, tau) =
   my(g2g3 = weierstrass_invariants(J, tau));
   my(g2 = g2g3[1], g3 = g2g3[2]);
   my(E = ell_curve_from_J(J, tau));
-  my(w = ellperiods(E));
+  my(W = ellperiods(E));    \\ PARI full periods
+  my(omega1 = W[1]/2, omega2 = -W[2]/2);  \\ reference-oriented half-periods
+  my(tau_mod = omega2/omega1);
   my(Delta = g2^3 - 27*g3^2);
 
   print("J = ", J, "; g2 = ", g2, "; g3 = ", g3, "; Delta = ", Delta);
-  print("Periods = ", w);
+  print("PARI full periods W = ", W);
+  print("Reference half-periods: omega1 = ", omega1, ", omega2 = ", omega2);
+  print("tau_mod = ", tau_mod);
 
-  if (imag(w[2]/w[1]) <= 0,
-    print("Warning: the period ratio is not in the upper half-plane.");
+  if (imag(tau_mod) <= 0,
+    print("Warning: tau_mod is not in the upper half-plane.");
   );
 
   print("poldisc = ", poldisc(quartic_poly(J, tau, 'X), 'X));
@@ -157,21 +161,17 @@ verify_qrt_translation(lambda, m, r, eta, tau, nsteps = 6) =
   my(E = ell_curve_from_J(J, tau));
   my(x = lambda*r/m^2, y = m*eta/r^2);
   my(P = fixed_translation_point(J, tau));
-  my(zP = ellpointtoz(E, P));
-  my(zQ = ellpointtoz(E, curve_point_from_qrt(x, y, J, tau)));
 
   for (n = 1, nsteps,
     my(cur = [x, y]);
     my(next = qrt_step_pair(x, y, tau));
     my(Qn = curve_point_from_qrt(x, y, J, tau));
     my(Qnp1 = curve_point_from_qrt(next[1], next[2], J, tau));
-    my(zn = ellpointtoz(E, Qn));
-    my(znp1 = ellpointtoz(E, Qnp1));
-    my(check = (sqrt(ellwp(E, znp1) - ellwp(E, zn))));
+    my(translation_check = (ellsub(E, Qnp1, Qn) == P));
     x = next[1];
     y = next[2];
     print("step ", n, ": invariant = ", qrt_invariant(cur[1], cur[2], tau),
-          ", Q_{n+1}-Q_n = P ? ", abs(znp1 - zn - zP) < 1e-30);
+          ", Q_{n+1}-Q_n = P ? ", translation_check);
   );
 };
 
@@ -201,9 +201,9 @@ somos_sigma_value(lambda, m, r, eta, tau, z0, delta, n) =
 {
   my(L = sigma_lattice_from_J(somos_J(lambda, m, r, eta, tau), tau));
   my(sigma_delta = ellsigma(L, delta));
-  my(A, B, s1, s2);
-  [A, B, s1, s2] = sigma_representation(lambda, m, r, eta, tau, z0, delta);
-  A * B^(n-1) * ellsigma(L, z0 + (n-1)*delta) / sigma_delta^((n-1)^2);
+  my(A, B, sd, s1, s2);
+  [A, B, sd, s1, s2] = sigma_representation(lambda, m, r, eta, tau, z0, delta);
+  A * B^n * ellsigma(L, z0 + n*delta) / sigma_delta^(n^2);
 };
 
 check_sigma_workflow_classical() =
@@ -221,22 +221,22 @@ check_sigma_workflow_classical() =
   my(z2 = ellpointtoz(E, Q2));
   my(z3 = ellpointtoz(E, Q3));
   my(delta = zP);
-  my(z0 = z2 - 2*delta);
+  my(z0 = z2 - 3*delta);
 
   my(A, B, sd, s1, s2);
   [A, B, sd, s1, s2] = sigma_representation(lambda, m, r, eta, tau, z0, delta);
-  my(H = [0]);
+  my(H = List());
   for (n = 1, 10,
-    my(hn = A * B^(n-1) * ellsigma(L, z0 + (n-1)*delta) / sd^((n-1)^2));
+    my(hn = A * B^n * ellsigma(L, z0 + n*delta) / sd^(n^2));
     listput(H, hn);
   );
 
   print("H1..H10 from sigma formula = ", Vec(H));
-  print("Exact Somos values           = ", [1,1,1,1,2,3,7,23,47,123]);
+  print("Exact Somos values           = ", [1,1,1,1,2,3,7,23,59,314]);
   print("J = ", J, "; translation point = ", P);
   print("z0 = ", z0, "; delta = ", delta);
 
-  [H, E, L, z0, delta, J];
+  [Vec(H), E, L, z0, delta, J];
 };
 
 \\ ---------------------------------------------------------------------------
@@ -260,13 +260,13 @@ demo_sigma_workflow() =
   my(z2 = ellpointtoz(E, Q2));
   my(z3 = ellpointtoz(E, Q3));
   my(delta = zP);
-  my(z0 = z2 - 2*delta);
+  my(z0 = z2 - 3*delta);
 
   my(A, B, sd, s1, s2);
   [A, B, sd, s1, s2] = sigma_representation(lambda, m, r, eta, tau, z0, delta);
 
   my(H = vector(8, n,
-    A * B^(n-1) * ellsigma(L, z0 + (n-1)*delta) / sd^((n-1)^2)
+    A * B^n * ellsigma(L, z0 + n*delta) / sd^(n^2)
   ));
 
   print("Generative data: lambda=", lambda, ", m=", m, ", r=", r,
