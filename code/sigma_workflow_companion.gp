@@ -203,7 +203,7 @@ somos_sigma_value(lambda, m, r, eta, tau, z0, delta, n) =
   my(sigma_delta = ellsigma(L, delta));
   my(A, B, s1, s2);
   [A, B, s1, s2] = sigma_representation(lambda, m, r, eta, tau, z0, delta);
-  A * B^n * ellsigma(L, z0 + n*delta) / sigma_delta^(n^2);
+  A * B^(n-1) * ellsigma(L, z0 + (n-1)*delta) / sigma_delta^((n-1)^2);
 };
 
 check_sigma_workflow_classical() =
@@ -227,7 +227,7 @@ check_sigma_workflow_classical() =
   [A, B, sd, s1, s2] = sigma_representation(lambda, m, r, eta, tau, z0, delta);
   my(H = [0]);
   for (n = 1, 10,
-    my(hn = A * B^n * ellsigma(L, z0 + n*delta) / sd^(n^2));
+    my(hn = A * B^(n-1) * ellsigma(L, z0 + (n-1)*delta) / sd^((n-1)^2));
     listput(H, hn);
   );
 
@@ -266,7 +266,7 @@ demo_sigma_workflow() =
   [A, B, sd, s1, s2] = sigma_representation(lambda, m, r, eta, tau, z0, delta);
 
   my(H = vector(8, n,
-    A * B^n * ellsigma(L, z0 + n*delta) / sd^(n^2)
+    A * B^(n-1) * ellsigma(L, z0 + (n-1)*delta) / sd^((n-1)^2)
   ));
 
   print("Generative data: lambda=", lambda, ", m=", m, ", r=", r,

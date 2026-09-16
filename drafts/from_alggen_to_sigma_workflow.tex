@@ -861,7 +861,7 @@ somos_sigma_value(lambda, m, r, eta, tau, z0, delta, n) =
   my(L = sigma_lattice_from_J(J, tau));
   my(A, B, sd, s1, s2);
   [A, B, sd, s1, s2] = sigma_representation(lambda, m, r, eta, tau, z0, delta);
-  A * B^n * ellsigma(L, z0 + n*delta) / sd^(n^2);
+  A * B^(n-1) * ellsigma(L, z0 + (n-1)*delta) / sd^((n-1)^2);
 };
 
 workflow_demo(lambda, m, r, eta, tau, prec = 80) =
@@ -920,7 +920,7 @@ classical_example() =
   my(z0 = z2 - 2*delta);
   my(A, B, sd, s1, s2);
   [A, B, sd, s1, s2] = sigma_representation(lambda, m, r, eta, tau, z0, delta);
-  my(H = vector(8, n, A * B^n * ellsigma(L, z0 + n*delta) / sd^(n^2)));
+  my(H = vector(8, n, A * B^(n-1) * ellsigma(L, z0 + (n-1)*delta) / sd^((n-1)^2)));
   print("J = ", J);
   print("z0 = ", z0, "; delta = ", delta);
   print("A = ", A, "; B = ", B);
