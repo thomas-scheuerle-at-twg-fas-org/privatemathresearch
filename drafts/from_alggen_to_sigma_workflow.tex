@@ -9,6 +9,7 @@
 \usepackage{listings}
 \usepackage[hidelinks]{hyperref}
 \usepackage[nameinlink,noabbrev]{cleveref}
+\setlength{\emergencystretch}{3em}
 \definecolor{todocolor}{RGB}{145,45,45}
 \definecolor{codegray}{RGB}{245,245,245}
 \newcommand{\editorialnote}[1]{%
@@ -44,10 +45,11 @@ Its discriminant contains the genus-one curve
 \[
   \EJ:\qquad y^2=(X^2-JX+\taupar)^2-4X.
 \]
-The elliptic-function theory behind Somos--4 sequences is classical, but
-the practical passage from concrete recurrence data to a numerical sigma-
-or theta-function representation is distributed across several sources
-and conventions.  This paper assembles those ingredients into one
+The elliptic-function theory behind Somos--4 sequences is classical; the
+practical difficulty lies in moving from concrete recurrence data to a
+numerical sigma- or theta-function representation without losing track of
+normalizations.  The relevant ingredients are scattered across several
+sources and conventions.  This paper brings them together into one
 constructive and reproducible workflow:
 \[
  (\lambda,m,r,\eta,\taupar)
@@ -61,9 +63,9 @@ constructive and reproducible workflow:
 \]
 The emphasis is on normalization choices, computational checks, and an
 executable PARI/GP implementation.  No new proof of the classical
-sigma-function representation is intended; the contribution is the
-unification of the scattered constructions into an applicable end-to-end
-procedure beginning with the algebraic generating function.
+sigma-function representation is intended; the contribution is a coherent
+end-to-end procedure that starts from the algebraic generating function
+and ends with a verified sigma or theta description.
 \end{abstract}
 \section{Introduction}
 The relation between Somos--4 recurrences, elliptic curves, and elliptic
@@ -79,27 +81,25 @@ The purpose of this paper is not to prove a new elliptic-function theorem.
 Rather, it is to make the established theory directly usable.  Our
 starting point is the direct algebraic generating function constructed in
 \cite{Scheuerle2026}.  Its discriminant naturally produces a genus-one
-curve associated with the Somos--4 data.  Beginning with this curve, we
-describe how to obtain a Weierstrass model, compute its period lattice,
-identify the point corresponding to one recurrence step, determine the
-Abel--Jacobi parameters, and finally write explicit sigma- and
-theta-function representations.
-The paper is therefore organized as a mathematical workflow rather than
-as a theorem--proof sequence.  Classical facts are stated with references
-and are not reproved.  Special attention is paid to the information
-required at each stage, the conventions that must remain consistent, and
-the checks that detect an incorrect branch, period, sign, or scaling.
-PARI/GP fragments accompany the construction, and a complete script is
-planned for the appendix.
+curve associated with the Somos--4 data.  From there we describe how to
+obtain a Weierstrass model, compute the period lattice, identify the
+translation point, determine the Abel--Jacobi parameters, and finally
+write explicit sigma- and theta-function representations.
+The paper is organized as a mathematical workflow rather than a
+theorem--proof sequence.  Classical facts are stated with references and
+are not reproved.  The main concern is to keep the conventions aligned
+and to expose the checks that catch a wrong branch, period, sign, or
+scaling.  PARI/GP fragments accompany the construction, and the appendix
+contains a complete script.
 \subsection{Scope and contribution}
 This paper provides:
 \begin{itemize}[leftmargin=2em]
-  \item a single route from the five input parameters to an elliptic curve;
-  \item an explicit inventory of the normalization choices needed to pass
-        from a quartic model to sigma and theta functions;
-  \item computational checkpoints at every stage;
+  \item one route from the five input parameters to an elliptic curve;
+  \item an explicit record of the normalization choices needed to pass
+    from a quartic model to sigma and theta functions;
+  \item computational checkpoints at each stage;
   \item worked examples comparing recurrence, algebraic-generating-function,
-        sigma-function, and theta-function evaluations; and
+    sigma-function, and theta-function evaluations; and
   \item an end-to-end PARI/GP workflow suitable for adaptation.
 \end{itemize}
 It does not claim a new proof of the classical Somos--4 sigma formula, a
@@ -715,10 +715,12 @@ workflow.
 The implementation uses the elliptic primitives available in the current
 sandbox: \texttt{ellinit}, \texttt{ellperiods}, \texttt{ellwp},
 \texttt{ellpointtoz}, and \texttt{ellsigma}.  In this particular PARI/GP
-build there is no separate \texttt{elltheta} helper; the theta form is
+build there is no separate \texttt{elltheta} helper.  The theta form is
 therefore checked indirectly through the sigma-function identity and the
 period lattice, which is exactly the normalization required for the final
-comparison with the recurrence.
+comparison with the recurrence.  PARI/GP is a particularly strong choice
+here because it combines exact algebra and high-precision elliptic
+numerics in one environment.
 
 \begin{lstlisting}[style=parigp]
 \\ PARI/GP companion for the algebraic-to-sigma workflow of Somos--4 data.
@@ -967,6 +969,18 @@ point $P$ and the consistent indexing convention for $z_0$ and $\delta$.
   \item Theta values agree independently with the sigma values.
   \item Reported numerical errors are compatible with the working precision.
 \end{enumerate}
+\section{Statement on AI assistance and computational tools}
+This manuscript was drafted with the assistance of AI tools.  The prose was
+rewritten with AI support to improve style, clarity, and continuity, and the
+mathematical formulas were transferred into proper \LaTeX{} with AI-assisted
+editing.  AI tools were also used in implementing and polishing the
+verification scripts in PARI/GP based on the mathematical content of the
+paper.
+
+PARI/GP deserves explicit recognition here: it is a compact and powerful
+system for exact algebra, symbolic manipulation, and high-precision elliptic
+computation, and it is well suited to the kind of end-to-end workflow used in
+this paper.
 \bibliographystyle{plain}
 \begin{thebibliography}{99}
 \bibitem{Scheuerle2026}
