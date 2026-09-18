@@ -42,9 +42,11 @@ general two-coefficient recurrence
 A weighted transport with $q^6=\alpha$ gives an exact six-parameter
 construction, and it preserves the prescribed ordinary Hankel determinants.
 This selected generating-function branch, however, involves fractional powers of
-$\alpha$; already its first nonconstant coefficient is $q^{-5}r$.  The sharper
-question is whether one can find a quadratic-algebraic representative over the
-rational parameter field while retaining the companion normalization
+$\alpha$; already its first nonconstant coefficient is $q^{-5}r$.  Recent work gives broad rational-function-field constructions for general
+$(\alpha,\beta)$--Somos--4 Hankel transforms, so the sharper question here is
+more constrained: whether one can find a quadratic-algebraic representative over
+the rational six-parameter field while independently prescribing the four
+initial determinants and retaining the companion normalization
 $D_N=H_{N+2}$.
 
 The obstruction is not in the Somos--4 orbit itself, nor in the associated
@@ -109,6 +111,9 @@ It is helpful to separate three different objects:
  \text{a chosen generating-function branch}.
 \]
 The first two have direct descriptions over $K$, while a chosen branch need not.
+Recent work of Liu, Wang, and Zhang~\cite{LiuWangZhang2026} extends the
+Wang--Zhang sufficient condition over rational-function fields. Our question is
+narrower because the initial determinants and companion identity are prescribed.
 This distinction explains why clearing radicals from the curve does not by
 itself clear them from the normalized generating function.
 
@@ -329,10 +334,11 @@ $r\neq0$, the transported series \eqref{eq:transported-G} does not belong to
 $K[[x]]$.
 \end{proposition}
 \begin{proof}
-Its coefficient of $x$ is $b_1=q^{-5}r=qr/\alpha$, which is not in $K$ for
-generic $\alpha$.  Equivalently, if $\sigma(q)=\zeta q$ with
-$\zeta^6=1$ and $\zeta\neq1$, then
-$\sigma(b_1)=\zeta^{-5}b_1=\zeta b_1\neq b_1$.
+Its coefficient of $x$ is $b_1=q^{-5}r=qr/\alpha$. The polynomial
+$X^6-\alpha$ is irreducible over $K$ by Eisenstein's criterion at the prime
+$\alpha$ in the corresponding polynomial ring. Hence $q\notin K$. Since
+$r\neq0$ generically, $b_1\notin K$, and the transported series is not in
+$K[[x]]$.
 \end{proof}
 
 Although the coefficients do not descend, the fractional powers cancel in the
@@ -424,7 +430,7 @@ All coefficients of \eqref{eq:rational-quartic-z} belong to
 $\Q(\lambda,m,r,\eta,\alpha,\tau)$.
 
 For comparison with the quartic convention used in \cite{Scheuerle2026}, set
-$X=z^{-1}$ and $Y=z^{-2}y$.  Then \eqref{eq:rational-quartic-z} is birational
+$X=z^{-1}$ and $y=z^{-2}Y$ (equivalently, $Y=z^2y$).  Then \eqref{eq:rational-quartic-z} is birational
 to
 \begin{equation}
  y^2=\left(X^2-(A+\alpha B)X+\tau\right)^2-4\alpha^2X.
@@ -594,7 +600,7 @@ Let
 \[
  S(t;u)=\sum_{n\ge0}s_n(u)t^n,\qquad u^2=\alpha,
 \]
-be the distinguished positive Chang--Liu moment branch.  The two choices of square root satisfy
+be the distinguished Chang--Liu moment branch. Chang and Liu, Remark~4.7, exhibit the two square-root choices and the alternating-sign relation
 \begin{equation}
  S(t;-u)=S(-t;u),\qquad s_n(-u)=(-1)^ns_n(u).
  \label{eq:galois-parity}
@@ -624,7 +630,7 @@ No generic scaling $r_n=cd^ns_n$ converts the normalized Chang--Liu determinants
 \begin{proof}
 Such a scaling gives $H_N(r)=c^Nd^{N(N-1)}H_N(s)$, so one would need $c^Nd^{N(N-1)}=m$.  The cases $N=1,2$ force $c=m$ and $d^2=m^{-1}$, while $N=3$ then gives $c^3d^6=1$, not $m$, generically.
 \end{proof}
-Finally, the Galois-equivariant obstruction proved above applies to a finite Jacobi prefix over $K$: as a generically invertible linear-fractional transformation in its tail, it cannot turn one non-descending Chang--Liu branch into a descending one.  This excludes the direct prefix strategy, but not every possible quadratic-algebraic representative.
+A finite Jacobi prefix defined over $K$, when its denominator is invertible, is an injective $K$-rational linear-fractional transformation of its tail. The Galois-equivariant obstruction below therefore shows that it cannot turn a non-descending Chang--Liu branch into a descending one.  This excludes the direct prefix strategy, but not every possible quadratic-algebraic representative.
 
 \subsection{Why base-field transforms cannot repair a branch}
 The following observation excludes a broad class of attempted rationalizations.
@@ -634,7 +640,7 @@ $K$-automorphism of $L$.  If $T(G)\in K[[x]]$, then $G\in K[[x]]$.
 If $T$ is invertible, the two conditions are equivalent.
 \end{proposition}
 \begin{proof}
-For every $\sigma\in\operatorname{Gal}(L/K)$,
+For every $\sigma\in\operatorname{Gal}(M/K)$,
 $T(\sigma G)=\sigma T(G)=T(G)$.  Injectivity gives $\sigma G=G$, so $G$ is
 fixed by the Galois action and belongs to $K[[x]]$.
 \end{proof}
@@ -717,6 +723,10 @@ mathematical statements and the final text.
 X.-K.~Chang and J.~Liu,
 \newblock Hankel determinants from quadratic orthogonal pairs for hyperelliptic functions and their applications,
 \newblock arXiv:2603.11670v4 [nlin.SI], 2026; to appear in the \emph{Journal of the London Mathematical Society}.
+\bibitem{LiuWangZhang2026}
+F.~Liu, Y.~Wang, and Z.~Zhang,
+\newblock Hankel transform and $(\alpha,\beta)$ Somos--4 sequences,
+\newblock arXiv:2608.08703v1 [math.CO], 2026.
 \bibitem{Scheuerle2026}
 T.~Scheuerle,
 \newblock Direct generation of a Somos--4 sequence from an algebraic generating function,
