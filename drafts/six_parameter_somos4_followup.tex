@@ -31,61 +31,98 @@ Direct Somos--4 Algebraic Generating Function}
 \maketitle
 
 \begin{abstract}
-The preceding paper constructs a five-parameter quadratic algebraic generating
-function with prescribed initial Hankel determinants
-$(\lambda,m,r,\eta)$ and Somos--4 parameter $\tau$.  We adjoin a second
-Somos coefficient $\alpha$.  If $q^6=\alpha$, the weighted transport
-\[
- G_{\alpha;\lambda,m,r,\eta,\tau}(x)
- =G_{1;\lambda,q^{-2}m,q^{-6}r,q^{-12}\eta,q^{-8}\tau}(qx)
-\]
-preserves the four prescribed ordinary Hankel determinants and changes the
-recurrence to
+The preceding paper constructed a five-parameter quadratic algebraic generating
+function whose first four Hankel determinants are
+$(\lambda,m,r,\eta)$ and whose Hankel sequence satisfies a normalized
+Somos--4 recurrence with coefficient $\tau$.  We ask whether the same method
+extends to the general two-coefficient recurrence
 \[
  H_{k+4}H_k=\alpha H_{k+3}H_{k+1}+\tau H_{k+2}^2.
 \]
-The once-shifted determinants acquire an explicit grading factor.  We also
-transport the discriminant exactly and show that its residual genus-one
-quartic has the rational model
-\[
- Y^2=\bigl(1-(A+\alpha B)z+\tau z^2\bigr)^2-4\alpha^2z^3,
-\]
-where $A$ and $B$ are rational functions of the initial Hankel data.  This
-separates curve-level descent from descent of the distinguished formal-power-
-series branch.  The latter remains open; no nonexistence claim is made.
-\end{abstract}
+A weighted transport with $q^6=\alpha$ gives an exact six-parameter
+construction and preserves the prescribed ordinary Hankel determinants.
+However, its selected generating-function branch contains fractional powers of
+$\alpha$; already its first nonconstant coefficient is $q^{-5}r$.  This leads
+to the sharper question whether another quadratic-algebraic representative can
+be defined over the rational parameter field while retaining the companion
+normalization $D_N=H_{N+2}$.
 
+We show that the difficulty belongs neither to the Somos--4 orbit nor to its
+associated genus-one curve.  The Hankel sequence is defined over the rational
+six-parameter field, and the transported discriminant has the rational quartic
+model
+\[
+ Y^2=\bigl(1-(A+\alpha B)z+\tau z^2\bigr)^2-4\alpha^2z^3.
+\]
+We then compare the construction with the generic quadratic-orthogonal-pair
+realization of Chang and Liu.  An explicit shift identifies their bilateral
+orbit with ours, and their subdiagonal data satisfy $d_n=B_{n+2}$.  The
+comparison also separates three notions that need not descend together: the
+Hankel sequence, the algebraic curve, and a chosen moment branch.  The first
+two descend, whereas the distinguished transported and Chang--Liu branches do
+not descend generically.  We rule out several natural repairs, including
+parity rescaling, geometric scaling, and injective finite prefixes over the
+base field.  A genuinely non-diagonal construction from the invariant even
+and odd parts remains possible, so no general nonexistence claim is made.
+\end{abstract}
 \section{Introduction}
-The five-parameter construction in \cite{Scheuerle2026} uses the notation
+The purpose of this paper is to extend the five-parameter generating function
+of \cite{Scheuerle2026} and to understand a difficulty that becomes visible in
+the extension.  The previous construction prescribes
 \[
  (H_1,H_2,H_3,H_4)=(\lambda,m,r,\eta)
 \]
-and the recurrence parameter $\tau$ in
+and produces the recurrence
 \begin{equation}
  H_{k+4}H_k=H_{k+3}H_{k+1}+\tau H_{k+2}^2,
  \qquad k\geq1.
  \label{eq:old-somos4}
 \end{equation}
-We retain that notation throughout.  The new parameter $\alpha$ is the
-coefficient of the first bilinear term, so the six-parameter recurrence is
+The natural generalization is to free the coefficient of the first bilinear
+term:
 \begin{equation}
  H_{k+4}H_k=\alpha H_{k+3}H_{k+1}+\tau H_{k+2}^2,
  \qquad k\geq1.
  \label{eq:new-somos4}
 \end{equation}
-Thus the parameter list is
-$(\lambda,m,r,\eta,\alpha,\tau)$, and specialization $\alpha=1$ recovers the
-normalization of \cite{Scheuerle2026}.
+The six independent parameters are therefore
+$(\lambda,m,r,\eta,\alpha,\tau)$, and $\alpha=1$ recovers the normalization of
+the preceding paper.
 
-The extension is obtained by a weighted scaling over a field containing a
-sixth root of $\alpha$.  The determinant identities and the transported
-discriminant are exact formal identities.  They do not require expansion of
-the lengthy quadratic polynomial from the preceding paper.  What is not
-settled by these identities is whether the distinguished normalized series
-itself descends from the sixth-root extension to
-$\Q(\lambda,m,r,\eta,\alpha,\tau)$.
+Two questions guide the discussion.  First, can the earlier algebraic
+construction be extended to arbitrary values of these six parameters while
+preserving the four prescribed Hankel determinants?  We answer this question
+affirmatively by a weighted change of parameters and variable.  Second, can
+one obtain such a generating function directly over
+\[
+ K=\Q(\lambda,m,r,\eta,\alpha,\tau)
+\]
+without fractional powers of $\alpha$, while also retaining the ungraded
+companion identity $D_N=H_{N+2}$?  The weighted construction does not answer
+the second question: it naturally lives over a field containing a sixth root
+of $\alpha$, and its first nonconstant coefficient proves that this dependence
+is genuine for the selected branch.
 
-\section{The five-parameter input}
+The resulting investigation is easiest to follow by distinguishing three
+objects:
+\[
+ \text{the Hankel sequence},\qquad
+ \text{the associated algebraic curve},\qquad
+ \text{a chosen generating-function branch}.
+\]
+The first two objects admit descriptions over $K$.  A chosen branch need not.
+This distinction explains why removing radicals from the curve does not by
+itself remove them from the normalized generating function.
+
+Sections~2 and~3 construct the six-parameter extension and locate the first
+fractional power.  Section~4 shows that the Hankel orbit and the associated
+curve nevertheless descend to $K$.  Section~5 compares the result with Chang
+and Liu's generic quadratic-algebraic Hankel construction and gives an explicit
+dictionary between the two descriptions.  Section~6 studies the remaining
+branch and normalization problem and records several transformations that
+cannot solve it.  Section~7 states precisely what remains open.
+\section{From the five-parameter construction to six parameters}
+\subsection{The five-parameter input}
 Let
 \[
  G_{1;\lambda,m,r,\eta,\tau}(x)=\sum_{k\geq0}g_kx^k
@@ -119,7 +156,7 @@ where
 These statements are the only inputs from the five-parameter construction
 needed below.
 
-\section{Weighted transport}
+\subsection{Weighted transport}
 Work over
 \[
  \K=\Q(\lambda,m,r,\eta,q,\tau),\qquad q^6=\alpha,
@@ -165,7 +202,7 @@ by $q^{i+j+1}$.  The additional factor $q$ in every row contributes $N$, so
 the total exponent is $N(N-1)+N=N^2$.
 \end{proof}
 
-\section{The two-coefficient Somos--4 recurrence}
+\subsection{The six-parameter Somos--4 recurrence}
 \begin{theorem}
 Let $\Ha_N=H_N(b)$.  Then
 \[
@@ -213,7 +250,10 @@ These formulas provide a direct indexing check for any coefficient expansion
 of \eqref{eq:transported-G}.
 \end{corollary}
 
-\section{The transported companion normalization}
+\section{Why fractional powers appear}
+The weighted transport solves the ordinary Hankel-determinant problem, but it does not preserve the companion normalization in its original form.  This is the point at which the stronger rationality question enters.
+
+\subsection{The transported companion identity}
 \begin{proposition}
 If the primed series obeys $D_N(a)=H'_{N+2}$, then
 \begin{equation}
@@ -241,7 +281,7 @@ identity, is the companion normalization naturally inherited from the
 five-parameter series.
 \end{remark}
 
-\section{Low-order expansion and non-descent of the transported branch}
+\subsection{The first coefficients and failure of descent}
 For the five-parameter selected series, the companion normalization gives
 $g_0=\lambda$ and $g_1=r$.  Applied to the primed parameters in
 \eqref{eq:parameter-scaling}, this yields $a_0=\lambda$ and
@@ -308,7 +348,10 @@ Together with the theorem above, this establishes the precise distinction:
 ordinary Hankel descent holds, whereas descent of the selected transported
 series fails.
 
-\section{Exact transport of the discriminant}
+\section{What is defined over the six-parameter field}
+Although the selected transported series does not descend, this does not imply that the underlying recurrence or its curve requires fractional parameters.  We now separate these levels.
+
+\subsection{Transport of the discriminant}
 Separate the old invariant into
 \begin{equation}
  A=\frac{\lambda\eta}{mr}+\frac{\tau mr}{\lambda\eta},
@@ -367,7 +410,7 @@ be retained when comparing discriminants of particular polynomial
 representatives, because multiplying a quadratic equation by a scalar squares
 that scalar in its discriminant.
 
-\section{A rational curve-level model}
+\subsection{A rational model of the curve}
 Remove the square prefactor in \eqref{eq:alpha-discriminant} and put
 \begin{equation}
  x=\alpha^{1/2}z.
@@ -395,7 +438,7 @@ series and does not preserve the normalized Hankel data.  Curve descent and
 descent of the distinguished generating series are therefore different
 problems.
 
-\section{Hankel representatives and Galois-equivariant transforms}
+\subsection{Formal representatives with the same Hankel determinants}
 Preservation of the ordinary Hankel transform alone does not characterize the
 distinguished algebraic series.  For a nondegenerate Hankel sequence define
 \begin{equation}
@@ -417,6 +460,175 @@ representatives over $K$ exist, but they need not be quadratic algebraic,
 preserve the graded companion identity, or arise from the distinguished
 Stieltjes splitting.
 
+\section{Comparison with the construction of Chang and Liu}
+The preceding results leave open whether a different quadratic-algebraic generating function can avoid fractional powers.  The construction of Chang and Liu is directly relevant because it realizes a generic bilateral Somos--4 orbit by Hankel determinants.  We therefore compare the two descriptions explicitly before considering further repairs.
+
+\subsection{The shifted Somos--4 orbit}
+Chang and Liu \cite[Sections~3.3--4.2]{ChangLiu2026} treat the generic bilateral Somos--4 initial-value problem by Hankel determinants of quadratic orthogonal pairs. Their normalized recurrence is
+\begin{equation}
+ \sigma_{n+2}\sigma_{n-2}=a\sigma_{n+1}\sigma_{n-1}+b\sigma_n^2,
+ \qquad n\in\mathbb Z,
+ \label{eq:CL-recurrence}
+\end{equation}
+with $\sigma_{-1}=x$, $\sigma_0=1$, $\sigma_1=y$, and $\sigma_2=z$.
+Our freely prescribed determinants fit this normalization after the shift
+\begin{equation}
+ \sigma_n=\frac{H_{n+2}}m,
+ \qquad
+ (x,y,z;a,b)=\left(\frac\lambda m,\frac r m,\frac\eta m;\alpha,\tau\right).
+ \label{eq:CL-dictionary}
+\end{equation}
+This uses all six parameters and avoids the constraint
+$\eta=\alpha\lambda r+\tau m^2$ that would follow from imposing our recurrence at $N=0$ with $H_0=1$.
+
+Write $u^2=\alpha$ and define
+\begin{align}
+ \mathcal N&=\tau r^2m+\lambda^2\eta^2+\alpha\eta m^3+\alpha\lambda r^3,
+ \label{eq:CL-Nplus}\\
+ \mathcal N_0&=\tau r^2m-\lambda^2\eta^2+\alpha\eta m^3+\alpha\lambda r^3.
+ \label{eq:CL-Nminus}
+\end{align}
+Under \eqref{eq:CL-dictionary}, the Chang--Liu parameters include
+\begin{align}
+ d_0&=\frac{\lambda r}{m^2},&u_0&=\frac{2r}{m},\\
+ \frac vu&=\frac{\mathcal N}{2\alpha\lambda r\eta m},&
+ uv&=\frac{\mathcal N}{2\lambda r\eta m},\\
+ \frac{v_0}{u}&=\frac{\mathcal N_0}{2\alpha\lambda r\eta m},&
+ uv_0&=\frac{\mathcal N_0}{2\lambda r\eta m},
+ \label{eq:CL-parameters}
+\end{align}
+and
+\begin{equation}
+ f=\frac{\tau}{\alpha}-
+ \frac{\mathcal N^2}{4\alpha\lambda^2r^2\eta^2m^2}.
+ \label{eq:CL-f}
+\end{equation}
+The sign difference between $\mathcal N$ and $\mathcal N_0$ is essential because $v_0$ enters the distinguished moment branch.
+The scaling $X=uZ$ turns their curve into
+\begin{equation}
+ Y^2=(\alpha Z^2+f)^2+4\alpha Z-4uv,
+ \label{eq:CL-descended-curve}
+\end{equation}
+which is defined over $K$. This is curve-level descent, not coefficientwise descent of a selected moment branch.
+
+\subsection{Translation to Jacobi data}
+Use the local Jacobi convention
+\begin{equation}
+ F(t)=\cfrac{\lambda}{1-A_0t-
+ \cfrac{B_1t^2}{1-A_1t-
+ \cfrac{B_2t^2}{1-A_2t-
+ \cfrac{B_3t^2}{1-A_3t-B_4t^2M_4(t)}}}},
+ \qquad M_4(0)=1.
+ \label{eq:local-jacobi-convention}
+\end{equation}
+The product formula
+\begin{equation}
+ H_N=\lambda^N\prod_{j=1}^{N-1}B_j^{N-j}
+ \label{eq:J-Hankel-product}
+\end{equation}
+gives
+\begin{align}
+ B_1&=\frac{m}{\lambda^2},&
+ B_2&=\frac{\lambda r}{m^2},&
+ B_3&=\frac{m\eta}{r^2},&
+ B_4&=\frac{r(\alpha\eta m+\tau r^2)}{\lambda\eta^2}.
+ \label{eq:first-B}
+\end{align}
+The companion identities through $D_3=H_5$ force
+\begin{align}
+ A_0&=\frac r\lambda,&
+ A_1&=\frac{\eta\lambda^2+m^2}{\lambda mr},&
+ A_2&=\frac{\alpha\eta m^3+\lambda r^3+\tau m^2r^2}{\eta\lambda mr}.
+ \label{eq:first-A}
+\end{align}
+
+\begin{proposition}[Fourth shifted determinant]
+For the convention \eqref{eq:local-jacobi-convention},
+\begin{equation}
+ D_4=\lambda^4B_1^3B_2^2B_3
+ \left(A_0A_1A_2A_3-A_0A_1B_3-A_0A_3B_2-A_2A_3B_1+B_1B_3\right).
+ \label{eq:generic-D4}
+\end{equation}
+After substitution of \eqref{eq:first-B} and \eqref{eq:first-A}, this reduces to
+\begin{equation}
+ D_4=\frac{\eta}{\lambda r^2}
+ \left[A_3r(\alpha\eta m+\tau r^2)-\eta^2\lambda\right].
+ \label{eq:D4-reduced}
+\end{equation}
+Consequently $D_4=H_6$, where
+\[
+ H_6=\frac{\alpha^2\eta mr+\alpha\tau r^3+\tau\eta^2\lambda}{\lambda m},
+\]
+uniquely forces
+\begin{equation}
+ A_3=
+ \frac{\alpha^2\eta mr^3+\alpha\tau r^5+\eta^3\lambda m+\tau\eta^2\lambda r^2}
+ {\eta mr(\alpha\eta m+\tau r^2)}.
+ \label{eq:A3}
+\end{equation}
+\end{proposition}
+\begin{proof}
+Equation \eqref{eq:generic-D4} follows by direct expansion of the shifted $4\times4$ Hankel determinant in Jacobi parameters.  Substitution and collection of the terms linear in $A_3$ gives \eqref{eq:D4-reduced}.  Solving \eqref{eq:D4-reduced} for $A_3$ after inserting the displayed value of $H_6$ gives \eqref{eq:A3}.
+\end{proof}
+An equivalent useful form is
+\[
+ A_3=\frac{\alpha r^2}{\eta m}+
+ \frac{\eta\lambda(\eta m+\tau r^2)}{mr(\alpha\eta m+\tau r^2)}.
+\]
+No $B_4$ occurs in $D_4$: the fourth ordinary Hankel step determines $B_4$, while the fourth shifted step determines $A_3$, without imposing any extra relation among the six parameters.
+
+Chang and Liu use
+\[
+ d_n=\frac{\sigma_{n-1}\sigma_{n+1}}{\sigma_n^2}.
+\]
+Substitution of \eqref{eq:CL-dictionary} gives the exact all-order interface
+\begin{equation}
+ d_n=\frac{H_{n+1}H_{n+3}}{H_{n+2}^2}=B_{n+2}.
+ \label{eq:d-B}
+\end{equation}
+Thus $d_0=B_2$, $d_1=B_3$, and $d_2=B_4$.  At the subdiagonal level only $B_1$ precedes the Chang--Liu tail; the diagonal and moment normalizations remain separate issues.
+
+\section{What the comparison resolves}
+The comparison confirms the same basic distinction found for the weighted transport: the orbit and the curve may descend even when one distinguished moment branch does not.
+
+\subsection{Even and odd parts of the Chang--Liu branch}
+Let
+\[
+ S(t;u)=\sum_{n\ge0}s_n(u)t^n,\qquad u^2=\alpha,
+\]
+be the distinguished positive Chang--Liu moment branch.  The two choices of square root satisfy
+\begin{equation}
+ S(t;-u)=S(-t;u),\qquad s_n(-u)=(-1)^ns_n(u).
+ \label{eq:galois-parity}
+\end{equation}
+Hence the two branches have equal ordinary Hankel determinants, but a single branch is generically not fixed by $u\mapsto-u$ and therefore does not descend coefficientwise to $K[[t]]$.
+Writing
+\[
+ S(t;u)=E(t^2;u)+tO(t^2;u)
+\]
+gives $E(z;u)\in K[[z]]$ and $O(z;u)/u\in K[[z]]$, whereas $O$ is generically anti-invariant.
+
+\begin{proposition}[Parity-rescaling obstruction]
+Let $r_{2k}=a s_{2k}$ and $r_{2k+1}=b s_{2k+1}$.  If the generic identity $H_3(r)=\kappa H_3(s)$ holds coefficientwise, then $a^3=\kappa$, $ab^2=\kappa$, and therefore $b^2=a^2$.
+\end{proposition}
+\begin{proof}
+Compare the coefficients of the independent monomials in the two generic $3\times3$ Hankel determinants.  The pure even contribution has weight $a^3$, while the terms containing two odd moments have weight $ab^2$.
+\end{proof}
+In particular, the descended recombination
+$R(t)=E(t^2;u)+tO(t^2;u)/u$ fails already at order two:
+\[
+ H_2(R)-H_2(S)=\left(1-\frac1\alpha\right)s_1^2.
+\]
+
+\begin{proposition}[Geometric-scaling obstruction]
+No generic scaling $r_n=cd^ns_n$ converts the normalized Chang--Liu determinants $H_N(s)=H_{N+2}/m$ into $H_N(r)=H_{N+2}$ for all $N$.
+\end{proposition}
+\begin{proof}
+Such a scaling gives $H_N(r)=c^Nd^{N(N-1)}H_N(s)$, so one would need $c^Nd^{N(N-1)}=m$.  The cases $N=1,2$ force $c=m$ and $d^2=m^{-1}$, while $N=3$ then gives $c^3d^6=1$, not $m$, generically.
+\end{proof}
+Finally, the Galois-equivariant obstruction proved above applies to a finite Jacobi prefix over $K$: as a generically invertible linear-fractional transformation in its tail, it cannot turn one non-descending Chang--Liu branch into a descending one.  This excludes the direct prefix strategy, but not every possible quadratic-algebraic representative.
+
+\subsection{Why base-field transforms cannot repair a branch}
 The following observation excludes a broad class of attempted rationalizations.
 \begin{proposition}[Galois-equivariant obstruction]
 Let $T:L[[x]]\to L[[x]]$ be injective and commute with every
@@ -444,50 +656,61 @@ into a series in $K[[x]]$.  This conclusion concerns these transforms over the
 base field; it does not exclude a new algebraic construction with different
 companion data.
 
-\section{The remaining open problem}
-The descent question for the specific transported branch is now settled
-negatively in the generic case by \eqref{eq:first-coefficients}.  The broader
-question is different:
-\begin{quote}
-Does there exist a direct quadratic algebraic generating function over
-$K=\Q(\lambda,m,r,\eta,\alpha,\tau)$ whose ordinary Hankel determinants have
-initial values $(\lambda,m,r,\eta)$ and satisfy
-\eqref{eq:transported-recurrence}?
-\end{quote}
-Jacobi reconstruction gives many formal representatives over $K$, so no
-nonexistence statement is possible for the unrestricted class of all formal
-series with the same ordinary Hankel transform.  A substantive existence or
-nonexistence theorem must additionally specify algebraicity, a companion
-normalization, a finite universal transform, or a distinguished continued-
-fraction splitting.
+\section{Remaining possibilities}
+The established facts now separate three levels cleanly: the Chang--Liu curve descends; its ordinary Hankel sequence descends; an individual distinguished moment branch does not descend generically.  The rational Jacobi calculation extends through $A_3$ and $B_4$, and the subdiagonal interface is exactly $d_n=B_{n+2}$.
 
-In particular, it remains open whether there is a quadratic algebraic series
-over $K$ with the same ordinary Hankel orbit and a suitably modified,
-radical-free companion normalization.  Possible approaches include a direct
-six-parameter tail recurrence over $K$ and rational splittings of modified
-companion products.  These are prospective constructions, not assumptions in
-the results proved here.
+The remaining constructive possibility should therefore be sought in the invariant pair
+\[
+ E(z),\qquad R(z):=O(z)/u,
+\]
+rather than by attaching an injective $K$-rational prefix to one raw branch.  Starting from the quadratic equation for $S(t;u)$, one should substitute
+\[
+ S(t;u)=E(t^2)+utR(t^2)
+\]
+and separate invariant and anti-invariant parts.  This yields coupled algebraic equations over $K$ for $E$ and $R$.  A non-diagonal rational construction from this pair can then be tested against
+\[
+ f_0=\lambda,\qquad f_1=r,\qquad f_2=\frac{r^2+m}{\lambda}
+\]
+and the determinant conditions through $D_4=H_6$.
+
+Thus no general nonexistence claim is made.  What is excluded is the narrower class consisting of parity rescalings, constant mass and argument scalings, alternating signs, and injective finite prefixes over $K$ applied to a single distinguished Chang--Liu branch.  A constructive all-order theorem, or a precise nonexistence theorem for a broader class, remains open.
 
 \section{Conclusion}
-The weighted substitution \eqref{eq:transported-G} gives an exact
-six-parameter extension of the direct Somos--4 construction.  The prescribed
-ordinary Hankel tuple is unchanged, the recurrence becomes
-\eqref{eq:transported-recurrence}, and the companion determinants satisfy the
-graded identity \eqref{eq:graded-companion}.  The explicit expansion
-\eqref{eq:series-expansion} shows that the selected transported branch
-genuinely requires the sixth-root extension in the generic case, already
-because $b_1=q^{-5}r$.  Ordinary Hankel descent therefore does not imply
-selected-series descent.
+We began with the five-parameter generating function of
+\cite{Scheuerle2026} and asked whether it extends to the general
+two-coefficient Somos--4 recurrence.  The weighted substitution
+\eqref{eq:transported-G} gives an exact extension for arbitrary
+$(\lambda,m,r,\eta,\alpha,\tau)$.  It preserves the prescribed ordinary
+Hankel determinants and yields \eqref{eq:transported-recurrence}.  Thus the
+six-parameter Hankel problem is solved at the level of the recurrence.
 
-Exact transport of the discriminant gives \eqref{eq:q-discriminant}; after a
-coordinate rescaling, its residual genus-one curve has the rational model
-\eqref{eq:rational-quartic-z}.  Hence curve-level descent and selected-series
-descent are distinct.  Standard binomial and invert transforms defined over
-the rational parameter field cannot create descent, by Galois equivariance and
-injectivity.  The remaining mathematically substantive problem is to construct
-a different direct quadratic algebraic representative over $K$, or to prove
-nonexistence within a precisely specified Hankel-compatible algebraic class.
+The same construction reveals a second and more delicate problem.  Its
+companion determinants satisfy the graded identity
+\eqref{eq:graded-companion}, and the coefficient $b_1=q^{-5}r$ shows that the
+selected branch does not generically descend to
+$K=\Q(\lambda,m,r,\eta,\alpha,\tau)$.  This is not merely an unsimplified
+formula.  On the other hand, the rational quartic
+\eqref{eq:rational-quartic-z} shows that the associated curve does descend.
+The Hankel sequence, the curve, and a distinguished generating-function branch
+must therefore be treated as separate objects.
 
+The comparison with Chang and Liu makes this separation explicit in a second
+construction.  The shifted dictionary \eqref{eq:CL-dictionary} identifies
+their generic bilateral orbit with ours, and the all-order relation
+$d_n=B_{n+2}$ identifies the subdiagonal Jacobi data.  The rational restoration
+through $A_3$ and $B_4$ shows that the prescribed companion data are consistent
+at the computed levels.  Nevertheless, the parity relation
+\eqref{eq:galois-parity} shows that an individual distinguished moment branch
+is generically non-descending.
+
+The remaining question is consequently narrower than the original one.  It is
+unknown whether another quadratic-algebraic representative can simultaneously
+have coefficients in $K$, realize the prescribed six-parameter Hankel orbit,
+and satisfy the ungraded identity $D_N=H_{N+2}$.  Parity rescaling, geometric
+scaling, and injective finite prefixes over $K$ cannot achieve all three goals.
+These obstructions do not constitute a general nonexistence theorem.  A
+non-diagonal construction based on the invariant pair $(E,O/u)$ remains a
+concrete possibility for further investigation.
 \section*{Disclosure on authoring and verification tools}
 The manuscript was revised with assistance from AI-based language and symbolic
 calculation tools.  Their use was directed toward notation control, LaTeX
@@ -495,6 +718,10 @@ editing, and exact algebraic checks.  The author remains responsible for the
 mathematical statements and the final text.
 
 \begin{thebibliography}{99}
+\bibitem{ChangLiu2026}
+X.-K.~Chang and J.~Liu,
+\newblock Hankel determinants from quadratic orthogonal pairs for hyperelliptic functions and their applications,
+\newblock arXiv:2603.11670v4 [nlin.SI], 2026; to appear in the \emph{Journal of the London Mathematical Society}.
 \bibitem{Scheuerle2026}
 T.~Scheuerle,
 \newblock Direct generation of a Somos--4 sequence from an algebraic generating function,
