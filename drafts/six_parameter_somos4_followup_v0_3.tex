@@ -1,0 +1,408 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\lam}{\lambda}
+\newcommand{\etap}{\eta}
+\newcommand{\taup}{\tau}
+\newcommand{\Ha}{\widehat H}
+\newcommand{\Da}{\widehat D}
+
+\title{A Six-Parameter Extension of the\\
+Direct Somos--4 Algebraic Generating Function}
+\author{Thomas Scheuerle}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The preceding paper constructs a five-parameter quadratic algebraic generating
+function with prescribed initial Hankel determinants
+$(\lambda,m,r,\eta)$ and Somos--4 parameter $\tau$.  We adjoin a second
+Somos coefficient $\alpha$.  If $q^6=\alpha$, the weighted transport
+\[
+ G_{\alpha;\lambda,m,r,\eta,\tau}(x)
+ =G_{1;\lambda,q^{-2}m,q^{-6}r,q^{-12}\eta,q^{-8}\tau}(qx)
+\]
+preserves the four prescribed ordinary Hankel determinants and changes the
+recurrence to
+\[
+ H_{k+4}H_k=\alpha H_{k+3}H_{k+1}+\tau H_{k+2}^2.
+\]
+The once-shifted determinants acquire an explicit grading factor.  We also
+transport the discriminant exactly and show that its residual genus-one
+quartic has the rational model
+\[
+ Y^2=\bigl(1-(A+\alpha B)z+\tau z^2\bigr)^2-4\alpha^2z^3,
+\]
+where $A$ and $B$ are rational functions of the initial Hankel data.  This
+separates curve-level descent from descent of the distinguished formal-power-
+series branch.  The latter remains open; no nonexistence claim is made.
+\end{abstract}
+
+\section{Introduction}
+The five-parameter construction in \cite{Scheuerle2026} uses the notation
+\[
+ (H_1,H_2,H_3,H_4)=(\lambda,m,r,\eta)
+\]
+and the recurrence parameter $\tau$ in
+\begin{equation}
+ H_{k+4}H_k=H_{k+3}H_{k+1}+\tau H_{k+2}^2,
+ \qquad k\geq1.
+ \label{eq:old-somos4}
+\end{equation}
+We retain that notation throughout.  The new parameter $\alpha$ is the
+coefficient of the first bilinear term, so the six-parameter recurrence is
+\begin{equation}
+ H_{k+4}H_k=\alpha H_{k+3}H_{k+1}+\tau H_{k+2}^2,
+ \qquad k\geq1.
+ \label{eq:new-somos4}
+\end{equation}
+Thus the parameter list is
+$(\lambda,m,r,\eta,\alpha,\tau)$, and specialization $\alpha=1$ recovers the
+normalization of \cite{Scheuerle2026}.
+
+The extension is obtained by a weighted scaling over a field containing a
+sixth root of $\alpha$.  The determinant identities and the transported
+discriminant are exact formal identities.  They do not require expansion of
+the lengthy quadratic polynomial from the preceding paper.  What is not
+settled by these identities is whether the distinguished normalized series
+itself descends from the sixth-root extension to
+$\Q(\lambda,m,r,\eta,\alpha,\tau)$.
+
+\section{The five-parameter input}
+Let
+\[
+ G_{1;\lambda,m,r,\eta,\tau}(x)=\sum_{k\geq0}g_kx^k
+\]
+be the selected algebraic series of \cite{Scheuerle2026}.  Define
+\[
+ H_N(g)=\det(g_{i+j})_{0\leq i,j\leq N-1},\qquad
+ D_N(g)=\det(g_{i+j+1})_{0\leq i,j\leq N-1}.
+\]
+The normalization in the preceding paper is
+\begin{equation}
+ (H_1,H_2,H_3,H_4)=(\lambda,m,r,\eta),
+ \qquad D_N=H_{N+2}.
+ \label{eq:old-normalization}
+\end{equation}
+Its quadratic discriminant factors as
+\begin{equation}
+ \Delta_1(x)
+ =\bigl(x\lambda^2\eta m r^2\bigr)^2
+  \left((1-Jx+\tau x^2)^2-4x^3\right),
+ \label{eq:old-discriminant}
+\end{equation}
+where
+\begin{equation}
+ J=\frac{\lambda\eta}{mr}
+   +\frac{m^2}{\lambda r}
+   +\frac{r^2}{m\eta}
+   +\frac{\tau mr}{\lambda\eta}.
+ \label{eq:old-J}
+\end{equation}
+These statements are the only inputs from the five-parameter construction
+needed below.
+
+\section{Weighted transport}
+Work over
+\[
+ \K=\Q(\lambda,m,r,\eta,q,\tau),\qquad q^6=\alpha,
+\]
+and introduce the primed parameters
+\begin{equation}
+ \lambda'=\lambda,\qquad m'=q^{-2}m,\qquad
+ r'=q^{-6}r,\qquad \eta'=q^{-12}\eta,\qquad
+ \tau'=q^{-8}\tau.
+ \label{eq:parameter-scaling}
+\end{equation}
+Define
+\begin{equation}
+ G_{\alpha;\lambda,m,r,\eta,\tau}(x)
+ :=G_{1;\lambda',m',r',\eta',\tau'}(qx).
+ \label{eq:transported-G}
+\end{equation}
+If
+\[
+ G_{1;\lambda',m',r',\eta',\tau'}(x)=\sum_{k\geq0}a_kx^k,
+ \qquad
+ G_{\alpha;\lambda,m,r,\eta,\tau}(x)=\sum_{k\geq0}b_kx^k,
+\]
+then
+\begin{equation}
+ b_k=q^ka_k.
+ \label{eq:coefficient-scaling}
+\end{equation}
+
+\begin{proposition}[Determinant weights]
+For every $N\geq1$,
+\begin{equation}
+ H_N(b)=q^{N(N-1)}H_N(a),\qquad
+ D_N(b)=q^{N^2}D_N(a).
+ \label{eq:determinant-weights}
+\end{equation}
+\end{proposition}
+\begin{proof}
+In the ordinary Hankel matrix, its $(i,j)$ entry is multiplied by $q^{i+j}$.
+Factoring $q^i$ from row $i$ and $q^j$ from column $j$ gives the exponent
+$2\sum_{j=0}^{N-1}j=N(N-1)$.  For the shifted matrix the entry is multiplied
+by $q^{i+j+1}$.  The additional factor $q$ in every row contributes $N$, so
+the total exponent is $N(N-1)+N=N^2$.
+\end{proof}
+
+\section{The two-coefficient Somos--4 recurrence}
+\begin{theorem}
+Let $\Ha_N=H_N(b)$.  Then
+\[
+ (\Ha_1,\Ha_2,\Ha_3,\Ha_4)=(\lambda,m,r,\eta)
+\]
+and
+\begin{equation}
+ \Ha_{k+4}\Ha_k
+ =\alpha\Ha_{k+3}\Ha_{k+1}+\tau\Ha_{k+2}^2,
+ \qquad k\geq1.
+ \label{eq:transported-recurrence}
+\end{equation}
+\end{theorem}
+\begin{proof}
+Equation \eqref{eq:determinant-weights} and
+\eqref{eq:parameter-scaling} give
+\[
+ \Ha_1=\lambda,
+ \quad \Ha_2=q^2m'=m,
+ \quad \Ha_3=q^6r'=r,
+ \quad \Ha_4=q^{12}\eta'=\eta.
+\]
+Write $H'_N=H_N(a)$.  The primed sequence satisfies
+\[
+ H'_{k+4}H'_k=H'_{k+3}H'_{k+1}+\tau'H'_{k+2}{}^2.
+\]
+The weight difference between the left-hand product and the first product on
+the right is $6$, while that between the left-hand product and
+$H'_{k+2}{}^2$ is $8$.  Hence
+\[
+ \Ha_{k+4}\Ha_k
+ =q^6\Ha_{k+3}\Ha_{k+1}+q^8\tau'\Ha_{k+2}^2.
+\]
+Now use $q^6=\alpha$ and $q^8\tau'=\tau$.
+\end{proof}
+
+\begin{corollary}[Low-order recurrence check]
+The first two values forced beyond the initial tuple are
+\[
+ \Ha_5=\frac{\alpha\eta m+\tau r^2}{\lambda},
+\qquad
+ \Ha_6=\frac{\alpha\Ha_5r+\tau\eta^2}{m}.
+\]
+These formulas provide a direct indexing check for any coefficient expansion
+of \eqref{eq:transported-G}.
+\end{corollary}
+
+\section{The transported companion normalization}
+\begin{proposition}
+If the primed series obeys $D_N(a)=H'_{N+2}$, then
+\begin{equation}
+ \Da_N:=D_N(b)=q^{-3N-2}\Ha_{N+2},
+ \qquad N\geq1.
+ \label{eq:graded-companion}
+\end{equation}
+\end{proposition}
+\begin{proof}
+By \eqref{eq:determinant-weights},
+\[
+ D_N(b)=q^{N^2}H'_{N+2},\qquad
+ \Ha_{N+2}=q^{(N+2)(N+1)}H'_{N+2}.
+\]
+Their exponent difference is
+$N^2-(N+2)(N+1)=-3N-2$.
+\end{proof}
+
+\begin{remark}
+A constant coefficient rescaling $b_k\mapsto cb_k$ changes the ratio
+$D_N(b)/\Ha_{N+2}$ by $c^{-2}$.  It cannot remove the factor $q^{-3N}$.
+Thus the literal identity $D_N=H_{N+2}$ is not invariant under this graded
+transport.  Equation \eqref{eq:graded-companion}, rather than the ungraded
+identity, is the companion normalization naturally inherited from the
+five-parameter series.
+\end{remark}
+
+\section{Exact transport of the discriminant}
+Separate the old invariant into
+\begin{equation}
+ A=\frac{\lambda\eta}{mr}+\frac{\tau mr}{\lambda\eta},
+ \qquad
+ B=\frac{m^2}{\lambda r}+\frac{r^2}{m\eta}.
+ \label{eq:A-B}
+\end{equation}
+After substitution of \eqref{eq:parameter-scaling},
+\begin{equation}
+ J'=q^{-4}A+q^2B.
+ \label{eq:J-prime}
+\end{equation}
+Consequently the substitution $x\mapsto qx$ gives
+\begin{equation}
+ qJ'=q^{-3}A+q^3B
+ =\alpha^{-1/2}A+\alpha^{1/2}B.
+ \label{eq:J-alpha}
+\end{equation}
+
+\begin{proposition}[Transported discriminant]
+The discriminant obtained by substituting
+\eqref{eq:parameter-scaling} and $x\mapsto qx$ into
+\eqref{eq:old-discriminant} is
+\begin{equation}
+ \Delta_\alpha(x)
+ =q^{-50}\bigl(x\lambda^2\eta m r^2\bigr)^2
+ \left[
+  \left(1-(q^{-3}A+q^3B)x+q^{-6}\tau x^2\right)^2
+  -4q^3x^3
+ \right].
+ \label{eq:q-discriminant}
+\end{equation}
+Equivalently,
+\begin{equation}
+ \Delta_\alpha(x)
+ =\alpha^{-25/3}\bigl(x\lambda^2\eta m r^2\bigr)^2
+ \left[
+  \left(1-(\alpha^{-1/2}A+\alpha^{1/2}B)x
+             +\frac{\tau}{\alpha}x^2\right)^2
+  -4\alpha^{1/2}x^3
+ \right].
+ \label{eq:alpha-discriminant}
+\end{equation}
+\end{proposition}
+\begin{proof}
+The square prefactor has total $q$-weight
+$2(1-12-2-12)=-50$.  The three terms in the residual factor transform as
+$J'x\mapsto qJ'x$, $\tau'x^2\mapsto q^2\tau'x^2=q^{-6}\tau x^2$, and
+$x^3\mapsto q^3x^3$.  Equations \eqref{eq:J-prime} and $q^6=\alpha$ give the
+stated forms.
+\end{proof}
+
+The overall monomial factor in \eqref{eq:q-discriminant} is a square in
+$\K(x)$ and does not affect the residual double cover.  It should, however,
+be retained when comparing discriminants of particular polynomial
+representatives, because multiplying a quadratic equation by a scalar squares
+that scalar in its discriminant.
+
+\section{A rational curve-level model}
+Remove the square prefactor in \eqref{eq:alpha-discriminant} and put
+\begin{equation}
+ x=\alpha^{1/2}z.
+ \label{eq:x-z}
+\end{equation}
+The residual equation becomes
+\begin{equation}
+ Y^2=\left(1-(A+\alpha B)z+\tau z^2\right)^2
+      -4\alpha^2z^3.
+ \label{eq:rational-quartic-z}
+\end{equation}
+All coefficients of \eqref{eq:rational-quartic-z} belong to
+$\Q(\lambda,m,r,\eta,\alpha,\tau)$.
+
+For comparison with the quartic convention used in \cite{Scheuerle2026}, set
+$X=z^{-1}$ and $Y=z^{-2}y$.  Then \eqref{eq:rational-quartic-z} is birational
+to
+\begin{equation}
+ y^2=\left(X^2-(A+\alpha B)X+\tau\right)^2-4\alpha^2X.
+ \label{eq:rational-quartic-X}
+\end{equation}
+Thus the curve descends to the rational six-parameter field.  The coordinate
+change \eqref{eq:x-z} nevertheless rescales coefficients of a formal power
+series and does not preserve the normalized Hankel data.  Curve descent and
+descent of the distinguished generating series are therefore different
+problems.
+
+\section{What remains unresolved}
+The transport \eqref{eq:transported-G} defines a distinguished algebraic
+series over $\K$.  The preceding results prove the ordinary Hankel recurrence,
+the graded companion identity, and the discriminant factorization.  They do
+not prove that the coefficients of this distinguished branch belong to
+\[
+ \Q(\lambda,m,r,\eta,\alpha,\tau).
+\]
+Nor do they prove that no Hankel-compatible rationalizing transformation
+exists.  Such a statement would require both a precisely specified class of
+admissible transformations and an invariant obstructing descent.
+
+A complete series-level treatment should therefore supply the explicit
+transported quadratic equation, remove its common Laurent monomial and
+polynomial content, select the branch by its constant term, and determine the
+Galois action $q\mapsto\zeta q$ with $\zeta^6=1$ on that branch.  These are
+open tasks rather than assumptions used in the results above.
+
+\section{Conclusion}
+The weighted substitution \eqref{eq:transported-G} gives an exact
+six-parameter extension of the direct Somos--4 construction.  In notation
+consistent with \cite{Scheuerle2026}, the parameters are
+$(\lambda,m,r,\eta,\alpha,\tau)$.  The prescribed initial Hankel tuple is
+unchanged, the recurrence becomes \eqref{eq:transported-recurrence}, and the
+companion determinants satisfy \eqref{eq:graded-companion}.  Exact transport
+of the five-parameter discriminant gives \eqref{eq:q-discriminant}; after a
+coordinate rescaling, its residual genus-one curve has the rational model
+\eqref{eq:rational-quartic-z}.  The remaining issue is descent of the selected
+normalized formal series, not descent of the curve.
+
+\section*{Disclosure on authoring and verification tools}
+The manuscript was revised with assistance from AI-based language and symbolic
+calculation tools.  Their use was directed toward notation control, LaTeX
+editing, and exact algebraic checks.  The author remains responsible for the
+mathematical statements and the final text.
+
+\begin{thebibliography}{99}
+\bibitem{Scheuerle2026}
+T.~Scheuerle,
+\newblock Direct generation of a Somos--4 sequence from an algebraic generating function,
+\newblock arXiv:2609.15754 [math.CO], 2026.
+
+\bibitem{Wall1948}
+H.~S. Wall,
+\newblock \emph{Analytic Theory of Continued Fractions},
+\newblock Van Nostrand, New York, 1948.
+
+\bibitem{Flajolet1980}
+P.~Flajolet,
+\newblock Combinatorial aspects of continued fractions,
+\newblock \emph{Discrete Mathematics} \textbf{32} (1980), 125--161.
+
+\bibitem{Layman2001}
+J.~W. Layman,
+\newblock The Hankel transform and some of its properties,
+\newblock \emph{Journal of Integer Sequences} \textbf{4} (2001), Article 01.1.5.
+
+\bibitem{French2007}
+C.~French,
+\newblock Transformations preserving the Hankel transform,
+\newblock \emph{Journal of Integer Sequences} \textbf{10} (2007), Article 07.7.3.
+
+\bibitem{Hone2005}
+A.~N.~W. Hone,
+\newblock Elliptic curves and quadratic recurrence sequences,
+\newblock \emph{Bulletin of the London Mathematical Society} \textbf{37} (2005), 161--171.
+
+\bibitem{FominZelevinsky2002}
+S.~Fomin and A.~Zelevinsky,
+\newblock The Laurent phenomenon,
+\newblock \emph{Advances in Applied Mathematics} \textbf{28} (2002), 119--144.
+
+\bibitem{VanderPoortenSwart2006}
+A.~J. van der Poorten and C.~S. Swart,
+\newblock Recurrence relations for elliptic sequences: every Somos--4 is a Somos--$k$,
+\newblock \emph{Bulletin of the London Mathematical Society} \textbf{38} (2006), 546--554.
+\end{thebibliography}
+\end{document}
