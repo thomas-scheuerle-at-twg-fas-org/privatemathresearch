@@ -1,5 +1,5 @@
-import Mathlib.Data.List.Find
-import Mathlib.Data.Nat.Prime.Nth
+import Mathlib.Data.Nat.Find
+import Mathlib.Data.Nat.Prime.Infinite
 import A328596.Sequence
 
 /-!
@@ -12,7 +12,7 @@ The main ingredients are:
 
 * `Nat.bits` as the reversed binary word of a natural number;
 * the existing A328596 predicate for Lyndon reversed-binary words;
-* `Nat.count` and `Nat.nth` for ranking and enumerating generators and primes.
+* a computable prefix rank for A328596 and a computable prime enumerator.
 
 The factorization theorem itself will be added incrementally on top of these
 definitions.
@@ -53,28 +53,93 @@ theorem bitsToNat_bits (n : Nat) : bitsToNat n.bits = n := by
 @[simp] theorem bitsToNat_revBinary (n : Nat) : bitsToNat (revBinary n) = n := by
   simpa [revBinary] using bitsToNat_bits n
 
-/-- The rank of `n` inside A328596, using `Nat.count`. -/
-noncomputable def a328596Rank (n : Nat) : Nat := by
-  classical
-  exact Nat.count InA328596 n
+/-- The rank of `n` inside A328596.
+
+This is computed by filtering the finite prefix `0, 1, ..., n - 1`.
+-/
+def a328596Rank (n : Nat) : Nat :=
+  ((List.range n).filter inA328596Bool).length
 
 /-- The prime attached to the `A328596`-rank of `n`. -/
-noncomputable def primeOfA328596 (n : Nat) : Nat := by
-  classical
-  exact Nat.nth Nat.Prime (a328596Rank n)
+def nextPrimeAfter (n : Nat) : Nat :=
+  Nat.find (show ∃ m : Nat, n < m ∧ Nat.Prime m from by
+    obtain ⟨p, hle, hp⟩ := Nat.exists_infinite_primes (n + 1)
+    exact ⟨p, by omega, hp⟩)
+
+/-- The `k`-th prime, defined by iterating `nextPrimeAfter`. -/
+def primeAt : Nat → Nat
+  | 0 => 2
+  | n + 1 => nextPrimeAfter (primeAt n)
+
+/-- The prime attached to the `A328596`-rank of `n`. -/
+def primeOfA328596 (n : Nat) : Nat := primeAt (a328596Rank n)
 
 /-- The prime attached to a binary word, after converting it to a natural number. -/
-noncomputable def primeOfWord (w : BitWord) : Nat := by
-  classical
-  exact primeOfA328596 (bitsToNat w)
+def primeOfWord (w : BitWord) : Nat := primeOfA328596 (bitsToNat w)
+
+/-- The longest Lyndon prefix length of a binary word. -/
+def longestLyndonPrefixLen (w : BitWord) : Nat :=
+  Nat.findGreatest (fun k => 0 < k ∧ isLyndonBool (w.take k)) w.length
+
+/-- The longest Lyndon prefix length is bounded by the word length. -/
+theorem longestLyndonPrefixLen_le (w : BitWord) : longestLyndonPrefixLen w ≤ w.length := by
+  exact Nat.findGreatest_le _
+
+/-- A greedy Lyndon factorization of a binary word.
+
+This is an executable scaffold for the Chen-Fox-Lyndon factorization.
+The correctness proof will come later.
+-/
+def lyndonFactors : BitWord → List BitWord
+  | [] => []
+  | w =>
+      let k := longestLyndonPrefixLen w
+      if hk : k = 0 then [w] else w.take k :: lyndonFactors (w.drop k)
+termination_by w => w.length
+decreasing_by
+  simp_wf
+  have hkpos : 0 < k := Nat.pos_of_ne_zero hk
+  have hkle : k ≤ w.length := longestLyndonPrefixLen_le w
+  omega
+
+/-- The A348268 value attached to `n`.
+
+For `n > 0`, we factor the reversed binary word of `n` into Lyndon pieces,
+convert each Lyndon piece to its associated prime, and multiply the primes.
+-/
+def a348268 (n : Nat) : Nat :=
+  if _h : n = 0 then 1 else
+    ((lyndonFactors (revBinary n)).map primeOfWord).prod
 
 example : bitsToNat [false, true] = 2 := by
   simp [bitsToNat]
 
-example : Nat.nth Nat.Prime 0 = 2 := by
-  simp
+example : primeAt 0 = 2 := rfl
 
-example : Nat.nth Nat.Prime 1 = 3 := by
-  simp
+theorem nextPrimeAfter_two : nextPrimeAfter 2 = 3 := by
+  rw [nextPrimeAfter]
+  have h : ∃ m : Nat, 2 < m ∧ Nat.Prime m := by
+    refine ⟨3, ?_, ?_⟩
+    · omega
+    · decide
+  apply (Nat.find_eq_iff h).2
+  constructor
+  · constructor
+    · omega
+    · decide
+  · intro n hn hpn
+    omega
+
+theorem primeAt_one : primeAt 1 = 3 := by
+  simpa [primeAt] using nextPrimeAfter_two
+
+example : longestLyndonPrefixLen [false, true, false, true] = 2 := by
+  native_decide
+
+example : lyndonFactors [true, false, false, true] = [[true], [false, false, true]] := by
+  native_decide
+
+example : a348268 0 = 1 := by
+  simp [a348268]
 
 end A348268
