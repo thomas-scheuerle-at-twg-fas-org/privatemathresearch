@@ -1,6 +1,7 @@
 import Mathlib.Data.List.Lex
 import Mathlib.Data.List.Infix
 import Mathlib.Data.List.Rotate
+import Mathlib.Data.List.TakeDrop
 import Mathlib.Tactic
 
 /-!
