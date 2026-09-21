@@ -43,6 +43,17 @@ Key project files:
 - [`A328596/Sequence.lean`](A328596/Sequence.lean): sequence predicate, sanity check, and additive theorem
 - [`A328596.lean`](A328596.lean): root import file
 
+#### [`A328596/A348268.lean`](A328596/A348268.lean)
+Early scaffold for OEIS A348268, the Lyndon/prime permutation built from reversed binary words.
+
+Current status:
+- `Nat.bits` is reused as the reversed binary word representation;
+- `bitsToNat` is defined as the inverse conversion;
+- `Nat.count` and `Nat.nth` are prepared as the generator-to-prime ranking bridge;
+- the full Lyndon factorization and permutation proof are still in progress.
+
+This file is intended to grow incrementally on top of the existing A328596 development.
+
 Build with:
 
 ```bash
