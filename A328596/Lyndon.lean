@@ -219,6 +219,36 @@ theorem isSuffixLyndon_singleton {α : Type*} [LinearOrder α] (a : α) :
     have hlt : i < 1 := by simpa using hi
     omega
 
+theorem not_lt_false_singleton {w : List Bool} (hne : w ≠ []) : ¬ w < [false] := by
+  intro h
+  cases w with
+  | nil => exact (hne rfl).elim
+  | cons b t =>
+    cases b with
+    | false =>
+      cases t <;> simp at h
+    | true =>
+      have hlt : [false] < true :: t := by
+        exact (List.lt_iff_lex_lt _ _).2 <| List.Lex.rel (show false < true by decide)
+      exact (not_lt_of_gt hlt) h
+
+/-- A binary Lyndon word of length at least two must end in `true`. -/
+theorem IsLyndon.last_eq_true_of_lt_length {w : List Bool} (h : IsLyndon w)
+    (hw : 1 < w.length) : ∃ u, w = u ++ [true] := by
+  have hne : w ≠ [] := h.ne_nil
+  have hs : IsSuffixLyndon w := h.toIsSuffixLyndon
+  have hdrop := hs.lt_drop (Nat.sub_pos_of_lt hw) (by omega)
+  have hlast : w.drop (w.length - 1) = [w.getLast hne] := List.drop_length_sub_one hne
+  by_cases hlt : w.getLast hne = true
+  · refine ⟨w.take (w.length - 1), ?_⟩
+    simpa [hlast, hlt] using (List.take_append_drop (i := w.length - 1) (l := w)).symm
+  · have hfalse : w.getLast hne = false := by
+      simpa using hlt
+    have hbad : w < [false] := by
+      rw [hlast, hfalse] at hdrop
+      simpa using hdrop
+    exact False.elim (not_lt_false_singleton hne hbad)
+
 /-- If a binary suffix-Lyndon word ends in `1`, then prefixing one more `0`
 produces another suffix-Lyndon word.
 

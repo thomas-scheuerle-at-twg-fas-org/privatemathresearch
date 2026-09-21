@@ -157,6 +157,9 @@ theorem revBinary_pos_ends_with_true {n : Nat} (hn : 0 < n) :
             rw [hnexpr, revBinary_two_mul (by simp [hdiv]), hu]
             simp
 
+/-- Any binary word ending in `true` is the reversed binary expansion of the
+natural number obtained from its bits. -/
+
 example : revBinary 26 = [false, true, false, true, true] := rfl
 
 end A328596

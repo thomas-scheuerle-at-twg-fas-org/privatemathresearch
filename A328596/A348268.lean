@@ -1,4 +1,5 @@
 import Mathlib.Data.Nat.Find
+import Mathlib.Data.List.TakeWhile
 import Mathlib.Data.Nat.Prime.Infinite
 import A328596.Sequence
 
@@ -53,6 +54,51 @@ theorem bitsToNat_bits (n : Nat) : bitsToNat n.bits = n := by
 @[simp] theorem bitsToNat_revBinary (n : Nat) : bitsToNat (revBinary n) = n := by
   simpa [revBinary] using bitsToNat_bits n
 
+/-- Appending a trailing `true` makes the bit-encoding positive. -/
+theorem bitsToNat_pos_append_true (u : BitWord) : 0 < bitsToNat (u ++ [true]) := by
+  induction u with
+  | nil =>
+      simp [bitsToNat]
+  | cons b u ih =>
+      cases b <;> simp [bitsToNat, ih]
+
+/-- A binary word ending in `true` is the reversed binary expansion of the
+natural number obtained from its bits. -/
+theorem revBinary_bitsToNat_append_true (u : BitWord) :
+    revBinary (bitsToNat (u ++ [true])) = u ++ [true] := by
+  induction u with
+  | nil =>
+      simp [bitsToNat, revBinary_one]
+  | cons b u ih =>
+      have hpos : 0 < bitsToNat (u ++ [true]) := bitsToNat_pos_append_true u
+      cases b with
+      | false =>
+          calc
+            revBinary (bitsToNat (false :: (u ++ [true])))
+                = revBinary (2 * bitsToNat (u ++ [true])) := by simp [bitsToNat]
+            _ = false :: revBinary (bitsToNat (u ++ [true])) := by
+              simpa using (revBinary_two_mul (n := bitsToNat (u ++ [true]))
+                (Nat.ne_of_gt hpos))
+            _ = false :: (u ++ [true]) := by rw [ih]
+            _ = (false :: u) ++ [true] := by rfl
+      | true =>
+          calc
+            revBinary (bitsToNat (true :: (u ++ [true])))
+                = revBinary (2 * bitsToNat (u ++ [true]) + 1) := by simp [bitsToNat]
+            _ = true :: revBinary (bitsToNat (u ++ [true])) := by
+              simpa using (revBinary_two_mul_add_one (n := bitsToNat (u ++ [true])))
+            _ = true :: (u ++ [true]) := by rw [ih]
+            _ = (true :: u) ++ [true] := by rfl
+
+/-- A Lyndon binary word ending in `true` corresponds to an actual
+`A328596` number. -/
+theorem inA328596_of_isLyndon_append_true {w : BitWord} (h : IsLyndon w)
+    (hw : ∃ u, w = u ++ [true]) : InA328596 (bitsToNat w) := by
+  rcases hw with ⟨u, rfl⟩
+  constructor
+  · exact bitsToNat_pos_append_true u
+  · simpa [revBinary_bitsToNat_append_true] using h
+
 /-- The rank of `n` inside A328596.
 
 This is computed by filtering the finite prefix `0, 1, ..., n - 1`.
@@ -105,6 +151,82 @@ theorem longestLyndonPrefixLen_pos {w : BitWord} (hw : w ≠ []) :
       (k := (b :: w).length)).2 ?_
     refine ⟨1, by decide, by simp, ?_⟩
     simpa using (isLyndonBool_eq_true_iff (w := [b])).2 (isLyndon_singleton b)
+
+/-- The greedy Lyndon prefix of a binary word ending in `true` also ends in `true`. -/
+theorem longestLyndonPrefixLen_ends_true {w : BitWord} (hw : ∃ u, w = u ++ [true]) :
+    ∃ u, w.take (longestLyndonPrefixLen w) = u ++ [true] := by
+  rcases w with _ | b t
+  · rcases hw with ⟨u, hu⟩
+    simp at hu
+  · cases b with
+    | true =>
+        by_cases h1 : longestLyndonPrefixLen (true :: t) = 1
+        · refine ⟨[], ?_⟩
+          simpa [h1] using rfl
+        · have hpos : 0 < longestLyndonPrefixLen (true :: t) :=
+            longestLyndonPrefixLen_pos (by simp)
+          have hlt : 1 < longestLyndonPrefixLen (true :: t) := by omega
+          have hly : IsLyndon ((true :: t).take (longestLyndonPrefixLen (true :: t))) :=
+            longestLyndonPrefix_isLyndon (w := true :: t) hpos
+          rcases hly.last_eq_true_of_lt_length hlt with ⟨u, hu⟩
+          exact ⟨u, hu⟩
+    | false =>
+        let p : Bool → Bool := fun x => decide (x = false)
+        have htake_ne_nil : (false :: t).takeWhile p ≠ [] := by
+          intro hnil
+          rw [List.takeWhile_eq_nil_iff] at hnil
+          have hlen : 0 < (false :: t).length := by simp
+          have hcontra := hnil hlen
+          simp [p] at hcontra
+        have htake_all_false : ∀ x ∈ (false :: t).takeWhile p, x = false := by
+          intro x hx
+          have hpx := List.mem_takeWhile_imp (p := p) hx
+          simp [p] at hpx
+        have hrep : (false :: t).takeWhile p = List.replicate ((false :: t).takeWhile p).length false := by
+          exact (List.eq_replicate_length).2 htake_all_false
+        have hdrop_ne_nil : (false :: t).dropWhile p ≠ [] := by
+          intro hnil
+          rw [List.dropWhile_eq_nil_iff] at hnil
+          rcases hw with ⟨u, hu⟩
+          have hmem : true ∈ (false :: t) := by
+            rw [hu]
+            simp
+          have hfalse : p true := hnil true hmem
+          simp [p] at hfalse
+        have hdrop_pos : 0 < ((false :: t).dropWhile p).length := by
+          exact Nat.pos_of_ne_zero hdrop_ne_nil
+        have hhead_not_false : ¬ p (((false :: t).dropWhile p).get ⟨0, hdrop_pos⟩) :=
+          List.dropWhile_get_zero_not (p := p) (l := false :: t) hdrop_pos
+        rcases List.exists_cons_of_ne_nil hdrop_ne_nil with ⟨c, s, hcons⟩
+        have hc : c = true := by
+          rw [hcons] at hhead_not_false
+          cases c <;> simp [p] at hhead_not_false
+        have hcons' : (false :: t).dropWhile p = true :: s := by
+          rw [hcons, hc]
+        have hsplit : false :: t = (false :: t).takeWhile p ++ (true :: s) := by
+          rw [← List.takeWhile_append_dropWhile (p := p), hcons']
+        have hprefix : (false :: t).take (((false :: t).takeWhile p).length + 1)
+            = (false :: t).takeWhile p ++ [true] := by
+          rw [hsplit]
+          simp
+        have hly : IsLyndon ((false :: t).takeWhile p ++ [true]) := by
+          simpa [hrep] using zeroes_then_one_isLyndon ((false :: t).takeWhile p).length
+        have hlen_le : ((false :: t).takeWhile p).length + 1 ≤ longestLyndonPrefixLen (false :: t) := by
+          refine Nat.le_findGreatest ?_ ?_
+          · rw [hsplit]
+            omega
+          · constructor
+            · omega
+            · simpa [hprefix] using
+                (isLyndonBool_eq_true_iff
+                  (w := (false :: t).take (((false :: t).takeWhile p).length + 1))).2 hly
+        have hgt : 1 < longestLyndonPrefixLen (false :: t) := by
+          have h2 : 1 < ((false :: t).takeWhile p).length + 1 := by omega
+          exact lt_of_lt_of_le h2 hlen_le
+        have hlyprefix : IsLyndon ((false :: t).take (longestLyndonPrefixLen (false :: t))) :=
+          longestLyndonPrefix_isLyndon (w := false :: t) (Nat.pos_of_lt hgt)
+        rcases hlyprefix.last_eq_true_of_lt_length hgt with ⟨u, hu⟩
+        exact ⟨u, hu⟩
 
 /-- A greedy Lyndon factorization of a binary word.
 

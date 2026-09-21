@@ -49,8 +49,10 @@ Early scaffold for OEIS A348268, the Lyndon/prime permutation built from reverse
 Current status:
 - `Nat.bits` is reused as the reversed binary word representation;
 - `bitsToNat` is defined as the inverse conversion;
-- `Nat.count` and `Nat.nth` are prepared as the generator-to-prime ranking bridge;
-- the full Lyndon factorization and permutation proof are still in progress.
+- greedy Lyndon factorization of reversed binary words is implemented and proved to flatten back to the original word;
+- every factor is proved Lyndon, and Lyndon binary words ending in `true` are bridged back to `A328596` numbers via `bitsToNat`;
+- the greedy Lyndon prefix of any binary word ending in `true` is now proved to end in `true` as well;
+- the full permutation theorem is still in progress.
 
 This file is intended to grow incrementally on top of the existing A328596 development.
 
