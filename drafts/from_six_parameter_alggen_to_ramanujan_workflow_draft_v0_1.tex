@@ -1,0 +1,729 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage[a4paper,margin=28mm]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\setlength{\emergencystretch}{3em}
+\definecolor{codegray}{RGB}{245,245,245}
+\newcommand{\workflowstep}[1]{\subsection{Workflow Step #1}}
+\newcommand{\taupar}{\tau}
+\newcommand{\taumod}{\tau_{\mathrm{mod}}}
+\newcommand{\EJ}{E_J}
+\newcommand{\RamF}{f_{\mathrm R}}
+\newcommand{\TODO}[1]{\par\noindent\textcolor{red!70!black}{\textbf{TODO:} #1}\par}
+\lstdefinestyle{parigp}{language={},basicstyle=\ttfamily\small,
+  backgroundcolor=\color{codegray},frame=single,breaklines=true,
+  columns=fullflexible,keepspaces=true,showstringspaces=false}
+
+\title{From Six-Parameter Somos--4 Data to Weierstrass, Jacobi,\\
+Ramanujan Theta Representations\\[0.4em]
+\large A Constructive Workflow}
+\author{Thomas Scheuerle}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+A generic Somos--4 orbit with four freely prescribed initial values satisfies
+\[
+ H_{n+4}H_n=\alpha H_{n+3}H_{n+1}+\taupar H_{n+2}^2.
+\]
+An earlier workflow treated the normalized case $\alpha=1$ and organized the
+passage from a direct algebraic generating function to a genus-one curve, a
+Weierstrass sigma representation, and a Jacobi $\theta_1$ representation.
+The present paper develops the corresponding six-parameter workflow and adds
+a further endpoint suggested by Michael Somos: Ramanujan's general theta
+function
+\[
+ \RamF(a,b)=\sum_{k\in\mathbb Z}
+ a^{k(k+1)/2}b^{k(k-1)/2},\qquad |ab|<1.
+\]
+Starting from $(\lambda,m,r,\eta,\alpha,\taupar)$, we separate three layers that
+must not be conflated: the Somos orbit, its elliptic curve, and a chosen
+power-series lift.  A weighted transport from the five-parameter algebraic
+generating function introduces a sixth root of $\alpha$ in that particular
+lift, whereas the recurrence and a birational quartic model remain rational in
+the six parameters.  The elliptic part of the workflow then proceeds through
+periods, a translation point, Abel--Jacobi coordinates, and the classical
+sigma formula.  The Jacobi endpoint is converted exactly into Ramanujan form,
+with moving arguments $a_n,b_n$ satisfying the fixed-product relation
+$a_nb_n=q^2$, where $q=e^{\pi i\taumod}$.  This exposes both a bilateral
+$q$-series and an infinite-product representation of the same Somos--4 orbit.
+The emphasis is on normalization contracts, branch and indexing checks, and a
+reproducible computational plan.  PARI/GP routines and numerical tables are
+left as explicit placeholders for a companion implementation.
+\end{abstract}
+
+\section{Introduction}
+The sigma-function description of generic Somos--4 sequences is classical.
+The practical task, however, is not merely to quote the existence of such a
+description.  Starting from concrete recurrence data, one must identify the
+correct invariant curve, choose compatible coordinates and periods, locate the
+translation point, fix Abel--Jacobi lifts, and recover the elementary gauge
+factors.  Each step carries a convention whose unnoticed change may preserve
+some low-order checks while invalidating the final formula.
+
+The preceding workflow paper carried out this program for the normalized
+recurrence
+\[
+ H_{n+4}H_n=H_{n+3}H_{n+1}+\taupar H_{n+2}^2,
+\]
+starting from the direct algebraic generating function with prescribed
+$(H_1,H_2,H_3,H_4)=(\lambda,m,r,\eta)$.  Two developments motivate the present
+follow-up.  First, the generating-function construction has been extended to
+the six-parameter recurrence with a free coefficient $\alpha$.  Second,
+Michael Somos pointed out that Ramanujan theta functions provide a natural and
+less frequently documented endpoint of the workflow.  The latter is not only
+a change of notation: Ramanujan's $\RamF(a,b)$ simultaneously displays the
+bilateral series and Jacobi triple product, while the sequence index enters
+explicitly through its two arguments.
+
+The resulting workflow is
+\[
+(\lambda,m,r,\eta,\alpha,\taupar)
+\longmapsto (J,\mathcal C)
+\longmapsto E
+\longmapsto P
+\longmapsto(\omega_1,\omega_2;z_0,\delta)
+\longmapsto
+\begin{cases}
+ \sigma,\\
+ \theta_1,\\
+ \RamF(a,b).
+\end{cases}
+\]
+The six-parameter entry requires care.  The direct transported generating
+series lives naturally over a radical extension $q_6^6=\alpha$, but the
+ordinary Hankel orbit and a rational quartic model live over
+\[
+ K=\mathbb Q(\lambda,m,r,\eta,\alpha,\taupar).
+\]
+Accordingly, this paper distinguishes statements about a generating series
+from statements about the curve or recurrence.
+
+\subsection{Scope and contribution}
+This paper provides:
+\begin{itemize}[leftmargin=2em]
+ \item a workflow-level synthesis of the six-parameter generating-function
+       update with the algebraic-to-sigma construction;
+ \item a rational quartic entry point for the six-parameter orbit, together
+       with explicit checkpoints separating it from a radical power-series
+       lift;
+ \item the exact conversion from the Jacobi $\theta_1$ endpoint to
+       Ramanujan's general theta function $\RamF(a,b)$;
+ \item the fixed-product law $a_nb_n=q^2$ and the associated bilateral-series
+       and infinite-product forms;
+ \item a verification architecture for recurrence, curve, sigma, Jacobi, and
+       Ramanujan evaluations; and
+ \item marked placeholders for the later PARI/GP companion and numerical
+       examples.
+\end{itemize}
+It does not claim a new proof of the classical sigma representation, nor does
+it assert that every six-parameter algebraic lift requires radicals.  The
+non-descent statement concerns the particular weighted transport used below.
+
+\section{Six-parameter input and the three mathematical layers}
+Let
+\begin{equation}
+ H_{n+4}H_n=\alpha H_{n+3}H_{n+1}+\taupar H_{n+2}^2,
+ \qquad
+ (H_1,H_2,H_3,H_4)=(\lambda,m,r,\eta).
+ \label{eq:somos-six}
+\end{equation}
+We assume throughout the main workflow that all displayed denominators are
+nonzero and that the resulting genus-one curve is nonsingular.  Degenerate
+cases require separate projective or limiting treatments.
+
+Three related objects must be kept distinct:
+\[
+ \text{ordinary Hankel orbit},\qquad
+ \text{genus-one curve},\qquad
+ \text{chosen generating series}.
+\]
+The recurrence generates $H_n\in K$.  The six-parameter follow-up also gives a
+quartic model over $K$.  By contrast, the weighted algebraic-series transport
+uses $q_6$ with $q_6^6=\alpha$ and generically has coefficients outside $K$.
+This distinction is essential for a correct workflow.
+
+\subsection{Weighted generating-series transport}
+Let $G_{1;\lambda,m,r,\eta,\taupar}(x)$ denote the five-parameter series.  Put
+\begin{equation}
+ \lambda'=\lambda,\quad m'=q_6^{-2}m,\quad r'=q_6^{-6}r,
+ \quad \eta'=q_6^{-12}\eta,\quad \taupar'=q_6^{-8}\taupar,
+ \qquad q_6^6=\alpha,
+ \label{eq:weighted-parameters}
+\end{equation}
+and define
+\begin{equation}
+ G_{\alpha;\lambda,m,r,\eta,\taupar}(x)
+ =G_{1;\lambda',m',r',\eta',\taupar'}(q_6x).
+ \label{eq:weighted-series}
+\end{equation}
+If $b_k=q_6^ka_k$, row and column factorization gives
+\begin{equation}
+ H_N(b)=q_6^{N(N-1)}H_N(a),\qquad
+ D_N(b)=q_6^{N^2}D_N(a).
+ \label{eq:hankel-weights}
+\end{equation}
+Consequently, the first four ordinary determinants remain
+$(\lambda,m,r,\eta)$ and satisfy \cref{eq:somos-six}.  The inherited companion
+law is graded:
+\begin{equation}
+ D_N(b)=q_6^{-3N-2}H_{N+2}(b).
+ \label{eq:graded-companion}
+\end{equation}
+Already $b_1=q_6^{-5}r$, so this transported branch does not generically
+descend to $K$.  Nothing in this observation prevents the orbit and curve from
+descending.
+
+\section{Reduced dynamics and rational curve model}
+Define the gauge-invariant variables
+\begin{equation}
+ x_n=\frac{H_{n-1}H_{n+1}}{H_n^2}.
+ \label{eq:xn}
+\end{equation}
+Equation \cref{eq:somos-six} implies
+\begin{equation}
+ x_{n+2}x_nx_{n+1}^2=\alpha x_{n+1}+\taupar,
+ \qquad
+ x_{n+2}=\frac{\alpha x_{n+1}+\taupar}{x_nx_{n+1}^2}.
+ \label{eq:qrt-six}
+\end{equation}
+The natural first integral is
+\begin{equation}
+ J=x_nx_{n+1}+\alpha\left(\frac1{x_n}+\frac1{x_{n+1}}\right)
+   +\frac{\taupar}{x_nx_{n+1}}.
+ \label{eq:J-six}
+\end{equation}
+For the initial determinants,
+\begin{equation}
+ x_2=\frac{\lambda r}{m^2},\qquad
+ x_3=\frac{m\eta}{r^2},
+ \label{eq:x2x3}
+\end{equation}
+so that
+\begin{equation}
+ J=\frac{\lambda\eta}{mr}
+ +\alpha\frac{m^2}{\lambda r}
+ +\alpha\frac{r^2}{m\eta}
+ +\frac{\taupar mr}{\lambda\eta}.
+ \label{eq:J-seeds}
+\end{equation}
+A rational quartic model compatible with the six-parameter follow-up is
+\begin{equation}
+ \mathcal C_{J,\alpha,\taupar}:\qquad
+ y^2=(X^2-JX+\taupar)^2-4\alpha^2X.
+ \label{eq:quartic-six}
+\end{equation}
+For $\alpha=1$, this reduces to the quartic used in the preceding workflow.
+
+\TODO{In the code session, verify \cref{eq:J-six,eq:quartic-six} symbolically
+from consecutive QRT states and record the exact state-to-quartic map.  The
+normalization must be checked rather than inferred solely by specialization.}
+
+\section{The constructive workflow}
+
+\workflowstep{1: Validate the six-parameter input}
+Read $(\lambda,m,r,\eta,\alpha,\taupar)$, generate several exact recurrence
+values, and test every denominator required by the selected affine charts.
+Compute $x_2,x_3$ and $J$ from \cref{eq:x2x3,eq:J-seeds}.
+
+\paragraph{Checkpoint.}
+Verify \cref{eq:J-six} for several consecutive pairs generated by
+\cref{eq:qrt-six}.  Verify independently that the $H_n$ and $x_n$ routes agree.
+
+\workflowstep{2: Select the orbit, curve, or series route}
+If only the elliptic or transcendental representation is required, work over
+$K$ with \cref{eq:quartic-six}.  If the direct algebraic generating function is
+also required, construct \cref{eq:weighted-series} over $K(q_6)$ and retain the
+graded companion law \cref{eq:graded-companion}.  Do not use the literal
+five-parameter companion identity after transport.
+
+\paragraph{Checkpoint.}
+Confirm $(H_1,H_2,H_3,H_4)=(\lambda,m,r,\eta)$ and
+\[
+ H_5=\frac{\alpha\eta m+\taupar r^2}{\lambda},\qquad
+ H_6=\frac{\alpha H_5r+\taupar\eta^2}{m}.
+\]
+For the transported series, confirm $D_N=q_6^{-3N-2}H_{N+2}$ at the first
+orders.
+
+\workflowstep{3: Convert the rational quartic to Weierstrass form}
+Choose one point at infinity as origin and compute a birational map
+\begin{equation}
+ (X,y)\longleftrightarrow(u,v),\qquad
+ E:\ v^2=4u^3-g_2u-g_3.
+ \label{eq:weierstrass-general}
+\end{equation}
+The formulas must specialize to those of the normalized workflow at
+$\alpha=1$.
+
+\TODO{Insert the exact six-parameter birational maps, $g_2(J,\alpha,\taupar)$,
+$g_3(J,\alpha,\taupar)$, the elliptic discriminant, and the affine exceptional
+set after symbolic derivation and PARI/GP verification.}
+
+\paragraph{Checkpoint.}
+Verify both map compositions modulo the defining curve equations.  Check that
+the quartic discriminant and $g_2^3-27g_3^2$ agree up to the stated scaling,
+and verify the $j$-invariant independently.
+
+\workflowstep{4: Identify the fixed elliptic translation}
+Map the QRT state $(x_n,x_{n+1})$ to a point $Q_n\in E$.  Determine the fixed
+point $P\in E$ satisfying
+\begin{equation}
+ Q_{n+1}=Q_n+P.
+ \label{eq:translation}
+\end{equation}
+The sign convention for the second quartic coordinate fixes whether a step is
+represented by $P$ or $-P$.
+
+\TODO{Derive and insert the explicit six-parameter state map and translation
+point.  Verify that the formulas reduce to
+$P=((J^2-4\taupar)/12,1)$ when $\alpha=1$ in the text convention.}
+
+\paragraph{Checkpoint.}
+For several exact QRT iterates, verify that $Q_n$ lies on $E$ and that
+$Q_{n+1}-Q_n=P$ is independent of $n$.
+
+\workflowstep{5: Compute and normalize the period lattice}
+Compute an oriented basis of full periods $(2\omega_1,2\omega_2)$ for
+\cref{eq:weierstrass-general} and set
+\begin{equation}
+ \taumod=\frac{\omega_2}{\omega_1},\qquad
+ \operatorname{Im}(\taumod)>0.
+ \label{eq:tau-mod}
+\end{equation}
+Only the lattice is intrinsic; the ordered basis is a retained workflow
+choice.  Every later sigma, theta, and Ramanujan evaluation must use the same
+basis.
+
+\paragraph{Checkpoint.}
+Reconstruct $g_2,g_3$ from the lattice and compare with the algebraic values.
+State explicitly whether software returns full or half periods.
+
+\workflowstep{6: Compute Abel--Jacobi coordinates}
+Choose lifts $z_2$ and $\delta$ such that
+\[
+ (\wp(z_2),\wp'(z_2))=Q_2,
+ \qquad
+ (\wp(\delta),\wp'(\delta))=P,
+\]
+and define, for the present $H_1$-based indexing,
+\begin{equation}
+ z_0=z_2-3\delta\pmod\Lambda.
+ \label{eq:z0}
+\end{equation}
+Then $Q_n$ is represented by $z_0+(n+1)\delta$.
+
+\paragraph{Checkpoint.}
+Compare both Weierstrass coordinates, not only the first coordinate, for
+several $n$.  This fixes the sign of $\delta$.
+
+\workflowstep{7: Fix the sigma normalization}
+Use the classical representation
+\begin{equation}
+ H_n=A B^n
+ \frac{\sigma(z_0+n\delta)}{\sigma(\delta)^{n^2}}.
+ \label{eq:sigma}
+\end{equation}
+Put
+\[
+ S_n=\frac{\sigma(z_0+n\delta)}{\sigma(\delta)^{n^2}}.
+\]
+When the displayed factors are nonzero, the first two initial values give
+\begin{equation}
+ B=\frac{mS_1}{\lambda S_2},\qquad
+ A=\frac{\lambda^2S_2}{mS_1^2}.
+ \label{eq:AB}
+\end{equation}
+The values $H_3=r$ and $H_4=\eta$ are then independent consistency checks.
+The coefficient $\alpha$ is encoded in the elliptic data and the translation
+step, not in an extra arbitrary sigma gauge.
+
+\paragraph{Checkpoint.}
+Compare \cref{eq:sigma} with exact recurrence values and verify
+\begin{equation}
+ x_n=\wp(\delta)-\wp(z_0+n\delta)
+ \label{eq:x-sigma}
+\end{equation}
+under the selected normalization.  If the six-parameter scaling changes this
+identity, record the corrected factor explicitly rather than absorbing it
+silently.
+
+\workflowstep{8: Convert sigma to Jacobi $\theta_1$}
+For the chosen ordered half periods, let
+\[
+ \eta_1=\zeta(\omega_1),\qquad
+ c=\frac{2\omega_1}{\pi\theta_1'(0\mid\taumod)}.
+\]
+The normalization contract is
+\begin{equation}
+ \sigma(z)=
+ \exp\!\left(\frac{\eta_1z^2}{2\omega_1}\right)c\,
+ \theta_1\!\left(\frac{\pi z}{2\omega_1}\,\middle|\,\taumod\right).
+ \label{eq:sigma-theta}
+\end{equation}
+Define
+\begin{equation}
+ A_0=\frac{\pi\delta}{2\omega_1},\qquad
+ B_0=\frac{\pi z_0}{2\omega_1}.
+ \label{eq:A0B0}
+\end{equation}
+Then
+\begin{equation}
+ H_n=K_0q_0^{n^2}r_0^n
+ \theta_1(A_0n+B_0\mid\taumod),
+ \label{eq:theta}
+\end{equation}
+where
+\begin{align}
+ K_0&=Ac\exp\!\left(\frac{\eta_1z_0^2}{2\omega_1}\right),\\
+ q_0&=\exp\!\left(\frac{\eta_1\delta^2}{2\omega_1}\right)
+       \sigma(\delta)^{-1}
+     =\bigl(c\theta_1(A_0\mid\taumod)\bigr)^{-1},\\
+ r_0&=B\exp\!\left(\frac{\eta_1z_0\delta}{\omega_1}\right).
+ \label{eq:theta-constants}
+\end{align}
+
+\paragraph{Checkpoint.}
+Evaluate the sigma and Jacobi forms through independent code paths.  Libraries
+that use the nome rather than $\taumod$, or a rescaled first argument, require
+an explicit adapter.
+
+\workflowstep{9: Convert Jacobi $\theta_1$ to Ramanujan $\RamF(a,b)$}
+Set
+\begin{equation}
+ q=e^{\pi i\taumod},\qquad |q|<1,
+ \label{eq:nome}
+\end{equation}
+and define Ramanujan's general theta function by
+\begin{equation}
+ \RamF(a,b)=\sum_{k=-\infty}^{\infty}
+ a^{k(k+1)/2}b^{k(k-1)/2},\qquad |ab|<1.
+ \label{eq:ramanujan-f}
+\end{equation}
+Its Jacobi triple product is
+\begin{equation}
+ \RamF(a,b)=(-a;ab)_\infty(-b;ab)_\infty(ab;ab)_\infty.
+ \label{eq:triple-product}
+\end{equation}
+For the convention in \cref{eq:sigma-theta}, the exact bridge is
+\begin{equation}
+ \theta_1(z\mid\taumod)
+ =i q^{1/4}e^{-iz}
+ \RamF\!\left(-e^{2iz},-q^2e^{-2iz}\right).
+ \label{eq:theta-ramanujan}
+\end{equation}
+Put $z_n=A_0n+B_0$ and define
+\begin{align}
+ a_n&=-e^{2iz_n},&
+ b_n&=-q^2e^{-2iz_n},\\
+ K_R&=iK_0q^{1/4}e^{-iB_0},&
+ r_R&=r_0e^{-iA_0}.
+ \label{eq:ramanujan-data}
+\end{align}
+Substitution into \cref{eq:theta} gives the Ramanujan endpoint
+\begin{equation}
+ \boxed{
+ H_n=K_Rq_0^{n^2}r_R^n\RamF(a_n,b_n).}
+ \label{eq:ramanujan-somos}
+\end{equation}
+The moving arguments satisfy the fixed-product law
+\begin{equation}
+ \boxed{a_nb_n=q^2,}
+ \label{eq:fixed-product}
+\end{equation}
+which is independent of the Somos index $n$.
+
+\paragraph{Checkpoint.}
+Verify \cref{eq:theta-ramanujan} first for generic complex test arguments, then
+compare \cref{eq:ramanujan-somos} with the Jacobi, sigma, and recurrence values.
+Test convergence as the bilateral truncation grows.
+
+\section{What the Ramanujan endpoint adds}
+The conversion is exact, but it reveals structure that is less visible in the
+sigma notation.  From \cref{eq:ramanujan-f,eq:ramanujan-data},
+\begin{equation}
+ \RamF(a_n,b_n)=
+ \sum_{k\in\mathbb Z}(-1)^kq^{k(k-1)}e^{2ik(A_0n+B_0)}.
+ \label{eq:bilateral}
+\end{equation}
+Thus
+\begin{equation}
+ H_n=K_Rq_0^{n^2}r_R^n
+ \sum_{k\in\mathbb Z}(-1)^kq^{k(k-1)}
+ e^{2ikB_0}e^{2ikA_0n}.
+ \label{eq:fourier-index}
+\end{equation}
+The sequence index occurs explicitly in the exponential factor
+$e^{2ikA_0n}$.  It is therefore natural to regard \cref{eq:fourier-index} as a
+bilateral theta or Fourier expansion in the discrete index, without assigning
+it an interpretation beyond the exact identity.
+
+The product side is equally direct.  Since $a_nb_n=q^2$,
+\begin{equation}
+ \RamF(a_n,b_n)=
+ (e^{2iz_n};q^2)_\infty
+ (q^2e^{-2iz_n};q^2)_\infty
+ (q^2;q^2)_\infty.
+ \label{eq:ramanujan-product}
+\end{equation}
+Hence the same Somos orbit admits Weierstrass, Jacobi, bilateral $q$-series,
+and infinite-product descriptions.
+
+\subsection{Special Ramanujan functions}
+Ramanujan's classical specializations include
+\[
+ \phi(q)=\RamF(q,q),\qquad
+ \psi(q)=\RamF(q,q^3),\qquad
+ f(-q)=\RamF(-q,-q^2).
+\]
+The generic arguments in \cref{eq:ramanujan-data} do not usually reduce to
+these special forms.  Such reductions require additional arithmetic relations
+among $q$, $A_0$, and $B_0$.  They should therefore be treated as special
+modular cases rather than as part of the generic workflow.
+
+\TODO{Investigate, after the generic implementation is verified, whether the
+classical Somos--4 curve or other arithmetic examples yield useful
+$\phi$, $\psi$, eta-product, or modular-equation specializations.  Do not claim
+such a reduction without an exact parameter relation.}
+
+\section{Algorithm summary}
+\begin{enumerate}[label=\textbf{Step \arabic*.},leftmargin=2.7em]
+ \item Read $(\lambda,m,r,\eta,\alpha,\taupar)$ and generate exact recurrence
+       data.
+ \item Compute $x_2,x_3$ and the invariant $J$.
+ \item Decide whether the calculation needs the radical generating-series
+       lift or only the rational orbit and curve.
+ \item Construct the rational quartic and test nonsingularity.
+ \item Compute and verify a birational Weierstrass model.
+ \item Identify the fixed translation point from the QRT dynamics.
+ \item Compute and orient the period lattice.
+ \item Compute $z_0$ and $\delta$, retaining signs and period representatives.
+ \item Determine $A,B$ and verify all four initial values.
+ \item Convert sigma to Jacobi form using one stated normalization contract.
+ \item Convert Jacobi form to Ramanujan $\RamF(a,b)$ and verify
+       $a_nb_n=q^2$.
+ \item Compare recurrence, sigma, Jacobi, Ramanujan-series, and
+       Ramanujan-product evaluations.
+\end{enumerate}
+
+\section{Computational architecture}
+The companion implementation should keep exact and numerical stages separate.
+The proposed components are:
+\begin{itemize}[leftmargin=2em]
+ \item exact Somos recurrence and QRT iteration for $(\alpha,\taupar)$;
+ \item exact invariant and quartic construction;
+ \item exact forward and inverse birational maps;
+ \item exact curve discriminant and $j$-invariant checks;
+ \item numerical periods and elliptic logarithms at controlled precision;
+ \item sigma evaluation using the selected lattice;
+ \item an independent Jacobi $\theta_1$ implementation or adapter;
+ \item direct bilateral summation of $\RamF(a,b)$;
+ \item optional evaluation by the triple product; and
+ \item a consolidated error report against exact recurrence values.
+\end{itemize}
+
+\subsection{PARI/GP placeholders}
+\begin{lstlisting}[style=parigp]
+\\ TODO: six-parameter recurrence and invariant
+somos6_step(v, alpha, tau) = { /* placeholder */ };
+qrt6_step(x, y, alpha, tau) = { /* placeholder */ };
+qrt6_invariant(x, y, alpha, tau) = { /* placeholder */ };
+
+\\ TODO: rational quartic and verified Weierstrass maps
+quartic6_poly(J, alpha, tau, X) =
+  (X^2 - J*X + tau)^2 - 4*alpha^2*X;
+quartic6_to_weierstrass(X, Y, J, alpha, tau) =
+  { /* placeholder */ };
+weierstrass_to_quartic6(u, v, J, alpha, tau) =
+  { /* placeholder */ };
+
+\\ Ramanujan's general theta function by bilateral truncation
+ramanujan_f(a, b, N = 40) =
+{
+  sum(k = -N, N,
+      a^(k*(k+1)/2) * b^(k*(k-1)/2));
+};
+
+\\ theta_1 via the exact Ramanujan conversion used in the text
+ramanujan_theta1(tau_mod, z, N = 40) =
+{
+  my(q = exp(Pi*I*tau_mod));
+  I*q^(1/4)*exp(-I*z)
+    * ramanujan_f(-exp(2*I*z),
+                  -q^2*exp(-2*I*z), N);
+};
+
+\\ TODO: compare recurrence, sigma, Jacobi, Ramanujan sum and product
+workflow6_demo(lambda, m, r, eta, alpha, tau, N = 10, prec = 80) =
+  { /* placeholder */ };
+\end{lstlisting}
+
+\TODO{In the dedicated code session, replace every placeholder, add adaptive
+bilateral truncation and product truncation, and report numerical errors as a
+function of precision and truncation order.}
+
+\section{Numerical examples}
+\subsection{Normalized classical Somos--4}
+For
+\[
+ (\lambda,m,r,\eta,\alpha,\taupar)=(1,1,1,1,1,1),
+\]
+the workflow must reproduce
+\[
+ 1,1,1,1,2,3,7,23,59,\ldots.
+\]
+This example also provides a regression test against the earlier workflow.
+
+\TODO{Insert the recomputed periods, Abel--Jacobi data, sigma constants,
+Jacobi constants, nome $q$, several $(a_n,b_n)$ pairs, and a convergence table
+for the Ramanujan sum and product.  Recompute rather than copying rounded
+values from the earlier manuscript.}
+
+\subsection{A genuinely six-parameter example}
+Choose rational nonzero input with $\alpha\ne1$ for which the quartic is
+nonsingular and the first several recurrence denominators do not vanish.
+The example should show separately:
+\begin{enumerate}[leftmargin=2.3em]
+ \item exact recurrence and QRT checks over $K$;
+ \item the rational quartic and Weierstrass invariants;
+ \item the radical coefficient $b_1=q_6^{-5}r$ of the transported series;
+ \item numerical sigma and Jacobi evaluations; and
+ \item independent Ramanujan-series and product evaluations.
+\end{enumerate}
+
+\TODO{Select and verify the example during the PARI/GP session.}
+
+\section{Reliability and reproducibility}
+The principal failure modes are now broader than in the normalized workflow:
+\begin{itemize}[leftmargin=2em]
+ \item confusing the sixth root $q_6$ used in the generating-series transport
+       with the elliptic nome $q=e^{\pi i\taumod}$;
+ \item applying the ungraded companion identity after weighted transport;
+ \item silently changing the quartic or Weierstrass scaling when $\alpha$ is
+       introduced;
+ \item reversing the QRT translation by changing the sign of a second
+       coordinate;
+ \item mixing full and half periods;
+ \item using inconsistent Abel--Jacobi representatives;
+ \item confusing $q$ with $q^2$ in the Ramanujan arguments; and
+ \item comparing two formulas that were derived through the same code path
+       and therefore do not constitute independent verification.
+\end{itemize}
+The notation $q_6$ is reserved for $q_6^6=\alpha$, while $q$ denotes the nome.
+This typographical separation should be maintained in both manuscript and
+code.
+
+\section{Discussion and future directions}
+The six-parameter update sharpens the separation between algebraic and
+transcendental data.  The ordinary Hankel orbit and its rational quartic may be
+handled over $K$, while a distinguished generating-series lift can retain a
+radical orientation invisible to ordinary Hankel determinants.  Once the
+curve and translation are fixed, the sigma and Jacobi stages proceed as in the
+normalized case, but with modified elliptic invariants.
+
+The Ramanujan endpoint adds a complementary view.  It packages the same theta
+value as a bilateral series and an infinite product, with a constant nome
+product $a_nb_n=q^2$.  This may be particularly useful when the elliptic data
+have arithmetic or modular specializations.  The generic identity should be
+established and numerically checked first; special identities involving
+$\phi$, $\psi$, $f(-q)$, eta products, or modular equations belong to a later
+arithmetic analysis.
+
+\section{Conclusion}
+The extended workflow begins with six freely varying parameters, preserves the
+rational Somos orbit and elliptic curve, and tracks explicitly where a radical
+enters the transported algebraic generating series.  It then carries the orbit
+through QRT dynamics, a Weierstrass model, periods, Abel--Jacobi coordinates,
+and the classical sigma representation.  The final conversion
+\[
+ \sigma\longleftrightarrow\theta_1\longleftrightarrow\RamF(a,b)
+\]
+is exact under one stated normalization contract.  In Ramanujan form, the
+sequence is
+\[
+ H_n=K_Rq_0^{n^2}r_R^n\RamF(a_n,b_n),
+ \qquad a_nb_n=q^2,
+\]
+which exposes both the bilateral $q$-series and infinite-product structure.
+The remaining work is deliberately concrete: derive and verify the explicit
+six-parameter Weierstrass map and translation point, implement independent
+PARI/GP evaluation paths, and replace the marked placeholders with checked
+numerical data.
+
+\section*{Statement on AI assistance and computational tools}
+This draft was prepared with AI-assisted synthesis, \LaTeX{} editing, and
+normalization checking.  The author remains responsible for the mathematical
+statements, references, computational verification, and final text.  The
+planned companion implementation will use PARI/GP for exact algebra and
+high-precision elliptic computations.
+
+\begin{thebibliography}{99}
+\bibitem{ScheuerleDirect2026}
+T.~Scheuerle,
+\newblock Direct generation of a Somos--4 sequence from an algebraic generating function,
+\newblock arXiv:2609.15754 [math.CO], 2026.
+\newblock \url{https://arxiv.org/abs/2609.15754}.
+
+\bibitem{ScheuerleSix2026}
+T.~Scheuerle,
+\newblock A six-parameter extension of the direct Somos--4 algebraic generating function,
+\newblock manuscript in preparation, 2026.
+
+\bibitem{ScheuerleWorkflow2026}
+T.~Scheuerle,
+\newblock From direct algebraic generating functions to elliptic sigma and theta representations of Somos--4 sequences: A constructive workflow,
+\newblock manuscript, 2026.
+
+\bibitem{Hone2005}
+A.~N.~W. Hone,
+\newblock Elliptic curves and quadratic recurrence sequences,
+\newblock \emph{Bull. London Math. Soc.} \textbf{37} (2005), 161--171.
+\newblock \url{https://doi.org/10.1112/S0024609304004163}.
+
+\bibitem{Hone2020}
+A.~N.~W. Hone,
+\newblock Continued fractions and Hankel determinants from hyperelliptic curves,
+\newblock \emph{Comm. Pure Appl. Math.} \textbf{73} (2020), 2310--2347.
+\newblock \url{https://doi.org/10.1002/cpa.21923}.
+
+\bibitem{LiuWangZhang2026}
+F.~Liu, Y.~Wang, and Z.~Zhang,
+\newblock Hankel transform and $(\alpha,\beta)$ Somos--4 sequences,
+\newblock arXiv:2608.08703 [math.CO, math.NT], 2026.
+\newblock \url{https://arxiv.org/abs/2608.08703}.
+
+\bibitem{Berndt1985}
+B.~C.~Berndt,
+\newblock \emph{Ramanujan's Notebooks, Part III},
+\newblock Springer-Verlag, New York, 1985.
+
+\bibitem{WhittakerWatson}
+E.~T.~Whittaker and G.~N.~Watson,
+\newblock \emph{A Course of Modern Analysis}, 4th ed.,
+\newblock Cambridge University Press, 1927; reprinted 1996.
+
+\bibitem{DLMF20}
+NIST Digital Library of Mathematical Functions,
+\newblock Chapter 20: Theta functions,
+\newblock \url{https://dlmf.nist.gov/20}.
+
+\bibitem{DLMF23}
+NIST Digital Library of Mathematical Functions,
+\newblock Chapter 23: Weierstrass elliptic and modular functions,
+\newblock \url{https://dlmf.nist.gov/23}.
+
+\bibitem{PARIGPManual}
+The PARI Group,
+\newblock \emph{User's Guide to PARI/GP},
+\newblock \url{https://pari.math.u-bordeaux.fr/doc.html}.
+\end{thebibliography}
+\end{document}
