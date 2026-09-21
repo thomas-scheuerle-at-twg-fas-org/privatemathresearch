@@ -111,6 +111,33 @@ decreasing_by
   have hkle : k ≤ w.length := longestLyndonPrefixLen_le w
   omega
 
+/-- The greedy factorization recombines to the original word. -/
+theorem lyndonFactors_flatten (w : BitWord) : (lyndonFactors w).flatten = w := by
+  let P : Nat → Prop := fun n => ∀ w : BitWord, w.length = n → (lyndonFactors w).flatten = w
+  have hP : ∀ n, (∀ m < n, P m) → P n := by
+    intro n ih w hw
+    cases w with
+    | nil =>
+        subst hw
+        simp [P, lyndonFactors]
+    | cons b w' =>
+        subst hw
+        dsimp [P] at *
+        simp [lyndonFactors]
+        let k := longestLyndonPrefixLen (b :: w')
+        by_cases hk : k = 0
+        · simp [k, hk]
+        · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
+          have hkle : k ≤ (b :: w').length := longestLyndonPrefixLen_le _
+          have hlt : ((b :: w').drop k).length < (b :: w').length := by
+            rw [List.length_drop]
+            omega
+          have hrec : (lyndonFactors ((b :: w').drop k)).flatten = (b :: w').drop k :=
+            ih ((b :: w').drop k).length hlt ((b :: w').drop k) rfl
+          simp [k, hk, hrec, List.take_append_drop, hkle]
+  have hmain : P w.length := Nat.strong_induction_on w.length hP
+  exact hmain w rfl
+
 /-- The A348268 value attached to `n`.
 
 For `n > 0`, we factor the reversed binary word of `n` into Lyndon pieces,
