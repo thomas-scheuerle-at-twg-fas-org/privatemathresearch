@@ -19,6 +19,36 @@ Personal research notes, draft papers, and computational experiments by Thomas S
 
 ## Index of current files
 
+### Lean Formalization
+
+#### [`A328596/`](A328596/)
+Lean 4 / Mathlib formalization of the binary Lyndon-word interpretation of OEIS A328596.
+
+Current development status:
+- reversed binary words are formalized via `Nat.bits`, using least-significant-bit first order;
+- Lyndon words are defined transparently by comparison with all nontrivial rotations;
+- an auxiliary suffix-based Lyndon formulation is proved equivalent and used for the core structural lemmas;
+- powers of two are shown to lie in A328596;
+- clearing the least-significant set bit preserves membership in the non-power-of-two branch;
+- the main additive theorem is formalized:
+
+```lean
+theorem a328596_additive {n : Nat} (hn : 1 < n) (hA : InA328596 n) :
+	∃ a b, InA328596 a ∧ InA328596 b ∧ n = a + b
+```
+
+Key project files:
+- [`A328596/BinaryWords.lean`](A328596/BinaryWords.lean): reversed-binary arithmetic lemmas
+- [`A328596/Lyndon.lean`](A328596/Lyndon.lean): Lyndon and suffix-Lyndon theory
+- [`A328596/Sequence.lean`](A328596/Sequence.lean): sequence predicate, sanity check, and additive theorem
+- [`A328596.lean`](A328596.lean): root import file
+
+Build with:
+
+```bash
+lake build
+```
+
 ### Drafts
 
 #### [`drafts/somos_hankel_jacobi_revised5.tex`](drafts/somos_hankel_jacobi_revised5.tex)

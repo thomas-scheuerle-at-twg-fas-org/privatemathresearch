@@ -1,4 +1,5 @@
 import Mathlib.Data.List.Lex
+import Mathlib.Data.List.Infix
 import Mathlib.Data.List.Rotate
 import Mathlib.Tactic
 
@@ -67,6 +68,50 @@ theorem append_left_lt_of_lt {α : Type*} [LinearOrder α] {u v : List α} (p : 
   exact (List.lt_iff_lex_lt _ _).2 <|
     List.Lex.append_left (R := (· < ·)) ((List.lt_iff_lex_lt _ _).1 h) p
 
+theorem append_left_cancel_lt {α : Type*} [LinearOrder α] {p u v : List α}
+  (h : p ++ u < p ++ v) : u < v := by
+  induction p with
+  | nil => simpa using h
+  | cons a p ih =>
+    have h' : p ++ u < p ++ v := by
+      exact (List.lex_cons_iff).1 h
+    exact ih h'
+
+theorem append_right_lt_of_lt_of_eq_length {α : Type*} [LinearOrder α]
+  {u v : List α} (t : List α) (h : u < v) (hlen : u.length = v.length) :
+  u ++ t < v ++ t := by
+  induction u generalizing v with
+  | nil =>
+    cases v with
+    | nil => cases lt_irrefl [] h
+    | cons b v => simp at hlen
+  | cons a u ih =>
+    cases v with
+    | nil => simp at hlen
+    | cons b v =>
+      rcases lt_or_eq_of_le (List.head_le_of_lt h) with hab | rfl
+      · exact (List.lt_iff_lex_lt _ _).2 <| List.Lex.rel hab
+      · have htail : u < v := by simpa [List.lex_cons_iff] using h
+        have hlen' : u.length = v.length := by simpa using hlen
+        exact cons_lt_cons (ih htail hlen')
+
+theorem append_lt_of_lt_of_not_prefix {α : Type*} [LinearOrder α]
+  {u v t : List α} (h : u < v) (hprefix : ¬ u <+: v) : u ++ t < v := by
+  induction u generalizing v t with
+  | nil =>
+    simpa using hprefix
+  | cons a u ih =>
+    cases v with
+    | nil => cases h
+    | cons b v =>
+      rcases lt_or_eq_of_le (List.head_le_of_lt h) with hab | rfl
+      · exact (List.lt_iff_lex_lt _ _).2 <| List.Lex.rel hab
+      · have htail : u < v := by simpa [List.lex_cons_iff] using h
+        have hprefix' : ¬ u <+: v := by
+          intro hp
+          exact hprefix (List.cons_prefix_cons.mpr ⟨rfl, hp⟩)
+        exact cons_lt_cons (ih htail hprefix')
+
 theorem IsSuffixLyndon.toIsLyndon {α : Type*} [LinearOrder α] {w : List α}
     (h : IsSuffixLyndon w) : IsLyndon w := by
   constructor
@@ -74,6 +119,69 @@ theorem IsSuffixLyndon.toIsLyndon {α : Type*} [LinearOrder α] {w : List α}
   · intro i hi0 hi
     rw [List.rotate_eq_drop_append_take hi.le]
     exact append_right_lt_of_lt (List.take i w) (h.lt_drop hi0 hi)
+
+theorem IsLyndon.drop_not_prefix {α : Type*} [LinearOrder α] {w : List α}
+    (h : IsLyndon w) {i : Nat} (hi0 : 0 < i) (hi : i < w.length) :
+    ¬ w.drop i <+: w := by
+  intro hprefix
+  let v := w.drop i
+  let u := w.take i
+  let z := w.drop v.length
+  have hsplit : w = u ++ v := by
+    simpa [u, v] using (List.take_append_drop i w).symm
+  have hrot_i : w < v ++ u := by
+    have hrot := h.lt_rotate hi0 hi
+    rw [List.rotate_eq_drop_append_take hi.le] at hrot
+    simpa [u, v] using hrot
+  have hprefix_split : w = v ++ w.drop v.length := by
+    exact List.prefix_append_drop hprefix
+  have hzltu : z < u := by
+    rw [hprefix_split] at hrot_i
+    simpa [z] using append_left_cancel_lt hrot_i
+  have hvpos : 0 < v.length := by
+    simp [v]
+    omega
+  have hvlt : v.length < w.length := by
+    simp [v]
+    omega
+  have hzlen : z.length = u.length := by
+    simp [u, v, z]
+    omega
+  have hrot_v : w < z ++ v := by
+    have hrot : v ++ z < z ++ v := by
+      have hrot' := h.lt_rotate hvpos hvlt
+      rw [hprefix_split, List.rotate_append_length_eq] at hrot'
+      simpa [z] using hrot'
+    exact hprefix_split.symm ▸ hrot
+  have hback : z ++ v < w := by
+    have htmp : z ++ v < u ++ v :=
+      append_right_lt_of_lt_of_eq_length v hzltu hzlen
+    exact hsplit.symm ▸ htmp
+  exact (lt_asymm hrot_v hback).elim
+
+theorem IsLyndon.toIsSuffixLyndon {α : Type*} [LinearOrder α] {w : List α}
+    (h : IsLyndon w) : IsSuffixLyndon w := by
+  constructor
+  · exact h.1
+  · intro i hi0 hi
+    let v := w.drop i
+    let u := w.take i
+    have hrot : w < v ++ u := by
+      have hrot' := h.lt_rotate hi0 hi
+      rw [List.rotate_eq_drop_append_take hi.le] at hrot'
+      simpa [u, v] using hrot'
+    by_contra hnv
+    have hvne : v ≠ w := by
+      intro hEq
+      have : v.length < w.length := by
+        simp [v]
+        omega
+      simpa [hEq] using this
+    have hvw : v < w := lt_of_le_of_ne (le_of_not_gt hnv) hvne
+    by_cases hprefix : v <+: w
+    · exact (h.drop_not_prefix hi0 hi) hprefix
+    · have hcontra : v ++ u < w := append_lt_of_lt_of_not_prefix hvw hprefix
+      exact (lt_asymm hrot hcontra).elim
 
 theorem isLyndon_singleton {α : Type*} [LinearOrder α] (a : α) :
     IsLyndon [a] := by
