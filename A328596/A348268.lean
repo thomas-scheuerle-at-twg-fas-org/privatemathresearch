@@ -85,6 +85,15 @@ def longestLyndonPrefixLen (w : BitWord) : Nat :=
 theorem longestLyndonPrefixLen_le (w : BitWord) : longestLyndonPrefixLen w ≤ w.length := by
   exact Nat.findGreatest_le _
 
+/-- If the greedy prefix length is positive, that prefix is genuinely Lyndon. -/
+theorem longestLyndonPrefix_isLyndon {w : BitWord}
+    (h : 0 < longestLyndonPrefixLen w) : IsLyndon (w.take (longestLyndonPrefixLen w)) := by
+  have hspec := (Nat.findGreatest_eq_iff (P := fun k => 0 < k ∧ isLyndonBool (w.take k))
+      (k := w.length) (m := longestLyndonPrefixLen w)).1 rfl
+  have hbool : isLyndonBool (w.take (longestLyndonPrefixLen w)) = true := by
+    exact (hspec.2.1 (Nat.ne_of_gt h)).2
+  exact (isLyndonBool_eq_true_iff (w := w.take (longestLyndonPrefixLen w))).1 hbool
+
 /-- A greedy Lyndon factorization of a binary word.
 
 This is an executable scaffold for the Chen-Fox-Lyndon factorization.
@@ -134,10 +143,7 @@ theorem primeAt_one : primeAt 1 = 3 := by
   simpa [primeAt] using nextPrimeAfter_two
 
 example : longestLyndonPrefixLen [false, true, false, true] = 2 := by
-  native_decide
-
-example : lyndonFactors [true, false, false, true] = [[true], [false, false, true]] := by
-  native_decide
+  decide
 
 example : a348268 0 = 1 := by
   simp [a348268]

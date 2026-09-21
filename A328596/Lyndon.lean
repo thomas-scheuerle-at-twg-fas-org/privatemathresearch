@@ -36,6 +36,25 @@ def isLyndonBool {α : Type*} [LinearOrder α] (w : List α) : Bool :=
   decide (w ≠ []) &&
     (List.range w.length).all fun i => decide (i = 0 ∨ w < w.rotate i)
 
+theorem isLyndonBool_eq_true_iff {α : Type*} [LinearOrder α] (w : List α) :
+    isLyndonBool w = true ↔ IsLyndon w := by
+  constructor
+  · intro h
+    simp [isLyndonBool] at h
+    rcases h with ⟨hne, hall⟩
+    constructor
+    · exact hne
+    · intro i hi0 hi
+      exact (hall i hi).resolve_left (by omega)
+  · intro h
+    rcases h with ⟨hne, hlt⟩
+    simp [isLyndonBool, hne, List.all_eq_true]
+    intro x hx
+    by_cases hx0 : x = 0
+    · simp [hx0]
+    · have hxpos : 0 < x := Nat.pos_of_ne_zero hx0
+      simp [hx0, hlt x hxpos hx]
+
 theorem IsLyndon.ne_nil {α : Type*} [LinearOrder α] {w : List α} (h : IsLyndon w) :
     w ≠ [] :=
   h.1
