@@ -51,7 +51,6 @@ Current status:
 - `bitsToNat` is defined as the inverse conversion;
 - greedy Lyndon factorization of reversed binary words is implemented and proved to flatten back to the original word;
 - every factor is proved Lyndon, and Lyndon binary words ending in `true` are bridged back to `A328596` numbers via `bitsToNat`;
-- the greedy Lyndon prefix of any binary word ending in `true` is now proved to end in `true` as well;
 - the full permutation theorem is still in progress.
 
 This file is intended to grow incrementally on top of the existing A328596 development.
