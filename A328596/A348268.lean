@@ -94,6 +94,18 @@ theorem longestLyndonPrefix_isLyndon {w : BitWord}
     exact (hspec.2.1 (Nat.ne_of_gt h)).2
   exact (isLyndonBool_eq_true_iff (w := w.take (longestLyndonPrefixLen w))).1 hbool
 
+/-- Any nonempty binary word has a positive Lyndon prefix length. -/
+theorem longestLyndonPrefixLen_pos {w : BitWord} (hw : w ≠ []) :
+    0 < longestLyndonPrefixLen w := by
+  cases w with
+  | nil => exact False.elim (hw rfl)
+  | cons b w =>
+    refine (Nat.findGreatest_pos
+      (P := fun k => 0 < k ∧ isLyndonBool ((b :: w).take k))
+      (k := (b :: w).length)).2 ?_
+    refine ⟨1, by decide, by simp, ?_⟩
+    simpa using (isLyndonBool_eq_true_iff (w := [b])).2 (isLyndon_singleton b)
+
 /-- A greedy Lyndon factorization of a binary word.
 
 This is an executable scaffold for the Chen-Fox-Lyndon factorization.
@@ -135,6 +147,34 @@ theorem lyndonFactors_flatten (w : BitWord) : (lyndonFactors w).flatten = w := b
           have hrec : (lyndonFactors ((b :: w').drop k)).flatten = (b :: w').drop k :=
             ih ((b :: w').drop k).length hlt ((b :: w').drop k) rfl
           simp [k, hk, hrec, List.take_append_drop, hkle]
+  have hmain : P w.length := Nat.strong_induction_on w.length hP
+  exact hmain w rfl
+
+/-- Every factor produced by the greedy decomposition is Lyndon. -/
+theorem lyndonFactors_mem_isLyndon (w : BitWord) :
+    ∀ x ∈ lyndonFactors w, IsLyndon x := by
+  let P : Nat → Prop := fun n => ∀ w : BitWord, w.length = n → ∀ x ∈ lyndonFactors w, IsLyndon x
+  have hP : ∀ n, (∀ m < n, P m) → P n := by
+    intro n ih w hw x hx
+    cases w with
+    | nil =>
+        simp [lyndonFactors] at hw hx
+    | cons b w' =>
+        subst hw
+        let k := longestLyndonPrefixLen (b :: w')
+        by_cases hk : k = 0
+        · have hkpos : 0 < k := longestLyndonPrefixLen_pos (by simp)
+          exact (Nat.ne_of_gt hkpos hk).elim
+        · simp [lyndonFactors, k, hk] at hx ⊢
+          rcases hx with rfl | hx
+          · exact longestLyndonPrefix_isLyndon (w := b :: w') (Nat.pos_of_ne_zero hk)
+          · have hlt : ((b :: w').drop k).length < (b :: w').length := by
+              have hkle : k ≤ (b :: w').length := longestLyndonPrefixLen_le _
+              rw [List.length_drop]
+              omega
+            have hrec : ∀ y ∈ lyndonFactors ((b :: w').drop k), IsLyndon y :=
+              ih ((b :: w').drop k).length hlt ((b :: w').drop k) rfl
+            exact hrec x hx
   have hmain : P w.length := Nat.strong_induction_on w.length hP
   exact hmain w rfl
 
