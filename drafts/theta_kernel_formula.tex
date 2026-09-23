@@ -324,15 +324,62 @@ Expanding the two parity theta functions gives the corresponding Ramanujan form
 \end{aligned}}
 \end{equation}
 \section{A two-component parity-determinant reduction}
-Rewriting the parity-theta form of the kernel gives
+
+\begin{proposition}[Rank-two parity expansion]
+With the notation of Sections~3--5,
+\begin{equation}
+\boxed{
+\begin{aligned}
+\mathcal K(t,z;q_\ast)
+={}&A_{\rm S}^2C_\sigma^4e^{2az_0^2}
+\sum_{\varepsilon=0}^1\sum_{\ell,m\in\mathbb Z}
+ e^{2i\ell x_0}(a_\ell b_m-b_\ell a_m)\\
+&\qquad\qquad\times
+\Theta_\varepsilon\!\left(X_\ast e^{2i\ell\gamma};p^{1/2}\right)
+\Theta_\varepsilon\!\left(ze^{2im\gamma};p^{1/2}\right).
+\end{aligned}}
+\end{equation}
+\end{proposition}
+\begin{proof}
+Start from
+\begin{equation}
+\mathcal K(t,z;q_\ast)=\sum_{i,j\in\mathbb Z}W_iW_jt^{i+j}z^{i-j}
+\end{equation}
+and introduce
+\begin{equation}
+u=i+j,\qquad v=i-j,\qquad i=\frac{u+v}{2},\qquad j=\frac{u-v}{2}.
+\end{equation}
+Thus $u$ and $v$ have the same parity.  The $(u,v)$-lattice is therefore the
+disjoint union of $u\equiv v\equiv\varepsilon\pmod2$, with
+$\varepsilon\in\{0,1\}$.  Insert the aligned sigma representation for
+$W_i$ and $W_j$, apply the rank-two theta addition identity, and expand its
+two theta factors in the Fourier bases defining $a_\ell$ and $b_\ell$.
+The Fourier pair $(\ell,m)$ then carries the alternating coefficient
+\begin{equation}
+\det\!\begin{pmatrix}a_\ell&a_m\\ b_\ell&b_m\end{pmatrix}
+=a_\ell b_m-b_\ell a_m.
+\end{equation}
+For fixed $\varepsilon$, the sums over $u$ and $v$ are precisely the two
+parity theta functions displayed in the proposition.  The remaining phase is
+$e^{2i\ell x_0}$, and the sigma normalization supplies
+$A_{\rm S}^2C_\sigma^4e^{2az_0^2}$.
+
+This argument is coefficientwise: after the parity theta functions are
+expanded, the coefficient of $X_\ast^u z^v$ vanishes unless
+$u\equiv v\pmod2$.  In the surviving sector the inverse change of variables
+gives the unique integers $i=(u+v)/2$ and $j=(u-v)/2$, and the addition
+identity reconstructs $W_iW_j$.  This is also the finite-truncation check used
+in the companion computation.
+\end{proof}
+
+Substituting Proposition~5.1 gives
 \begin{equation}
 \boxed{
 \begin{aligned}
 \mathcal K(t,z;q_\ast)
 ={}&4\lambda^2\Delta(p)A_{\rm S}^2C_\sigma^4e^{2az_0^2}
 \sum_{\varepsilon=0}^1\sum_{\ell,m\in\mathbb Z}
-e^{2i\ell x_0}a_\ell a_m
-\bigl(\pi(\ell)-\pi(m)\bigr)\\
+ e^{2i\ell x_0}a_\ell a_m(\pi(\ell)-\pi(m))\\
 &\qquad\qquad\times
 \Theta_\varepsilon\!\left(X_\ast e^{2i\ell\gamma};p^{1/2}\right)
 \Theta_\varepsilon\!\left(ze^{2im\gamma};p^{1/2}\right).
@@ -374,13 +421,14 @@ With the preceding notation,
 Insert the explicit antisymmetric coefficient into the parity-theta double series above.  The factor $\pi(\ell)-\pi(m)$ vanishes unless $\ell$ and $m$ have opposite parity.  In the even--odd sector it contributes $-1$, and in the odd--even sector it contributes $+1$.  Grouping those two sectors yields the displayed determinant.
 \end{proof}
 
-The kernel coefficients still satisfy the Somos--4 relation. Put
+The kernel coefficients still satisfy the Somos--4 relation.  Extracting
+$z^k$ from $\sum_{i,j\in\mathbb Z}W_iW_jt^{i+j}z^{i-j}$ imposes
+$i-j=k$.  Writing $j=n$ and $i=n+k$ gives
 \begin{equation}
 \boxed{
 [z^k]\mathcal K(t,z;q_\ast)
 =\sum_{n\in\mathbb Z}W_{n+k}W_n t^{2n+k}.}
 \end{equation}
-
 \begin{corollary}[Coefficient recurrence]
 One has
 \begin{equation}
@@ -421,7 +469,7 @@ $\Delta(p)$ & derived lattice scalar & Logarithmic nome derivative of $\theta_2(
 The identities may be read coefficientwise in a formal setting. For an analytic interpretation, assume $|p|<1$ and restrict the remaining variables to a domain on which the bilateral theta sums and their differentiated series converge absolutely and locally uniformly. The operators $\Dp$, $\partial_x^2$, and $\partial_y^2$ may then be applied term by term.
 
 \section{Conclusion}
-The infinite theta expansion has a convolution-free coefficient structure. The sequence $b_\ell$ is generated from $a_\ell$ by a quadratic spectral operator and a nome derivative. Antisymmetrization removes the Gaussian constant and leaves the factor $m^2-\ell^2$ together with the single parity modulus $\Delta(p)$. After the rank-two normalization is included, the kernel is expressed both as an explicit double-theta series and as a wave-type bilinear expression with a two-component parity determinant. These forms provide direct starting points for modular identities and special-value reductions.  In particular, the multiplicative factor in the arguments of the generating series turns a Somos--4 Hankel orbit into a coefficient-selecting kernel, and nome alignment then converts that kernel into Jacobi and Ramanujan theta expansions.
+The infinite theta expansion has a convolution-free coefficient structure. The sequence $b_\ell$ is generated from $a_\ell$ by a quadratic spectral operator and a nome derivative. Antisymmetrization removes the Gaussian constant and leaves the single parity modulus $\Delta(p)$, with the two opposite-parity sectors coupled with opposite signs. After the rank-two normalization is included, the kernel is expressed both as an explicit double-theta series and as a wave-type bilinear expression with a two-component parity determinant. These forms provide direct starting points for modular identities and special-value reductions.  In particular, the multiplicative factor in the arguments of the generating series turns a Somos--4 Hankel orbit into a coefficient-selecting kernel, and nome alignment then converts that kernel into Jacobi and Ramanujan theta expansions.
 
 \section*{Disclosure on authoring and verification tools}
 The text of this manuscript was revised and partially rewritten with the
