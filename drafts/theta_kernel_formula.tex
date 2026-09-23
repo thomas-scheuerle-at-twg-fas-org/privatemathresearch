@@ -5,208 +5,272 @@
 \usepackage[hidelinks]{hyperref}
 \newtheorem{proposition}{Proposition}[section]
 \newtheorem{corollary}[proposition]{Corollary}
+\numberwithin{equation}{section}
 \newcommand{\CT}{\operatorname{CT}}
 \newcommand{\Dp}{D_p}
-\title{Explicit Infinite Theta Expansion of the Somos--4 Kernel\\\large Nome-aligned formula with convolution-free and operator reductions}
+\title{A Generating-Function Bridge from Somos--4 Sequences to Ramanujan Theta Functions\\\large An explicit convolution-free theta expansion}
 \author{Thomas Scheuerle}
 \date{23 September 2026}
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Starting from the nome-aligned infinite theta expansion of the Somos--4 kernel, this revision removes the remaining convolution in the Fourier coefficients attached to $\sigma^2\wp$.  The antisymmetric coefficient of the kernel becomes an explicit product of the coefficients of $\theta_1^2$, a quadratic spectral factor, and one parity-dependent logarithmic derivative of theta constants.  Splitting the Fourier indices by parity then yields a compact differential-operator representation: the kernel is the sum of a wave-type Wronskian term and one two-component parity determinant.  In particular, the Gaussian constant in the sigma/theta normalization cancels from the antisymmetric coefficient, and the same-parity sectors vanish on both $m=\ell$ and $m=-\ell$.
+We derive a generating-function formulation for Somos--4 sequences.  Starting from a generating function whose Hankel determinants satisfy a Somos--4 recurrence, we introduce a multiplicative factor in the argument of a bilateral generating series.  This produces a two-variable kernel that admits expansions in Jacobi theta functions and, equivalently, in Ramanujan's two-variable theta function.  The main calculation removes a convolution from the Fourier coefficients and replaces it by an explicit quadratic factor together with a logarithmic derivative of theta constants.  The resulting formula gives a direct and computationally usable link among Somos--4 recurrences, generating functions, Hankel determinants, elliptic sigma functions, and Ramanujan theta functions.
 \end{abstract}
+
+\section{Introduction and motivation}
+A Somos--4 sequence is a sequence $(H_n)$ satisfying a fourth-order bilinear recurrence
+\begin{equation}
+H_{n+4}H_n=\alpha H_{n+3}H_{n+1}+\beta H_{n+2}^2.
+\end{equation}
+Despite its elementary appearance, this recurrence is closely connected with elliptic curves and elliptic functions.  A second line of research begins with an ordinary generating function $G(x)=\sum_{k\ge0}g_kx^k$ and asks when its Hankel determinants form a Somos--4 sequence.  Continued fractions, moment sequences, orthogonal polynomials, and Riordan arrays provide several approaches to that question; see, for example, \cite{Barry2018,Barry2019,LiuWangZhang2026,Scheuerle2026}.
+
+This paper develops a complementary generating-function viewpoint.  Rather than stopping at the Hankel transform of $G$, we place the Somos--4 orbit in a bilateral generating series $S(t,q)$ and compare the two arguments $tz$ and $t/z$.  The auxiliary factor $z$ records the difference of two indices: in the product
+\begin{equation}
+S(tz,q)S(t/z,q),
+\end{equation}
+the exponent of $t$ records their sum, while the exponent of $z$ records their difference.  This simple multiplicative change of argument is the bridge used throughout the paper.  After the elliptic sigma representation is converted to theta notation and the nome is aligned, the bridge leads to parity-restricted theta series and then to Ramanujan's two-variable theta function.
+
+The main result is an explicit expansion whose coefficients contain no unevaluated convolution.  It shows how the Somos--4 recurrence is encoded by selected coefficients of a single kernel, and it separates the double series into elementary Fourier coefficients, a quadratic factor, and one parity-dependent scalar.
+
+\subsection*{Terminology and reading guide}
+We use a few standard terms that may be unfamiliar outside the subject.
+\begin{itemize}
+\item An \emph{ordinary generating function} packages a sequence $(g_k)_{k\ge0}$ as the formal power series $G(x)=\sum_{k\ge0}g_kx^k$.  Algebraic operations on $G$ can therefore encode identities for its coefficients.
+\item The \emph{Hankel determinant} $H_n[G]$ is the determinant of the $n\times n$ matrix whose $(i,j)$ entry is $g_{i+j}$.  The sequence $(H_n[G])$ is called the Hankel transform of $(g_k)$.
+\item A \emph{kernel} here is simply the two-variable product $\mathcal K(t,z;q)=S(tz,q)S(t/z,q)$.  The word does not introduce an integral operator; it names the central generating expression from which the Somos--4 relation is extracted.
+\item A \emph{nome} is the parameter $p=e^{\pi i\tau}$ used in Fourier series for theta functions.  ``Nome alignment'' means choosing the scaling parameter so that the Gaussian factor from the sigma function matches this theta nome.
+\item A \emph{bilateral series} is summed over all integers rather than only nonnegative integers.  A \emph{parity sector} restricts its index to even or odd integers.
+\item ``Convolution-free'' means that a coefficient originally written as a sum over products of Fourier coefficients is replaced by a direct formula involving one coefficient and its nome derivative.
+\end{itemize}
+Section~1 introduces the generating-function bridge.  Sections~2--5 supply the elliptic and Fourier data and derive the explicit coefficient.  Sections~6--7 give the double-theta and differential-operator forms.  The final sections collect the parameters and state the analytic assumptions.
+
+\subsection*{Generating functions and the surrounding literature}
+For this paper, generating functions are used formally: $[x^k]G(x)=g_k$ denotes coefficient extraction, and identities are valid coefficient by coefficient whenever the displayed algebraic operations are defined.  When numerical or analytic evaluation is intended, convergence assumptions are added explicitly.  Useful general introductions are Wilf \cite{Wilf2006} and Stanley \cite{Stanley2012}; continued-fraction and Hankel methods are treated by Wall \cite{Wall1948}, Flajolet \cite{Flajolet1980}, and Krattenthaler \cite{Krattenthaler1999}.
+
+In the Somos--4 setting, Barry connected generating functions, continued fractions, Riordan arrays, Hankel transforms, and elliptic curves \cite{Barry2018,Barry2019}.  Recent work gives sufficient conditions and proofs for broad families of Somos--4 Hankel transforms \cite{LiuWangZhang2026}, while \cite{Scheuerle2026} addresses the inverse problem of constructing an algebraic generating function from prescribed Somos--4 data.  The elliptic sigma-function description of Somos--4 sequences is developed in the work of Hone \cite{Hone2005}.  For theta functions we use standard Jacobi notation, while Ramanujan's symmetric function
+\begin{equation}
+f(a,b)=\sum_{n\in\mathbb Z}a^{n(n+1)/2}b^{n(n-1)/2},\qquad |ab|<1,
+\end{equation}
+provides the final form of the expansion; classical background is available in Berndt \cite{Berndt1991} and a concise introduction in Somos \cite{Somos2017}.  We do not assume a previously established direct Somos--4--Ramanujan identity: the connection claimed here is the explicit bridge derived below through the scaled arguments of the generating series.
+
 
 \section{From the scaled generating function to the kernel}
 Let
-\[
-G(x)=\sum_{k\ge0}g_kx^k,
-\]
-and let $H_n=H_n[G]$ denote the associated Hankel determinants. Under $G(x)\mapsto G(qx)$,
-\[
+\begin{equation}
+G(x)=\sum_{k\ge0}g_kx^k.
+\end{equation}
+Its $n$th Hankel determinant is
+\begin{equation}
+H_n=H_n[G]:=\det(g_{i+j})_{0\le i,j\le n-1},\qquad H_0:=1.
+\end{equation}
+Thus the first values are $H_1=g_0$ and $H_2=g_0g_2-g_1^2$.  This example shows that a Hankel determinant combines several coefficients of $G$ into one nonlinear invariant. Under $G(x)\mapsto G(qx)$,
+\begin{equation}
 H_n[G(qx)]=q^{n(n-1)}H_n[G].
-\]
-Define
-\[
+\end{equation}
+Define the scaled orbit and its bilateral generating series by
+\begin{equation}
+\begin{aligned}
 W_n:=H_nq^{n(n-1)},\qquad
-S(t,q):=\sum_{n\in\mathbb Z}W_nt^n,
-\]
-and
-\[
+S(t,q):=\sum_{n\in\mathbb Z}W_nt^n.
+\end{aligned}
+\end{equation}
+The word ``orbit'' refers to the sequence of values produced by iterating the Somos--4 recurrence.  Negative indices are included whenever the nondegenerate recurrence determines them.  Now set
+\begin{equation}
 \boxed{\mathcal K(t,z;q_\ast):=S(tz,q_\ast)S(t/z,q_\ast).}
-\]
+\end{equation}
 Equivalently,
-\[
+\begin{equation}
 \mathcal K(t,z;q_\ast)=\sum_{i,j\in\mathbb Z}W_iW_jt^{i+j}z^{i-j}.
-\]
+\end{equation}
 If
-\[
+\begin{equation}
 H_{n+4}H_n=\alpha H_{n+3}H_{n+1}+\beta H_{n+2}^2,
-\]
+\end{equation}
 then
-\[
+\begin{equation}
 [z^4]\mathcal K=\alpha q_\ast^6[z^2]\mathcal K+\beta q_\ast^8[z^0]\mathcal K.
-\]
+\end{equation}
 
 \section{Elliptic data and Fourier nome alignment}
-Assume the standard nondegenerate sigma representation
-\[
+The Weierstrass sigma function is an entire function associated with an elliptic lattice; it provides a convenient closed form for generic Somos--4 orbits.  We assume the standard nondegenerate sigma representation
+\begin{equation}
 \boxed{H_n=A_{\rm S}B_{\rm S}^{\,n}
 \frac{\sigma(z_0+n\kappa)}{\sigma(\kappa)^{n^2}}.}
-\]
+\end{equation}
+Here $A_{\rm S}$ and $B_{\rm S}$ are nonzero gauge factors, $z_0$ is the initial elliptic phase, and $\kappa$ is the fixed translation step.  ``Nondegenerate'' means that the denominators displayed below do not vanish.
+
 Choose fundamental half-periods $\omega_1,\omega_3$ and put
-\[
+\begin{equation}
+\begin{aligned}
 \tau=\frac{\omega_3}{\omega_1},\qquad
 p=e^{\pi i\tau},\qquad
 \lambda=\frac{\pi}{2\omega_1},\qquad
 a=\frac{\eta_1}{2\omega_1},
-\]
+\end{aligned}
+\end{equation}
 where $\eta_1=\zeta(\omega_1)$. We use
-\[
+\begin{equation}
+\begin{aligned}
 \boxed{\sigma(u)=C_\sigma e^{au^2}\theta_1(\lambda u,p)},
 \qquad
 \boxed{C_\sigma=\frac{2\omega_1}{\pi\theta_1'(0,p)}}.
-\]
+\end{aligned}
+\end{equation}
 Define
-\[
+\begin{equation}
+\begin{aligned}
 Q:=\frac{q}{\sigma(\kappa)},\qquad
 \gamma:=\frac{\lambda\kappa}{2},\qquad
 x_0:=\lambda z_0,
-\]
+\end{aligned}
+\end{equation}
 and
-\[
+\begin{equation}
 P:=Qe^{a\kappa^2}.
-\]
+\end{equation}
 For the infinite Fourier expansion we impose the alignment
-\[
+\begin{equation}
 \boxed{P^2=p.}
-\]
+\end{equation}
 After choosing a branch of $p^{1/2}$, set
-\[
+\begin{equation}
+\begin{aligned}
 \boxed{q_\ast:=\sigma(\kappa)p^{1/2}e^{-a\kappa^2}},
 \qquad
 \boxed{Q_\ast=p^{1/2}e^{-a\kappa^2},\quad P=p^{1/2}}.
-\]
+\end{aligned}
+\end{equation}
 Finally put
-\[
+\begin{equation}
 \boxed{X_\ast:=\frac{B_{\rm S}t}{q_\ast}e^{2az_0\kappa}.}
-\]
-This is specifically the Fourier alignment used below.  It is distinct, in general, from an alignment imposed after a finite torsion dissection.
+\end{equation}
+This is the Fourier alignment used below; in general it differs from alignments imposed after a finite torsion dissection.
 
 \section{Parity theta functions}
+A theta function is a rapidly convergent bilateral series with a quadratic exponent.  We separate such a series into its even and odd index parts because the Fourier coefficients below have different closed forms in the two parities.
+
 For $\varepsilon\in\{0,1\}$ define
-\[
+\begin{equation}
 \boxed{\Theta_\varepsilon(Y;p^{1/2})
 :=\sum_{\substack{n\in\mathbb Z\\n\equiv\varepsilon\ ({\rm mod}\ 2)}}
 p^{n^2/4}Y^n.}
-\]
+\end{equation}
 With
-\[
+\begin{equation}
 \Phi_\rho(\xi):=\sum_{k\in\mathbb Z}\rho^{k^2}\xi^k
 =f(\rho\xi,\rho/\xi),
-\]
+\end{equation}
 one has
-\[
+\begin{equation}
 \boxed{\Theta_\varepsilon(Y;p^{1/2})=
 p^{\varepsilon^2/4}Y^\varepsilon
 \Phi_p(p^\varepsilon Y^2).}
-\]
+\end{equation}
 
 \section{Fourier coefficients and elimination of the convolution}
+A Fourier coefficient is the multiplier of one exponential mode $e^{2i\ell x}$.  Multiplying two Fourier series normally produces a convolution, namely a sum over all pairs of indices with a fixed total.  The point of this section is to replace that sum by a direct differential formula.
+
 Define $a_\ell$ and $b_\ell$ by
-\[
+\begin{equation}
 \theta_1(x,p)^2=\sum_{\ell\in\mathbb Z}a_\ell(p)e^{2i\ell x},
-\]
-\[
+\end{equation}
+\begin{equation}
 \lambda^2\bigl(\theta_1'(x,p)^2-\theta_1(x,p)\theta_1''(x,p)\bigr)
 -2a\theta_1(x,p)^2
 =\sum_{\ell\in\mathbb Z}b_\ell(p)e^{2i\ell x}.
-\]
+\end{equation}
 The first sequence has the parity formulas
-\[
+\begin{equation}
+\begin{aligned}
 \boxed{a_{2j}=p^{2j^2}\theta_2(0,p^2)},
 \qquad
 \boxed{a_{2j+1}=-p^{(2j+1)^2/2}\theta_3(0,p^2).}
-\]
+\end{aligned}
+\end{equation}
 Equivalently,
-\[
+\begin{equation}
 a_\ell=(-1)^\ell\sum_{n\in\mathbb Z}
 p^{(n+1/2)^2+(\ell-n-1/2)^2}.
-\]
+\end{equation}
 Let
-\[
+\begin{equation}
 \boxed{\Dp:=p\frac{d}{dp}}.
-\]
+\end{equation}
 
 \begin{proposition}[Convolution-free formula for $b_\ell$]
 For every $\ell\in\mathbb Z$,
-\[
+\begin{equation}
 \boxed{b_\ell=4\lambda^2(\ell^2-\Dp)a_\ell-2a\,a_\ell.}
-\]
+\end{equation}
 \end{proposition}
 
 \begin{proof}
 The direct convolution is
-\[
+\begin{equation}
 b_\ell=2\lambda^2(-1)^\ell\sum_{n\in\mathbb Z}
 (2n+1)(2\ell-2n-1)
 p^{(n+1/2)^2+(\ell-n-1/2)^2}-2a\,a_\ell.
-\]
+\end{equation}
 Set $r=2n+1-\ell$. Then
-\[
+\begin{equation}
 (2n+1)(2\ell-2n-1)=\ell^2-r^2,
-\]
-\[
+\end{equation}
+\begin{equation}
 (n+\tfrac12)^2+(\ell-n-\tfrac12)^2=\frac{\ell^2+r^2}{2},
-\]
+\end{equation}
 and $r\equiv1-\ell\pmod2$. Hence
-\[
+\begin{equation}
 a_\ell=(-1)^\ell
 \sum_{\substack{r\in\mathbb Z\\r\equiv1-\ell\ ({\rm mod}\ 2)}}
 p^{(\ell^2+r^2)/2}.
-\]
+\end{equation}
 Applying $\Dp$ and eliminating the $r^2$-weighted sum gives
-\[
+\begin{equation}
 (-1)^\ell\sum_r(\ell^2-r^2)p^{(\ell^2+r^2)/2}
 =2(\ell^2-\Dp)a_\ell,
-\]
+\end{equation}
 which proves the claim.
 \end{proof}
 
-Let $\pi(\ell)\in\{0,1\}$ denote the numerical parity of $\ell$, and put
-\[
+Let $\pi(\ell)\in\{0,1\}$ denote the numerical parity of $\ell$, so that $\pi(\ell)=0$ for even $\ell$ and $\pi(\ell)=1$ for odd $\ell$, and put
+\begin{equation}
 T_0(p):=\theta_2(0,p^2),\qquad T_1(p):=\theta_3(0,p^2).
-\]
+\end{equation}
 Then
-\[
+\begin{equation}
 \boxed{b_\ell=a_\ell\left[
 2\lambda^2\ell^2-4\lambda^2\Dp\log T_{\pi(\ell)}(p)-2a
 \right].}
-\]
+\end{equation}
 Thus $b_\ell$ contains no convolution and no data beyond the elliptic lattice.
 
 \section{Antisymmetric coefficient and its cancellations}
+Antisymmetrization means replacing a two-index expression $c_{\ell,m}$ by $c_{\ell,m}-c_{m,\ell}$.  This forces vanishing on the diagonal $m=\ell$ and, in the present calculation, also removes the Gaussian lattice constant.
+
 Define the single parity modulus
-\[
+\begin{equation}
 \boxed{\Delta(p):=\Dp\log\frac{\theta_2(0,p^2)}{\theta_3(0,p^2)}.}
-\]
+\end{equation}
 
 \begin{proposition}[Explicit antisymmetric coefficient]
 For all $\ell,m\in\mathbb Z$,
-\[
+\begin{equation}
 \boxed{
 a_\ell b_m-b_\ell a_m
 =2\lambda^2a_\ell a_m
 \left[m^2-\ell^2+2\Delta(p)\bigl(\pi(m)-\pi(\ell)\bigr)\right].}
-\]
+\end{equation}
 \end{proposition}
 
 \begin{proof}
 Insert the preceding formula for $b_k$. The terms $-2a\,a_k$ cancel identically. The difference of the two parity logarithmic derivatives is $-\Delta$, $0$, or $\Delta$ according to the parities of $(\ell,m)$, which gives the displayed formula.
 \end{proof}
 
+
+
 The four parity sectors are therefore
-\[
+\begin{equation}
 \begin{array}{c|c}
 (\pi(\ell),\pi(m))&
 (a_\ell b_m-b_\ell a_m)/(2\lambda^2a_\ell a_m)\\ \hline
@@ -215,26 +279,36 @@ The four parity sectors are therefore
 (0,1)&m^2-\ell^2+2\Delta(p)\\
 (1,0)&m^2-\ell^2-2\Delta(p)
 \end{array}
-\]
+\end{equation}
 In particular, every same-parity term contains
-\[
+\begin{equation}
 m^2-\ell^2=(m-\ell)(m+\ell),
-\]
+\end{equation}
 so the same-parity contribution vanishes on both the diagonal $m=\ell$ and the anti-diagonal $m=-\ell$. The full coefficient always vanishes on $m=\ell$ by antisymmetry.
 
 \section{Convolution-free infinite-theta kernel}
-The rank-two identity is
-\[
-\mathcal K(t,z;q_\ast)=A_{\rm S}^2\sum_{\varepsilon=0}^1
-\left(\mathcal R_\varepsilon\widehat{\mathcal D}_\varepsilon
--\widehat{\mathcal R}_\varepsilon\mathcal D_\varepsilon\right).
-\]
-Substitution of the explicit antisymmetric coefficient gives
-\[
+A rank-two combination here means a difference of two separable products, one depending on $\ell$ and the other on $m$.  The kernel is obtained from this antisymmetric combination by the normalization
+\begin{equation}
 \boxed{
 \begin{aligned}
 \mathcal K(t,z;q_\ast)
-={}&2\lambda^2A_{\rm S}^2C_\sigma^4e^{2az_0^2}
+=-\frac12 A_{\rm S}^2 C_\sigma^4 e^{2az_0^2}
+\sum_{\varepsilon=0}^1
+\sum_{\ell,m\in\mathbb Z} e^{2i\ell x_0}
+(a_\ell b_m-b_\ell a_m)
+\Theta_\varepsilon(X_\ast e^{2i\ell\gamma};p^{1/2})
+\Theta_\varepsilon(ze^{2im\gamma};p^{1/2}).
+\end{aligned}
+}
+\end{equation}
+The factor $-1/2$ follows from the antisymmetrization convention: the ordered rank-two difference counts the two exchanged terms separately, while their order is opposite to the orientation in the product $S(tz,q_\ast)S(t/z,q_\ast)$.
+
+Substitution of the explicit antisymmetric coefficient gives
+\begin{equation}
+\boxed{
+\begin{aligned}
+\mathcal K(t,z;q_\ast)
+={}&-\lambda^2A_{\rm S}^2C_\sigma^4e^{2az_0^2}
 \sum_{\varepsilon=0}^1\sum_{\ell,m\in\mathbb Z}
 e^{2i\ell x_0}a_\ell a_m\\
 &\times\left[m^2-\ell^2
@@ -242,13 +316,13 @@ e^{2i\ell x_0}a_\ell a_m\\
 &\times\Theta_\varepsilon(X_\ast e^{2i\ell\gamma};p^{1/2})
 \Theta_\varepsilon(ze^{2im\gamma};p^{1/2}).
 \end{aligned}}
-\]
-Expanding the two parity theta functions gives the entirely Ramanujan form
-\[
+\end{equation}
+Expanding the two parity theta functions gives the corresponding Ramanujan form
+\begin{equation}
 \boxed{
 \begin{aligned}
 \mathcal K(t,z;q_\ast)
-={}&2\lambda^2A_{\rm S}^2C_\sigma^4e^{2az_0^2}
+={}&-\lambda^2A_{\rm S}^2C_\sigma^4e^{2az_0^2}
 \sum_{\varepsilon=0}^1\sum_{\ell,m\in\mathbb Z}
 e^{2i\ell x_0}a_\ell a_m\\
 &\times\left[m^2-\ell^2
@@ -259,40 +333,42 @@ e^{2i\ell x_0}a_\ell a_m\\
 &\times\Phi_p\!\left(p^\varepsilon X_\ast^2e^{4i\ell\gamma}\right)
 \Phi_p\!\left(p^\varepsilon z^2e^{4im\gamma}\right).
 \end{aligned}}
-\]
+\end{equation}
 
 \section{A two-component differential-operator reduction}
-The parity split can be reorganized further. For $r,s\in\{0,1\}$ define the theta lifts
-\[
+A differential-operator representation rewrites the factors $\ell^2$ and $m^2$ as second derivatives of Fourier exponentials.  This shortens the double sum and reveals its separable structure.  The parity split can be reorganized further. For $r,s\in\{0,1\}$ define the theta lifts
+\begin{equation}
 \mathcal R_{\varepsilon,r}(x;t):=
 \sum_{\substack{\ell\in\mathbb Z\\\ell\equiv r\ ({\rm mod}\ 2)}}
 a_\ell e^{2i\ell x}
 \Theta_\varepsilon(X_\ast e^{2i\ell\gamma};p^{1/2}),
-\]
-\[
+\end{equation}
+\begin{equation}
 \mathcal D_{\varepsilon,s}(y;z):=
 \sum_{\substack{m\in\mathbb Z\\m\equiv s\ ({\rm mod}\ 2)}}
 a_m e^{2imy}
 \Theta_\varepsilon(ze^{2im\gamma};p^{1/2}).
-\]
+\end{equation}
 For functions of $x$ and $y$, set
-\[
+\begin{equation}
 \boxed{\mathcal W(F,G):=\frac14\left((\partial_x^2F)G-F(\partial_y^2G)\right).}
-\]
+\end{equation}
 On a Fourier monomial this operator has symbol $m^2-\ell^2$. Put
-\[
+\begin{equation}
+\begin{aligned}
 \mathcal R_{\varepsilon,+}:=\mathcal R_{\varepsilon,0}+\mathcal R_{\varepsilon,1},
 \qquad
 \mathcal D_{\varepsilon,+}:=\mathcal D_{\varepsilon,0}+\mathcal D_{\varepsilon,1}.
-\]
+\end{aligned}
+\end{equation}
 
 \begin{proposition}[Wave term plus parity determinant]
-The full kernel is
-\[
+The double series is equivalently represented by
+\begin{equation}
 \boxed{
 \begin{aligned}
 \mathcal K(t,z;q_\ast)
-={}&2\lambda^2A_{\rm S}^2C_\sigma^4e^{2az_0^2}
+={}&-\lambda^2A_{\rm S}^2C_\sigma^4e^{2az_0^2}
 \sum_{\varepsilon=0}^1
 \Bigl\{
 \mathcal W(\mathcal R_{\varepsilon,+},\mathcal D_{\varepsilon,+})\\
@@ -304,12 +380,12 @@ The full kernel is
 \bigr)
 \Bigr\}_{x=x_0,\,y=0}.
 \end{aligned}}
-\]
+\end{equation}
 \end{proposition}
 
 \begin{proof}
 The operator $\mathcal W$ supplies $m^2-\ell^2$ in all four parity sectors. The determinant
-\[
+\begin{equation}
 \det\begin{pmatrix}
 \mathcal R_{\varepsilon,0}&\mathcal R_{\varepsilon,1}\\
 \mathcal D_{\varepsilon,0}&\mathcal D_{\varepsilon,1}
@@ -317,11 +393,11 @@ The operator $\mathcal W$ supplies $m^2-\ell^2$ in all four parity sectors. The 
 =
 \mathcal R_{\varepsilon,0}\mathcal D_{\varepsilon,1}
 -\mathcal R_{\varepsilon,1}\mathcal D_{\varepsilon,0}
-\]
+\end{equation}
 adds $+2\Delta$ in the even--odd sector, $-2\Delta$ in the odd--even sector, and zero in the same-parity sectors.
 \end{proof}
 
-This representation gives a structural interpretation of the double series. Its main part is a wave-type differential image of two separable theta lifts. All residual coupling between the Fourier parities is carried by one $2\times2$ determinant and the single lattice scalar $\Delta(p)$.
+This representation gives a structural interpretation of the double series. Its main part is a wave-type differential image of two separable theta lifts. The remaining parity coupling is carried by one $2\times2$ determinant and the single lattice scalar $\Delta(p)$.
 
 \section{Free and derived quantities}
 \renewcommand{\arraystretch}{1.2}
@@ -342,17 +418,37 @@ $\Delta(p)$ & derived lattice scalar & Logarithmic nome derivative of $\theta_2(
 \bottomrule
 \end{longtable}
 
-\section{Analytic qualification and verification status}
-The rearrangements may be interpreted formally whenever all sums are handled coefficientwise in a valid formal setting. For an analytic interpretation, assume $|p|<1$ and impose a domain in the variables for which the bilateral sums and all differentiated sums converge absolutely and locally uniformly. Under such hypotheses, application of $\Dp$, $\partial_x^2$, and $\partial_y^2$ term by term is justified.
-
-The convolution elimination and the operator formula are algebraic consequences of the displayed Fourier series. They can be checked coefficientwise by truncating the theta series and comparing:
-\begin{enumerate}
-\item the original convolution for $b_\ell$ with $4\lambda^2(\ell^2-\Dp)a_\ell-2aa_\ell$;
-\item the original determinant $a_\ell b_m-b_\ell a_m$ with the parity formula;
-\item each of the four parity sectors with the wave-plus-determinant operator.
-\end{enumerate}
+\section{Analytic interpretation}
+The identities may be read coefficientwise in a formal setting. For an analytic interpretation, assume $|p|<1$ and restrict the remaining variables to a domain on which the bilateral theta sums and their differentiated series converge absolutely and locally uniformly. The operators $\Dp$, $\partial_x^2$, and $\partial_y^2$ may then be applied term by term.
 
 \section{Conclusion}
-The infinite theta expansion now has a convolution-free coefficient structure. The sequence $b_\ell$ is generated from $a_\ell$ by a second-order spectral operator and a nome derivative. Antisymmetrization removes the Gaussian constant and leaves only the quadratic factor $m^2-\ell^2$ together with one parity modulus $\Delta(p)$. Finally, the complete double series is a wave-type bilinear operator plus a two-component parity determinant. This is a substantive simplification of the kernel and provides a more promising starting point for modular identities, special-value reductions, and numerical verification.
+The infinite theta expansion has a convolution-free coefficient structure. The sequence $b_\ell$ is generated from $a_\ell$ by a quadratic spectral operator and a nome derivative. Antisymmetrization removes the Gaussian constant and leaves the factor $m^2-\ell^2$ together with the single parity modulus $\Delta(p)$. After the rank-two normalization is included, the kernel is expressed both as an explicit double-theta series and as a wave-type bilinear expression with a two-component parity determinant. These forms provide direct starting points for modular identities and special-value reductions.  In particular, the multiplicative factor in the arguments of the generating series turns a Somos--4 Hankel orbit into a coefficient-selecting kernel, and nome alignment then converts that kernel into Jacobi and Ramanujan theta expansions.
 
+\section*{Disclosure on authoring and verification tools}
+The text of this manuscript was revised and partially rewritten with the
+assistance of AI-based language tools.  The purpose was to improve clarity and
+place the mathematical material into proper \LaTeX{} while preserving the
+technical content and the mathematical claims.  The author remains responsible
+for the final text, all statements, and the correctness of the formulas.
+
+AI-assisted workflows were also used to draft and test PARI/GP scripts for
+verifying the identities and formulas appearing in this paper.  PARI/GP
+merits explicit recognition as a powerful and highly effective tool for exact
+symbolic and arithmetic verification, and it played a useful role in checking
+the computations underlying the present work.
+
+\begin{thebibliography}{99}
+\bibitem{Barry2018} P. Barry, \emph{Riordan pseudo-involutions, continued fractions and Somos--4 sequences}, arXiv:1807.05794, 2018.
+\bibitem{Barry2019} P. Barry, \emph{Riordan arrays, the $A$-matrix, and Somos--4 sequences}, arXiv:1912.01126, 2019.
+\bibitem{Berndt1991} B. C. Berndt, \emph{Ramanujan's Notebooks, Part III}, Springer, 1991.
+\bibitem{Flajolet1980} P. Flajolet, \emph{Combinatorial aspects of continued fractions}, Discrete Mathematics 32 (1980), 125--161.
+\bibitem{Hone2005} A. N. W. Hone, \emph{Elliptic curves and quadratic recurrence sequences}, Bulletin of the London Mathematical Society 37 (2005), 161--171.
+\bibitem{Krattenthaler1999} C. Krattenthaler, \emph{Advanced determinant calculus}, S\'eminaire Lotharingien de Combinatoire 42 (1999), Article B42q.
+\bibitem{LiuWangZhang2026} F. Liu, Y. Wang, and Z. Zhang, \emph{Hankel transform and $(\alpha,\beta)$ Somos--4 sequences}, arXiv:2608.08703, 2026.
+\bibitem{Scheuerle2026} T. Scheuerle, \emph{Direct generation of a Somos--4 sequence from an algebraic generating function}, arXiv:2609.15754v1, 2026.
+\bibitem{Somos2017} M. Somos, \emph{A multisection of $q$-series}, 2017, available from the author's web page.
+\bibitem{Stanley2012} R. P. Stanley, \emph{Enumerative Combinatorics, Volume 1}, second edition, Cambridge University Press, 2012.
+\bibitem{Wall1948} H. S. Wall, \emph{Analytic Theory of Continued Fractions}, Van Nostrand, 1948.
+\bibitem{Wilf2006} H. S. Wilf, \emph{generatingfunctionology}, third edition, A K Peters, 2006.
+\end{thebibliography}
 \end{document}

@@ -457,6 +457,31 @@ somos4_theta_Delta(p, nmax) =
   D0/T0 - D1/T1;
 };
 
+somos4_theta_aell_direct(sigpar, ell, nmax) =
+{
+  my(L = sigpar[2], omega1 = L[1]/2, omega3 = -L[2]/2);
+  my(tau_mod = omega3/omega1, p = exp(Pi*I*tau_mod));
+  my(s = 0);
+  for (n = -nmax, nmax,
+    s += (-1)^ell * p^((n + 1/2)^2 + (ell - n - 1/2)^2);
+  );
+  s;
+};
+
+somos4_theta_bell_convolution(sigpar, ell, nmax) =
+{
+  my(L = sigpar[2], omega1 = L[1]/2, omega3 = -L[2]/2);
+  my(tau_mod = omega3/omega1, p = exp(Pi*I*tau_mod));
+  my(lambda = Pi/(2*omega1));
+  my(eta1 = ellzeta(L, omega1));
+  my(a = eta1/(2*omega1));
+  my(s = 0);
+  for (n = -nmax, nmax,
+    s += (2*n + 1)*(2*ell - 2*n - 1) * p^((n + 1/2)^2 + (ell - n - 1/2)^2);
+  );
+  2 * lambda^2 * (-1)^ell * s - 2 * a * somos4_theta_aell_direct(sigpar, ell, nmax);
+};
+
 somos4_theta_parity_sum(eps, Y, p, nmax) =
 {
   my(s = 0);
@@ -509,6 +534,90 @@ somos4_kernel_theta_series(sigpar, qstar, t, z, lmmax, nmax) =
     );
   );
   2 * lambda^2 * A^2 * Csigma^4 * exp(2*a*z0^2) * total;
+};
+
+somos4_kernel_direct_coeff(sigpar, qstar, t, k, nmax) =
+{
+  my(s = 0);
+  for (n = -nmax, nmax,
+    my(Wn = somos4_sigma_value(sigpar, n) * qstar^(n*(n-1)));
+    my(Wnk = somos4_sigma_value(sigpar, n + k) * qstar^((n + k)*(n + k - 1)));
+    s += Wnk * Wn * t^(2*n + k);
+  );
+  s;
+};
+
+somos4_kernel_preconvolution_coeff(sigpar, qstar, t, k, lmmax, nmax) =
+{
+  my(L = sigpar[2], z0 = sigpar[3], kappa = sigpar[4]);
+  my(A = sigpar[5], B = sigpar[6]);
+  my(omega1 = L[1]/2, omega3 = -L[2]/2);
+  my(tau_mod = omega3/omega1, p = exp(Pi*I*tau_mod));
+  my(eta1 = ellzeta(L, omega1));
+  my(a = eta1/(2*omega1));
+  my(Csigma = 2*omega1/(Pi*somos4_theta1prime0(p, nmax)));
+  my(lambda = Pi/(2*omega1));
+  my(gamma = lambda*kappa/2, x0 = lambda*z0);
+  my(Xstar = B*t/qstar * exp(2*a*z0*kappa));
+  my(eps = (k % 2 + 2) % 2, total = 0);
+  for (ell = -lmmax, lmmax,
+    my(aell = somos4_theta_aell_direct(sigpar, ell, nmax));
+    my(bell = somos4_theta_bell_convolution(sigpar, ell, nmax));
+    my(Th1 = somos4_theta_parity_sum(eps, Xstar * exp(2*I*ell*gamma), p, nmax));
+    for (m = -lmmax, lmmax,
+      my(am = somos4_theta_aell_direct(sigpar, m, nmax));
+      my(bm = somos4_theta_bell_convolution(sigpar, m, nmax));
+      total += exp(2*I*ell*x0) * (aell*bm - bell*am)
+        * Th1 * p^(k^2/4) * exp(2*I*m*gamma*k);
+    );
+  );
+  A^2 * Csigma^4 * exp(2*a*z0^2) * total;
+};
+
+somos4_kernel_theta_coeff(sigpar, qstar, t, k, lmmax, nmax) =
+{
+  my(L = sigpar[2], z0 = sigpar[3], kappa = sigpar[4]);
+  my(A = sigpar[5], B = sigpar[6]);
+  my(omega1 = L[1]/2, omega3 = -L[2]/2);
+  my(tau_mod = omega3/omega1, p = exp(Pi*I*tau_mod));
+  my(lambda = Pi/(2*omega1));
+  my(eta1 = ellzeta(L, omega1));
+  my(a = eta1/(2*omega1));
+  my(Csigma = 2*omega1/(Pi*somos4_theta1prime0(p, nmax)));
+  my(gamma = lambda*kappa/2, x0 = lambda*z0);
+  my(Xstar = B*t/qstar * exp(2*a*z0*kappa));
+  my(T0 = somos4_theta2_const(p, nmax), T1 = somos4_theta3_const(p, nmax));
+  my(Delta = somos4_theta_Delta(p, nmax));
+  my(eps = (k % 2 + 2) % 2, total = 0);
+  for (ell = -lmmax, lmmax,
+    my(aell = somos4_theta_aell(ell, p, T0, T1));
+    my(Th1 = somos4_theta_parity_sum(eps, Xstar * exp(2*I*ell*gamma), p, nmax));
+    for (m = -lmmax, lmmax,
+      my(am = somos4_theta_aell(m, p, T0, T1));
+      total += exp(2*I*ell*x0) * aell * am
+        * (m^2 - ell^2 + 2*Delta*(((m % 2 + 2) % 2) - ((ell % 2 + 2) % 2)))
+        * Th1 * p^(k^2/4) * exp(2*I*m*gamma*k);
+    );
+  );
+  2 * lambda^2 * A^2 * Csigma^4 * exp(2*a*z0^2) * total;
+};
+
+somos4_probe_theta_coefficients(sigpar, qstar, t, max_k, lmmax, nmax) =
+{
+  vector(max_k + 1, k,
+    my(cd = somos4_kernel_direct_coeff(sigpar, qstar, t, k - 1, nmax));
+    my(ct = somos4_kernel_theta_coeff(sigpar, qstar, t, k - 1, lmmax, nmax));
+    [k - 1, cd, ct, somos4_abs(cd - ct)]
+  );
+};
+
+somos4_probe_preconvolution_coefficients(sigpar, qstar, t, max_k, lmmax, nmax) =
+{
+  vector(max_k + 1, k,
+    my(cd = somos4_kernel_direct_coeff(sigpar, qstar, t, k - 1, nmax));
+    my(cp = somos4_kernel_preconvolution_coeff(sigpar, qstar, t, k - 1, lmmax, nmax));
+    [k - 1, cd, cp, somos4_abs(cd - cp), somos4_abs(cd + cp/2)]
+  );
 };
 
 somos4_probe_theta_series_expansion(sigpar, qstar, t, z, lmmax, nmax) =
