@@ -1,0 +1,209 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=28mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{remark}{Remark}
+\newcommand{\CT}{\operatorname{CT}}
+
+\title{A Theta-Kernel Lift of Somos--4\\\large Internal research note, version 0.1}
+\author{Thomas Scheuerle}
+\date{23 September 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $(H_n)_{n\in\mathbb Z}$ be a bilateral Somos--4 sequence. Scaling a moment generating function by $G(x)\mapsto G(qx)$ multiplies its $n$th Hankel determinant by $q^{n(n-1)}$. This naturally suggests the bilateral theta-kernel transform
+\[
+ S(t,q)=\sum_{n\in\mathbb Z}H_n q^{n(n-1)}t^n.
+\]
+We show that the Somos--4 recurrence becomes an exact relation between three fixed difference diagonals of the quadratic kernel
+\[
+ \mathcal K(t,z;q)=S(tz,q)S(t/z,q).
+\]
+Specifically, the $z$-diagonals of separations $4$, $2$, and $0$ satisfy a linear relation. This is a rigorous first bridge between the Hankel/Somos construction and a theta-like bilateral $q$-series, without introducing an elliptic parametrization.
+\end{abstract}
+
+\section{Starting point}
+Assume that a bilateral sequence $(H_n)_{n\in\mathbb Z}$ satisfies
+\begin{equation}
+ H_{n+4}H_n=\alpha H_{n+3}H_{n+1}+\beta H_{n+2}^2,
+ \qquad n\in\mathbb Z.
+ \label{eq:somos}
+\end{equation}
+If
+\[
+ G(x)=\sum_{k\ge 0}g_kx^k,
+ \qquad
+ H_n=\det(g_{i+j})_{0\le i,j<n},
+\]
+then
+\[
+ G(qx)=\sum_{k\ge0}q^kg_kx^k.
+\]
+Factoring $q^i$ from row $i$ and $q^j$ from column $j$ gives
+\begin{equation}
+ H_n[G(qx)]=q^{n(n-1)}H_n[G].
+ \label{eq:hankel-scaling}
+\end{equation}
+Thus the quadratic exponent is forced by the elementary scaling of the moment variable.
+
+\section{The weighted Somos sequence}
+Define
+\begin{equation}
+ W_n=H_nq^{n(n-1)}.
+ \label{eq:Wdef}
+\end{equation}
+A direct comparison of exponents gives
+\begin{align*}
+ &(n+4)(n+3)+n(n-1)=2n^2+6n+12,\\
+ &(n+3)(n+2)+(n+1)n=2n^2+6n+6,\\
+ &2(n+2)(n+1)=2n^2+6n+4.
+\end{align*}
+Consequently, \eqref{eq:somos} is equivalent to
+\begin{equation}
+ W_{n+4}W_n
+ =\alpha q^6W_{n+3}W_{n+1}
+ +\beta q^8W_{n+2}^2.
+ \label{eq:weighted-somos}
+\end{equation}
+In particular, the scaling $G(x)\mapsto G(qx)$ induces the parameter transformation
+\[
+ (\alpha,\beta)\longmapsto(\alpha q^6,\beta q^8).
+\]
+
+\section{The bilateral theta-kernel transform}
+Define the formal bilateral series
+\begin{equation}
+ S(t,q)=\sum_{n\in\mathbb Z}W_nt^n
+       =\sum_{n\in\mathbb Z}H_nq^{n(n-1)}t^n.
+ \label{eq:Sdef}
+\end{equation}
+Since
+\[
+ q^{n(n-1)}t^n=q^{n^2}(t/q)^n,
+\]
+$S$ is a coefficientwise Somos deformation of the standard bilateral theta kernel
+$\sum_{n\in\mathbb Z}q^{n^2}u^n$.  No claim is made here that $S$ is itself a classical theta function.
+
+Now introduce the quadratic kernel
+\begin{equation}
+ \mathcal K(t,z;q)=S(tz,q)S(t/z,q).
+ \label{eq:Kdef}
+\end{equation}
+Its expansion is
+\begin{equation}
+ \mathcal K(t,z;q)
+ =\sum_{i,j\in\mathbb Z}W_iW_jt^{i+j}z^{i-j}.
+ \label{eq:Kexpand}
+\end{equation}
+The exponent of $t$ records the sum of the indices, while the exponent of $z$ records their difference.
+
+\begin{proposition}[Diagonal form of Somos--4]
+Let $S$ and $\mathcal K$ be defined by \eqref{eq:Sdef} and \eqref{eq:Kdef}. Then \eqref{eq:weighted-somos} is equivalent to
+\begin{equation}
+ [z^4]\mathcal K(t,z;q)
+ =\alpha q^6[z^2]\mathcal K(t,z;q)
+ +\beta q^8[z^0]\mathcal K(t,z;q).
+ \label{eq:diagonal-identity}
+\end{equation}
+Equivalently, in constant-term notation,
+\begin{equation}
+ \CT_z\!\left[
+ \bigl(z^{-4}-\alpha q^6z^{-2}-\beta q^8\bigr)
+ S(tz,q)S(t/z,q)
+ \right]=0.
+ \label{eq:CTidentity}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+For any integer $d$,
+\[
+ [z^d]\mathcal K(t,z;q)
+ =\sum_{j\in\mathbb Z}W_{j+d}W_jt^{2j+d}.
+\]
+Therefore
+\begin{align*}
+ [z^4]\mathcal K
+ &=\sum_{n\in\mathbb Z}W_{n+4}W_nt^{2n+4},\\
+ [z^2]\mathcal K
+ &=\sum_{n\in\mathbb Z}W_{n+3}W_{n+1}t^{2n+4},\\
+ [z^0]\mathcal K
+ &=\sum_{n\in\mathbb Z}W_{n+2}^2t^{2n+4}.
+\end{align*}
+Substitution of \eqref{eq:weighted-somos} proves \eqref{eq:diagonal-identity}. The constant-term formulation follows from $[z^d]F(z)=\CT_z(z^{-d}F(z))$.
+\end{proof}
+
+\begin{remark}
+The identity is exact. No parity projection or truncation is required. The powers of $t$ align automatically:
+\[
+ (n)+(n+4)=(n+1)+(n+3)=2(n+2)=2n+4.
+\]
+Thus Somos--4 acts on one fixed sum diagonal and relates the three difference diagonals $4$, $2$, and $0$.
+\end{remark}
+
+\section{Example: the classical Somos--4 sequence}
+For
+\[
+ \alpha=\beta=1,
+ \qquad H_0=H_1=H_2=H_3=1,
+\]
+the bilateral extension begins
+\[
+ \ldots,8209,1529,314,59,23,7,3,2,1,1,1,1,2,3,7,23,59,314,1529,8209,\ldots
+\]
+and satisfies
+\[
+ H_{-n}=H_{n+3}.
+\]
+The transformed series begins
+\begin{align*}
+ S(t,q)={}&\cdots+7q^{12}t^{-3}+3q^6t^{-2}+2q^2t^{-1}
+ +1+t+q^2t^2+q^6t^3\\
+ &\quad+2q^{12}t^4+3q^{20}t^5+7q^{30}t^6+\cdots.
+\end{align*}
+The kernel identity specializes to
+\begin{equation}
+ [z^4]\mathcal K=q^6[z^2]\mathcal K+q^8[z^0]\mathcal K.
+\end{equation}
+
+\section{Interpretation and research direction}
+The result gives a precise form to the proposed path
+\[
+ G(qx)\longrightarrow S(t,q)\longrightarrow\mathcal K(t,z;q).
+\]
+The substitution $x\mapsto qx$ supplies the quadratic theta weight through Hankel scaling. The bilinear Somos recurrence then becomes a linear relation between three coefficient projections of a quadratic theta-like kernel.
+
+The next questions are deliberately left open:
+\begin{enumerate}
+ \item Can the projection relation \eqref{eq:CTidentity} be converted into a closed functional equation using $z\mapsto q^kz$, a root-of-unity filter, or a suitable $q$-difference operator?
+ \item Does a distinguished normalization of $S$ admit a factorization into Ramanujan general theta functions or their quotients?
+ \item Can the algebraic generating function for prescribed Somos--4 Hankel data be used to determine $S$ without first solving the Somos orbit by elliptic uniformization?
+ \item What analytic region makes the bilateral series convergent for nontrivial Somos--4 growth? If ordinary convergence fails, which formal, regularized, or coefficientwise interpretation is most natural?
+ \item How does the construction change under a general gauge $H_n\mapsto A B^n C^{n^2}H_n$?
+\end{enumerate}
+
+\section{Status of the claim}
+The Hankel scaling \eqref{eq:hankel-scaling}, weighted recurrence \eqref{eq:weighted-somos}, and diagonal kernel identity \eqref{eq:diagonal-identity} are elementary exact consequences of the definitions. The possible identification of $S$ with known theta or Ramanujan objects remains conjectural and is not asserted in this note.
+
+\begin{thebibliography}{9}
+\bibitem{Scheuerle2026}
+T.~Scheuerle,
+\emph{Direct Generation of a Somos--4 Sequence from an Algebraic Generating Function},
+arXiv:2609.15754, 2026.
+
+\bibitem{LiuWangZhang2026}
+F.~Liu, Y.~Wang, and Z.~Zhang,
+\emph{Hankel Transform and $(\alpha,\beta)$ Somos--4 Sequences},
+arXiv:2608.08703, 2026.
+
+\bibitem{RamanujanTheta}
+For the standard notation $f(a,b)$ and the specialization
+$\varphi(q)=f(q,q)=\sum_{n\in\mathbb Z}q^{n^2}$, see standard accounts of Ramanujan's general theta function.
+\end{thebibliography}
+
+\end{document}

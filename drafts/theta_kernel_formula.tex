@@ -1,0 +1,358 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,array,longtable}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}[proposition]{Corollary}
+\newcommand{\CT}{\operatorname{CT}}
+\newcommand{\Dp}{D_p}
+\title{Explicit Infinite Theta Expansion of the Somos--4 Kernel\\\large Nome-aligned formula with convolution-free and operator reductions}
+\author{Thomas Scheuerle}
+\date{23 September 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Starting from the nome-aligned infinite theta expansion of the Somos--4 kernel, this revision removes the remaining convolution in the Fourier coefficients attached to $\sigma^2\wp$.  The antisymmetric coefficient of the kernel becomes an explicit product of the coefficients of $\theta_1^2$, a quadratic spectral factor, and one parity-dependent logarithmic derivative of theta constants.  Splitting the Fourier indices by parity then yields a compact differential-operator representation: the kernel is the sum of a wave-type Wronskian term and one two-component parity determinant.  In particular, the Gaussian constant in the sigma/theta normalization cancels from the antisymmetric coefficient, and the same-parity sectors vanish on both $m=\ell$ and $m=-\ell$.
+\end{abstract}
+
+\section{From the scaled generating function to the kernel}
+Let
+\[
+G(x)=\sum_{k\ge0}g_kx^k,
+\]
+and let $H_n=H_n[G]$ denote the associated Hankel determinants. Under $G(x)\mapsto G(qx)$,
+\[
+H_n[G(qx)]=q^{n(n-1)}H_n[G].
+\]
+Define
+\[
+W_n:=H_nq^{n(n-1)},\qquad
+S(t,q):=\sum_{n\in\mathbb Z}W_nt^n,
+\]
+and
+\[
+\boxed{\mathcal K(t,z;q_\ast):=S(tz,q_\ast)S(t/z,q_\ast).}
+\]
+Equivalently,
+\[
+\mathcal K(t,z;q_\ast)=\sum_{i,j\in\mathbb Z}W_iW_jt^{i+j}z^{i-j}.
+\]
+If
+\[
+H_{n+4}H_n=\alpha H_{n+3}H_{n+1}+\beta H_{n+2}^2,
+\]
+then
+\[
+[z^4]\mathcal K=\alpha q_\ast^6[z^2]\mathcal K+\beta q_\ast^8[z^0]\mathcal K.
+\]
+
+\section{Elliptic data and Fourier nome alignment}
+Assume the standard nondegenerate sigma representation
+\[
+\boxed{H_n=A_{\rm S}B_{\rm S}^{\,n}
+\frac{\sigma(z_0+n\kappa)}{\sigma(\kappa)^{n^2}}.}
+\]
+Choose fundamental half-periods $\omega_1,\omega_3$ and put
+\[
+\tau=\frac{\omega_3}{\omega_1},\qquad
+p=e^{\pi i\tau},\qquad
+\lambda=\frac{\pi}{2\omega_1},\qquad
+a=\frac{\eta_1}{2\omega_1},
+\]
+where $\eta_1=\zeta(\omega_1)$. We use
+\[
+\boxed{\sigma(u)=C_\sigma e^{au^2}\theta_1(\lambda u,p)},
+\qquad
+\boxed{C_\sigma=\frac{2\omega_1}{\pi\theta_1'(0,p)}}.
+\]
+Define
+\[
+Q:=\frac{q}{\sigma(\kappa)},\qquad
+\gamma:=\frac{\lambda\kappa}{2},\qquad
+x_0:=\lambda z_0,
+\]
+and
+\[
+P:=Qe^{a\kappa^2}.
+\]
+For the infinite Fourier expansion we impose the alignment
+\[
+\boxed{P^2=p.}
+\]
+After choosing a branch of $p^{1/2}$, set
+\[
+\boxed{q_\ast:=\sigma(\kappa)p^{1/2}e^{-a\kappa^2}},
+\qquad
+\boxed{Q_\ast=p^{1/2}e^{-a\kappa^2},\quad P=p^{1/2}}.
+\]
+Finally put
+\[
+\boxed{X_\ast:=\frac{B_{\rm S}t}{q_\ast}e^{2az_0\kappa}.}
+\]
+This is specifically the Fourier alignment used below.  It is distinct, in general, from an alignment imposed after a finite torsion dissection.
+
+\section{Parity theta functions}
+For $\varepsilon\in\{0,1\}$ define
+\[
+\boxed{\Theta_\varepsilon(Y;p^{1/2})
+:=\sum_{\substack{n\in\mathbb Z\\n\equiv\varepsilon\ ({\rm mod}\ 2)}}
+p^{n^2/4}Y^n.}
+\]
+With
+\[
+\Phi_\rho(\xi):=\sum_{k\in\mathbb Z}\rho^{k^2}\xi^k
+=f(\rho\xi,\rho/\xi),
+\]
+one has
+\[
+\boxed{\Theta_\varepsilon(Y;p^{1/2})=
+p^{\varepsilon^2/4}Y^\varepsilon
+\Phi_p(p^\varepsilon Y^2).}
+\]
+
+\section{Fourier coefficients and elimination of the convolution}
+Define $a_\ell$ and $b_\ell$ by
+\[
+\theta_1(x,p)^2=\sum_{\ell\in\mathbb Z}a_\ell(p)e^{2i\ell x},
+\]
+\[
+\lambda^2\bigl(\theta_1'(x,p)^2-\theta_1(x,p)\theta_1''(x,p)\bigr)
+-2a\theta_1(x,p)^2
+=\sum_{\ell\in\mathbb Z}b_\ell(p)e^{2i\ell x}.
+\]
+The first sequence has the parity formulas
+\[
+\boxed{a_{2j}=p^{2j^2}\theta_2(0,p^2)},
+\qquad
+\boxed{a_{2j+1}=-p^{(2j+1)^2/2}\theta_3(0,p^2).}
+\]
+Equivalently,
+\[
+a_\ell=(-1)^\ell\sum_{n\in\mathbb Z}
+p^{(n+1/2)^2+(\ell-n-1/2)^2}.
+\]
+Let
+\[
+\boxed{\Dp:=p\frac{d}{dp}}.
+\]
+
+\begin{proposition}[Convolution-free formula for $b_\ell$]
+For every $\ell\in\mathbb Z$,
+\[
+\boxed{b_\ell=4\lambda^2(\ell^2-\Dp)a_\ell-2a\,a_\ell.}
+\]
+\end{proposition}
+
+\begin{proof}
+The direct convolution is
+\[
+b_\ell=2\lambda^2(-1)^\ell\sum_{n\in\mathbb Z}
+(2n+1)(2\ell-2n-1)
+p^{(n+1/2)^2+(\ell-n-1/2)^2}-2a\,a_\ell.
+\]
+Set $r=2n+1-\ell$. Then
+\[
+(2n+1)(2\ell-2n-1)=\ell^2-r^2,
+\]
+\[
+(n+\tfrac12)^2+(\ell-n-\tfrac12)^2=\frac{\ell^2+r^2}{2},
+\]
+and $r\equiv1-\ell\pmod2$. Hence
+\[
+a_\ell=(-1)^\ell
+\sum_{\substack{r\in\mathbb Z\\r\equiv1-\ell\ ({\rm mod}\ 2)}}
+p^{(\ell^2+r^2)/2}.
+\]
+Applying $\Dp$ and eliminating the $r^2$-weighted sum gives
+\[
+(-1)^\ell\sum_r(\ell^2-r^2)p^{(\ell^2+r^2)/2}
+=2(\ell^2-\Dp)a_\ell,
+\]
+which proves the claim.
+\end{proof}
+
+Let $\pi(\ell)\in\{0,1\}$ denote the numerical parity of $\ell$, and put
+\[
+T_0(p):=\theta_2(0,p^2),\qquad T_1(p):=\theta_3(0,p^2).
+\]
+Then
+\[
+\boxed{b_\ell=a_\ell\left[
+2\lambda^2\ell^2-4\lambda^2\Dp\log T_{\pi(\ell)}(p)-2a
+\right].}
+\]
+Thus $b_\ell$ contains no convolution and no data beyond the elliptic lattice.
+
+\section{Antisymmetric coefficient and its cancellations}
+Define the single parity modulus
+\[
+\boxed{\Delta(p):=\Dp\log\frac{\theta_2(0,p^2)}{\theta_3(0,p^2)}.}
+\]
+
+\begin{proposition}[Explicit antisymmetric coefficient]
+For all $\ell,m\in\mathbb Z$,
+\[
+\boxed{
+a_\ell b_m-b_\ell a_m
+=2\lambda^2a_\ell a_m
+\left[m^2-\ell^2+2\Delta(p)\bigl(\pi(m)-\pi(\ell)\bigr)\right].}
+\]
+\end{proposition}
+
+\begin{proof}
+Insert the preceding formula for $b_k$. The terms $-2a\,a_k$ cancel identically. The difference of the two parity logarithmic derivatives is $-\Delta$, $0$, or $\Delta$ according to the parities of $(\ell,m)$, which gives the displayed formula.
+\end{proof}
+
+The four parity sectors are therefore
+\[
+\begin{array}{c|c}
+(\pi(\ell),\pi(m))&
+(a_\ell b_m-b_\ell a_m)/(2\lambda^2a_\ell a_m)\\ \hline
+(0,0)&m^2-\ell^2\\
+(1,1)&m^2-\ell^2\\
+(0,1)&m^2-\ell^2+2\Delta(p)\\
+(1,0)&m^2-\ell^2-2\Delta(p)
+\end{array}
+\]
+In particular, every same-parity term contains
+\[
+m^2-\ell^2=(m-\ell)(m+\ell),
+\]
+so the same-parity contribution vanishes on both the diagonal $m=\ell$ and the anti-diagonal $m=-\ell$. The full coefficient always vanishes on $m=\ell$ by antisymmetry.
+
+\section{Convolution-free infinite-theta kernel}
+The rank-two identity is
+\[
+\mathcal K(t,z;q_\ast)=A_{\rm S}^2\sum_{\varepsilon=0}^1
+\left(\mathcal R_\varepsilon\widehat{\mathcal D}_\varepsilon
+-\widehat{\mathcal R}_\varepsilon\mathcal D_\varepsilon\right).
+\]
+Substitution of the explicit antisymmetric coefficient gives
+\[
+\boxed{
+\begin{aligned}
+\mathcal K(t,z;q_\ast)
+={}&2\lambda^2A_{\rm S}^2C_\sigma^4e^{2az_0^2}
+\sum_{\varepsilon=0}^1\sum_{\ell,m\in\mathbb Z}
+e^{2i\ell x_0}a_\ell a_m\\
+&\times\left[m^2-\ell^2
++2\Delta(p)\bigl(\pi(m)-\pi(\ell)\bigr)\right]\\
+&\times\Theta_\varepsilon(X_\ast e^{2i\ell\gamma};p^{1/2})
+\Theta_\varepsilon(ze^{2im\gamma};p^{1/2}).
+\end{aligned}}
+\]
+Expanding the two parity theta functions gives the entirely Ramanujan form
+\[
+\boxed{
+\begin{aligned}
+\mathcal K(t,z;q_\ast)
+={}&2\lambda^2A_{\rm S}^2C_\sigma^4e^{2az_0^2}
+\sum_{\varepsilon=0}^1\sum_{\ell,m\in\mathbb Z}
+e^{2i\ell x_0}a_\ell a_m\\
+&\times\left[m^2-\ell^2
++2\Delta(p)\bigl(\pi(m)-\pi(\ell)\bigr)\right]\\
+&\times p^{\varepsilon^2/2}
+(X_\ast e^{2i\ell\gamma})^\varepsilon
+(ze^{2im\gamma})^\varepsilon\\
+&\times\Phi_p\!\left(p^\varepsilon X_\ast^2e^{4i\ell\gamma}\right)
+\Phi_p\!\left(p^\varepsilon z^2e^{4im\gamma}\right).
+\end{aligned}}
+\]
+
+\section{A two-component differential-operator reduction}
+The parity split can be reorganized further. For $r,s\in\{0,1\}$ define the theta lifts
+\[
+\mathcal R_{\varepsilon,r}(x;t):=
+\sum_{\substack{\ell\in\mathbb Z\\\ell\equiv r\ ({\rm mod}\ 2)}}
+a_\ell e^{2i\ell x}
+\Theta_\varepsilon(X_\ast e^{2i\ell\gamma};p^{1/2}),
+\]
+\[
+\mathcal D_{\varepsilon,s}(y;z):=
+\sum_{\substack{m\in\mathbb Z\\m\equiv s\ ({\rm mod}\ 2)}}
+a_m e^{2imy}
+\Theta_\varepsilon(ze^{2im\gamma};p^{1/2}).
+\]
+For functions of $x$ and $y$, set
+\[
+\boxed{\mathcal W(F,G):=\frac14\left((\partial_x^2F)G-F(\partial_y^2G)\right).}
+\]
+On a Fourier monomial this operator has symbol $m^2-\ell^2$. Put
+\[
+\mathcal R_{\varepsilon,+}:=\mathcal R_{\varepsilon,0}+\mathcal R_{\varepsilon,1},
+\qquad
+\mathcal D_{\varepsilon,+}:=\mathcal D_{\varepsilon,0}+\mathcal D_{\varepsilon,1}.
+\]
+
+\begin{proposition}[Wave term plus parity determinant]
+The full kernel is
+\[
+\boxed{
+\begin{aligned}
+\mathcal K(t,z;q_\ast)
+={}&2\lambda^2A_{\rm S}^2C_\sigma^4e^{2az_0^2}
+\sum_{\varepsilon=0}^1
+\Bigl\{
+\mathcal W(\mathcal R_{\varepsilon,+},\mathcal D_{\varepsilon,+})\\
+&\qquad\qquad
++2\Delta(p)
+\bigl(
+\mathcal R_{\varepsilon,0}\mathcal D_{\varepsilon,1}
+-\mathcal R_{\varepsilon,1}\mathcal D_{\varepsilon,0}
+\bigr)
+\Bigr\}_{x=x_0,\,y=0}.
+\end{aligned}}
+\]
+\end{proposition}
+
+\begin{proof}
+The operator $\mathcal W$ supplies $m^2-\ell^2$ in all four parity sectors. The determinant
+\[
+\det\begin{pmatrix}
+\mathcal R_{\varepsilon,0}&\mathcal R_{\varepsilon,1}\\
+\mathcal D_{\varepsilon,0}&\mathcal D_{\varepsilon,1}
+\end{pmatrix}
+=
+\mathcal R_{\varepsilon,0}\mathcal D_{\varepsilon,1}
+-\mathcal R_{\varepsilon,1}\mathcal D_{\varepsilon,0}
+\]
+adds $+2\Delta$ in the even--odd sector, $-2\Delta$ in the odd--even sector, and zero in the same-parity sectors.
+\end{proof}
+
+This representation gives a structural interpretation of the double series. Its main part is a wave-type differential image of two separable theta lifts. All residual coupling between the Fourier parities is carried by one $2\times2$ determinant and the single lattice scalar $\Delta(p)$.
+
+\section{Free and derived quantities}
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.22\textwidth}>{\raggedright\arraybackslash}p{0.50\textwidth}}
+\toprule
+Symbol & Status & Meaning / determination \\
+\midrule
+$G(x)$ & input & Original moment generating function. Its Hankel determinants give $H_n$.\\
+$q_\ast$ & Fourier alignment & $q_\ast=\sigma(\kappa)p^{1/2}e^{-a\kappa^2}$ after choosing a branch of $p^{1/2}$.\\
+$A_{\rm S},B_{\rm S},z_0,\kappa$ & orbit data & Gauge constants, initial elliptic phase, and elliptic translation step.\\
+$\omega_1,\omega_3$ & lattice data & Fundamental half-periods; $\tau=\omega_3/\omega_1$.\\
+$p,\lambda,a,C_\sigma$ & derived lattice data & Defined by the sigma/theta normalization above.\\
+$P$ & aligned value & $P=p^{1/2}$, so the outer bilateral theta functions have nome $P^2=p$.\\
+$\gamma,x_0,X_\ast$ & derived & Shift phase, initial phase, and the combined $t$-variable.\\
+$a_\ell$ & explicit coefficient & Fourier coefficient of $\theta_1^2$, with closed parity formulas.\\
+$b_\ell$ & eliminated coefficient & $b_\ell=4\lambda^2(\ell^2-\Dp)a_\ell-2aa_\ell$; no convolution is needed.\\
+$\Delta(p)$ & derived lattice scalar & Logarithmic nome derivative of $\theta_2(0,p^2)/\theta_3(0,p^2)$; it is the only non-polynomial coefficient in the parity coupling.\\
+\bottomrule
+\end{longtable}
+
+\section{Analytic qualification and verification status}
+The rearrangements may be interpreted formally whenever all sums are handled coefficientwise in a valid formal setting. For an analytic interpretation, assume $|p|<1$ and impose a domain in the variables for which the bilateral sums and all differentiated sums converge absolutely and locally uniformly. Under such hypotheses, application of $\Dp$, $\partial_x^2$, and $\partial_y^2$ term by term is justified.
+
+The convolution elimination and the operator formula are algebraic consequences of the displayed Fourier series. They can be checked coefficientwise by truncating the theta series and comparing:
+\begin{enumerate}
+\item the original convolution for $b_\ell$ with $4\lambda^2(\ell^2-\Dp)a_\ell-2aa_\ell$;
+\item the original determinant $a_\ell b_m-b_\ell a_m$ with the parity formula;
+\item each of the four parity sectors with the wave-plus-determinant operator.
+\end{enumerate}
+
+\section{Conclusion}
+The infinite theta expansion now has a convolution-free coefficient structure. The sequence $b_\ell$ is generated from $a_\ell$ by a second-order spectral operator and a nome derivative. Antisymmetrization removes the Gaussian constant and leaves only the quadratic factor $m^2-\ell^2$ together with one parity modulus $\Delta(p)$. Finally, the complete double series is a wave-type bilinear operator plus a two-component parity determinant. This is a substantive simplification of the kernel and provides a more promising starting point for modular identities, special-value reductions, and numerical verification.
+
+\end{document}

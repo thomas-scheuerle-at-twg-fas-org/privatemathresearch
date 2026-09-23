@@ -1,0 +1,101 @@
+============================================================
+Somos-4 theta companion (five- and six-parameter papers)
+PARI/GP version: [2, 13, 3]
+realprecision = 38
+direct-paper specialization: alpha = 1, beta = tau
+six-parameter transport root: q6^6 = alpha
+theta-paper nome parameter remains q_star and is distinct from q6
+============================================================
+Symbol / convention map
+  H_n               ordinary Hankel determinants
+  (lambda,m,r,eta)  H_1, H_2, H_3, H_4 in the direct paper
+  (alpha,tau)       six-parameter Somos-4 coefficients
+  q6                transport root with q6^6 = alpha
+  tau               second Somos coefficient in the direct and follow-up papers
+  (alpha,beta)      theta-paper general coefficients; direct-paper slice has alpha=1, beta=tau
+  G(x)              ordinary moment generating function
+  A_S,B_S,z0,kappa  sigma orbit data named in the theta paper only
+  q_star            nome-aligned scaling parameter from the theta paper
+  D_N               once-shifted determinant det(g_{i+j+1})
+  orientation       parity choice F(x) or F(-x), seen only by shifted determinants
+------------------------------------------------------------
+Direct-paper exact test tuple: [1, 1, 1, 1, 1]
+J invariant: 4
+[EXACT PASS] initial Hankel determinants match (lambda,m,r,eta)
+[EXACT PASS] Somos-4 recurrence verified through Hankel index 8
+[FORMAL SERIES PASS through z^19] algebraic defining equation
+[EXACT PASS] Hankel scaling law under G(x) -> G(2*x)
+------------------------------------------------------------
+Direct-paper exact test tuple: [2, 1, 1, 3, 2]
+J invariant: 43/6
+[EXACT PASS] initial Hankel determinants match (lambda,m,r,eta)
+[EXACT PASS] Somos-4 recurrence verified through Hankel index 8
+[FORMAL SERIES PASS through z^19] algebraic defining equation
+[EXACT PASS] Hankel scaling law under G(x) -> G(2*x)
+------------------------------------------------------------
+Six-parameter transported test tuple: [1, 1, 1, 1, 64, 1]
+Transport root / orientation: [2, 1]
+[EXACT PASS] transport preserves H_1 through H_4
+[EXACT PASS] six-parameter Somos-4 recurrence verified through Hankel index 8
+[EXACT PASS] low-order transported formulas for H_5 and H_6
+[EXACT PASS] signed Hankel start data recovers (lambda,m,r,eta,alpha,tau)
+[EXACT PASS] shifted graded companion law with parity orientation
+------------------------------------------------------------
+Six-parameter transported test tuple: [1, 1, 1, 1, 64, 1]
+Transport root / orientation: [2, -1]
+[EXACT PASS] transport preserves H_1 through H_4
+[EXACT PASS] six-parameter Somos-4 recurrence verified through Hankel index 8
+[EXACT PASS] low-order transported formulas for H_5 and H_6
+[EXACT PASS] signed Hankel start data recovers (lambda,m,r,eta,alpha,tau)
+[EXACT PASS] shifted graded companion law with parity orientation
+------------------------------------------------------------
+Elliptic sigma workflow tuple: [1, 1, 1, 1, 1]
+J invariant / [g2,g3,Delta]: [4, [4, -1, 37]]
+translation point P and orbit point Q2: [[1, 1/2], [0, 1/2]]
+z0 and kappa: [-4.6479635764269783720259967222947900303252134051847100133957373477469147642279676 + 1.2256946909933950304271124159332626126748086445723983073282357030645764499996284*I, 1.8591854305707913488103986889179160121300853620738840053582949390987659056911870]
+A_S and B_S: [-0.0024198703049578942013090699332680248175371134285423294079924138995510135468800599 + 0.041966804121788799137775170861890779925873492422523288930478011723819515199070890*I, 3.0160854498599450414249747565589197331451945841228083042499161996362538597794051 + 8.6029392050260079524080288350283672327722321656607740907829744524460904691352255*I]
+q_star from theta normalization: 0.24943120897163057392751544870075523126673928631278550406454839857266116207352270
+[NUMERIC PASS] sigma orbit matches the exact Somos-4 orbit to working precision
+[EXACT PASS] first six signed Hankel values recovered from sigma data reconstruct (lambda,m,r,eta,alpha=1,tau)
+[EXACT PASS] five-parameter generating function reconstructed from recovered data reproduces the same Hankel orbit
+[NUMERIC PASS] theta-kernel coefficient identity verified from the sigma orbit and q_star
+------------------------------------------------------------
+Elliptic sigma workflow tuple: [2, 1, 1, 3, 2]
+J invariant / [g2,g3,Delta]: [43/6, [2213809/15552, -3291850729/10077696, 1161689/324]]
+translation point P and orbit point Q2: [[1561/432, 1/2], [265/432, -31/4]]
+z0 and kappa: [-2.2037484582696795102319528237272952965232704585901312459759754815783198113776940 + 0.48869156048537645369398886850327992437610720201279865368284126350707765184523887*I, 1.3369352664860983077239363512207342254813949683022521337765993472309972500205558]
+A_S and B_S: [5.4223320698330173482724184030560465555431939298600817262139707353896774514475239 + 8.5110552308526689697029537965159300713337327146621273888616415406091326755202765*I, -0.062311851419182127376383128615783479480146194925460317112689838135593441235321630 + 0.077177891400921011586417739991949475640920576806463010616051483578500551966175397*I]
+q_star from theta normalization: 0.41624093547155191183609347155661672984167959473065310589159105371851224868373408
+[NUMERIC PASS] sigma orbit matches the exact Somos-4 orbit to working precision
+[EXACT PASS] first six signed Hankel values recovered from sigma data reconstruct (lambda,m,r,eta,alpha=1,tau)
+[EXACT PASS] five-parameter generating function reconstructed from recovered data reproduces the same Hankel orbit
+[NUMERIC PASS] theta-kernel coefficient identity verified from the sigma orbit and q_star
+------------------------------------------------------------
+Transported sigma-gauge workflow tuple: [1, 1, 1, 1, 64, 1]
+transport root q6 and q_star: [2, 0.29474643631234095787708798420237739746710707118665730921510759508894178431587894]
+transported sigma gauge [A_S, B_S/q6]: [-88026559.598891748087764681635894110317661921627734140333282831595311526798960520 + 28652794.052258490645286033755422699442989922702200727022628604354453232415849494*I, -2.6319752484444067208826148916124131637493244943122434840393312536244643174065978 E-7 - 3.3305877002580162184564788941370702079804827566475370522874860059693225175957988 E-8*I]
+[NUMERIC PASS] transported sigma gauge reproduces the six-parameter orbit
+[EXACT PASS] first six transported sigma Hankel values recover (lambda,m,r,eta,alpha,tau)
+[NUMERIC PASS] transported q_star satisfies the theta-kernel coefficient identity for alpha != 1
+------------------------------------------------------------
+Transported sigma-gauge workflow tuple: [2, 1, 1, 3, 64, 2]
+transport root q6 and q_star: [2, 0.19771262015920379975400009213942213023934004290146109250208742989828773638964119]
+transported sigma gauge [A_S, B_S/q6]: [5.0475652409324153017459619026106333102505542566888246479164243712651448315230890 - 0.28276525102235583721502821120826631893175592132514653094014877414699572252724901*I, -0.039166243966196032081251177047395240792993469518517655963356632895854339818568256 + 0.13326264407459967620002007510576001988723227972560782284198109787311645066405610*I]
+[NUMERIC PASS] transported sigma gauge reproduces the six-parameter orbit
+[EXACT PASS] first six transported sigma Hankel values recover (lambda,m,r,eta,alpha,tau)
+[NUMERIC PASS] transported q_star satisfies the theta-kernel coefficient identity for alpha != 1
+------------------------------------------------------------
+Summary
+[PASS] five-parameter generating-function branch selection
+[PASS] six-parameter transported generating-function branch
+[PASS] generating-function defining equation
+[PASS] Hankel determinants from generated coefficients
+[PASS] signed recovery of (lambda,m,r,eta,alpha,tau) from Hankel data
+[PASS] shifted determinant parity-orientation law
+[PASS] explicit elliptic curve and sigma-orbit instantiation for the direct-paper slice
+[PASS] parameter recovery from sigma data and regeneration of the five-parameter generating function
+[PASS] theta-kernel coefficient identity from the sigma orbit and q_star
+[PASS] transported sigma-gauge verification for six-parameter alpha != 1 examples
+[NOTE] full convolution-free theta double-series helper is available for further normalization/debug work
+[PASS] Hankel scaling law
+[DONE] direct-paper end-to-end elliptic / generating-function / kernel verification completed
