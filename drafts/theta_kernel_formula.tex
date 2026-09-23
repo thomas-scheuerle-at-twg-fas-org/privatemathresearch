@@ -15,7 +15,7 @@
 \maketitle
 
 \begin{abstract}
-We derive a generating-function formulation for Somos--4 sequences.  Starting from a generating function whose Hankel determinants satisfy a Somos--4 recurrence, we introduce a multiplicative factor in the argument of a bilateral generating series.  This produces a two-variable kernel that admits expansions in Jacobi theta functions and, equivalently, in Ramanujan's two-variable theta function.  The main calculation removes a convolution from the Fourier coefficients and replaces it by an explicit quadratic factor together with a logarithmic derivative of theta constants.  The resulting formula gives a direct and computationally usable link among Somos--4 recurrences, generating functions, Hankel determinants, elliptic sigma functions, and Ramanujan theta functions.
+Starting from a generating function whose Hankel determinants satisfy a Somos--4 recurrence, we introduce a multiplicative factor in the argument of a bilateral generating series.  This produces a two-variable kernel that admits expansions in Jacobi theta functions and, equivalently, in Ramanujan's two-variable theta function.  The main calculation removes a convolution from the Fourier coefficients and replaces it by an explicit quadratic factor together with a logarithmic derivative of theta constants.  The resulting formula gives a direct and computationally usable link among Somos--4 recurrences, generating functions, Hankel determinants, elliptic sigma functions, and Ramanujan theta functions.
 \end{abstract}
 
 \section{Introduction and motivation}
@@ -323,37 +323,76 @@ Expanding the two parity theta functions gives the corresponding Ramanujan form
 \frac{p^{1/2}}{X_\ast z^{-1}e^{2i(2s+1)\gamma}}\right).
 \end{aligned}}
 \end{equation}
-\section{A two-component differential-operator reduction}
-A differential-operator representation rewrites the factors $\ell^2$ and $m^2$ as second derivatives of Fourier exponentials.  This shortens the double sum and reveals its separable structure.  The parity split can be reorganized further. For $r,s\in\{0,1\}$ define the theta lifts
+\section{A two-component parity-determinant reduction}
+Rewriting the parity-theta form of the kernel gives
 \begin{equation}
-\mathcal F_r(u):=c_r e^{i(2r+1)x_0}
-\Phi_{p^{1/2}}\!\left(X_\ast u e^{2i(2r+1)\gamma}\right).
+\boxed{
+\begin{aligned}
+\mathcal K(t,z;q_\ast)
+={}&4\lambda^2\Delta(p)A_{\rm S}^2C_\sigma^4e^{2az_0^2}
+\sum_{\varepsilon=0}^1\sum_{\ell,m\in\mathbb Z}
+e^{2i\ell x_0}a_\ell a_m
+\bigl(\pi(\ell)-\pi(m)\bigr)\\
+&\qquad\qquad\times
+\Theta_\varepsilon\!\left(X_\ast e^{2i\ell\gamma};p^{1/2}\right)
+\Theta_\varepsilon\!\left(ze^{2im\gamma};p^{1/2}\right).
+\end{aligned}}
+\end{equation}
+This separates naturally into even and odd Fourier sectors.
+
+For $\varepsilon,\nu\in\{0,1\}$ define
+\begin{equation}
+\boxed{
+\mathcal R_{\varepsilon,\nu}(t):=
+\sum_{\substack{\ell\in\mathbb Z\\\pi(\ell)=\nu}}
+e^{2i\ell x_0}a_\ell
+\Theta_\varepsilon\!\left(X_\ast e^{2i\ell\gamma};p^{1/2}\right),}
 \end{equation}
 \begin{equation}
-\mathcal K(t,z;q_\ast)=A_{\rm S}^2C_\sigma^2e^{2az_0^2}
-\left(\sum_{r\in\mathbb Z}\mathcal F_r(z)\right)
-\left(\sum_{s\in\mathbb Z}\mathcal F_s(z^{-1})\right).
+\boxed{
+\mathcal D_{\varepsilon,\nu}(z):=
+\sum_{\substack{m\in\mathbb Z\\\pi(m)=\nu}}
+a_m
+\Theta_\varepsilon\!\left(ze^{2im\gamma};p^{1/2}\right).}
 \end{equation}
-For functions of $x$ and $y$, set
+
+\begin{proposition}[Parity-determinant reduction]
+With the preceding notation,
 \begin{equation}
-\boxed{\mathcal E_z:=z\frac{\partial}{\partial z}.}
+\boxed{
+\mathcal K(t,z;q_\ast)
+=4\lambda^2\Delta(p)A_{\rm S}^2C_\sigma^4e^{2az_0^2}
+\sum_{\varepsilon=0}^1
+\Bigl(
+\mathcal R_{\varepsilon,1}(t)\mathcal D_{\varepsilon,0}(z)
+-\mathcal R_{\varepsilon,0}(t)\mathcal D_{\varepsilon,1}(z)
+\Bigr).}
 \end{equation}
-On a Fourier monomial this operator has symbol $m^2-\ell^2$. Put
+\end{proposition}
+
+\begin{proof}
+Insert the explicit antisymmetric coefficient into the parity-theta double series above.  The factor $\pi(\ell)-\pi(m)$ vanishes unless $\ell$ and $m$ have opposite parity.  In the even--odd sector it contributes $-1$, and in the odd--even sector it contributes $+1$.  Grouping those two sectors yields the displayed determinant.
+\end{proof}
+
+The kernel coefficients still satisfy the Somos--4 relation. Put
 \begin{equation}
 \boxed{
 [z^k]\mathcal K(t,z;q_\ast)
 =\sum_{n\in\mathbb Z}W_{n+k}W_n t^{2n+k}.}
 \end{equation}
-\begin{proposition}[Wave term plus parity determinant]
-The double series is equivalently represented by
+
+\begin{corollary}[Coefficient recurrence]
+One has
 \begin{equation}
 \boxed{
 [z^4]\mathcal K
 =\alpha q_\ast^6[z^2]\mathcal K
 +\beta q_\ast^8[z^0]\mathcal K.}
 \end{equation}
-\end{proposition}
+\end{corollary}
+
 \begin{proof}
+This is the coefficientwise image of the Somos--4 recurrence
 \begin{equation}
 W_{n+4}W_n=\alpha q_\ast^6W_{n+3}W_{n+1}
 +\beta q_\ast^8W_{n+2}^2.
