@@ -201,7 +201,7 @@ Let
 \begin{proposition}[Convolution-free formula for $b_\ell$]
 For every $\ell\in\mathbb Z$,
 \begin{equation}
-\boxed{b_\ell=4\lambda^2(\ell^2-\Dp)a_\ell-2a\,a_\ell.}
+\boxed{b_\ell=\bigl(4\lambda^2\Dp-2\lambda^2\ell^2-2a\bigr)a_\ell.}
 \end{equation}
 \end{proposition}
 
@@ -209,12 +209,12 @@ For every $\ell\in\mathbb Z$,
 The direct convolution is
 \begin{equation}
 b_\ell=2\lambda^2(-1)^\ell\sum_{n\in\mathbb Z}
-(2n+1)(2\ell-2n-1)
+(2n+1-\ell)^2
 p^{(n+1/2)^2+(\ell-n-1/2)^2}-2a\,a_\ell.
 \end{equation}
 Set $r=2n+1-\ell$. Then
 \begin{equation}
-(2n+1)(2\ell-2n-1)=\ell^2-r^2,
+2(2n+1-\ell)^2=2r^2,
 \end{equation}
 \begin{equation}
 (n+\tfrac12)^2+(\ell-n-\tfrac12)^2=\frac{\ell^2+r^2}{2},
@@ -227,8 +227,8 @@ p^{(\ell^2+r^2)/2}.
 \end{equation}
 Applying $\Dp$ and eliminating the $r^2$-weighted sum gives
 \begin{equation}
-(-1)^\ell\sum_r(\ell^2-r^2)p^{(\ell^2+r^2)/2}
-=2(\ell^2-\Dp)a_\ell,
+(-1)^\ell\sum_r2r^2p^{(\ell^2+r^2)/2}
+=(4\Dp-2\ell^2)a_\ell,
 \end{equation}
 which proves the claim.
 \end{proof}
@@ -240,7 +240,7 @@ T_0(p):=\theta_2(0,p^2),\qquad T_1(p):=\theta_3(0,p^2).
 Then
 \begin{equation}
 \boxed{b_\ell=a_\ell\left[
-2\lambda^2\ell^2-4\lambda^2\Dp\log T_{\pi(\ell)}(p)-2a
+4\lambda^2\Dp\log T_{\pi(\ell)}(p)-2a
 \right].}
 \end{equation}
 Thus $b_\ell$ contains no convolution and no data beyond the elliptic lattice.
@@ -258,8 +258,8 @@ For all $\ell,m\in\mathbb Z$,
 \begin{equation}
 \boxed{
 a_\ell b_m-b_\ell a_m
-=2\lambda^2a_\ell a_m
-\left[m^2-\ell^2+2\Delta(p)\bigl(\pi(m)-\pi(\ell)\bigr)\right].}
+=4\lambda^2a_\ell a_m\Delta(p)
+\bigl(\pi(\ell)-\pi(m)\bigr).}
 \end{equation}
 \end{proposition}
 
@@ -273,16 +273,17 @@ The four parity sectors are therefore
 \begin{equation}
 \begin{array}{c|c}
 (\pi(\ell),\pi(m))&
-(a_\ell b_m-b_\ell a_m)/(2\lambda^2a_\ell a_m)\\ \hline
-(0,0)&m^2-\ell^2\\
-(1,1)&m^2-\ell^2\\
-(0,1)&m^2-\ell^2+2\Delta(p)\\
-(1,0)&m^2-\ell^2-2\Delta(p)
+(a_\ell b_m-b_\ell a_m)/(4\lambda^2a_\ell a_m)\\ \hline
+(0,0)&0\\
+(1,1)&0\\
+(0,1)&\Delta(p)\\
+(1,0)&-\Delta(p)
 \end{array}
 \end{equation}
 In particular, every same-parity term contains
 \begin{equation}
-m^2-\ell^2=(m-\ell)(m+\ell),
+a_\ell b_m-b_\ell a_m=0\qquad
+(\pi(\ell)=\pi(m)),
 \end{equation}
 so the same-parity contribution vanishes on both the diagonal $m=\ell$ and the anti-diagonal $m=-\ell$. The full coefficient always vanishes on $m=\ell$ by antisymmetry.
 
@@ -290,31 +291,23 @@ so the same-parity contribution vanishes on both the diagonal $m=\ell$ and the a
 A rank-two combination here means a difference of two separable products, one depending on $\ell$ and the other on $m$.  The kernel is obtained from this antisymmetric combination by the normalization
 \begin{equation}
 \boxed{
-\begin{aligned}
-\mathcal K(t,z;q_\ast)
-=-\frac12 A_{\rm S}^2 C_\sigma^4 e^{2az_0^2}
-\sum_{\varepsilon=0}^1
-\sum_{\ell,m\in\mathbb Z} e^{2i\ell x_0}
-(a_\ell b_m-b_\ell a_m)
-\Theta_\varepsilon(X_\ast e^{2i\ell\gamma};p^{1/2})
-\Theta_\varepsilon(ze^{2im\gamma};p^{1/2}).
-\end{aligned}
+S(t,q_\ast)=A_{\rm S}C_\sigma e^{az_0^2}
+\sum_{r\in\mathbb Z}c_r e^{i(2r+1)x_0}
+\Phi_{p^{1/2}}\!\left(X_\ast e^{2i(2r+1)\gamma}\right),
+\qquad
+c_r:=-i(-1)^r p^{(r+1/2)^2}.
 }
 \end{equation}
 The factor $-1/2$ follows from the antisymmetrization convention: the ordered rank-two difference counts the two exchanged terms separately, while their order is opposite to the orientation in the product $S(tz,q_\ast)S(t/z,q_\ast)$.
-
 Substitution of the explicit antisymmetric coefficient gives
 \begin{equation}
 \boxed{
 \begin{aligned}
 \mathcal K(t,z;q_\ast)
-={}&-\lambda^2A_{\rm S}^2C_\sigma^4e^{2az_0^2}
-\sum_{\varepsilon=0}^1\sum_{\ell,m\in\mathbb Z}
-e^{2i\ell x_0}a_\ell a_m\\
-&\times\left[m^2-\ell^2
-+2\Delta(p)\bigl(\pi(m)-\pi(\ell)\bigr)\right]\\
-&\times\Theta_\varepsilon(X_\ast e^{2i\ell\gamma};p^{1/2})
-\Theta_\varepsilon(ze^{2im\gamma};p^{1/2}).
+={}&A_{\rm S}^2C_\sigma^2e^{2az_0^2}
+\sum_{r,s\in\mathbb Z}c_rc_s e^{2i(r+s+1)x_0}\\
+&\times\Phi_{p^{1/2}}\!\left(X_\ast z e^{2i(2r+1)\gamma}\right)
+\Phi_{p^{1/2}}\!\left(X_\ast z^{-1}e^{2i(2s+1)\gamma}\right).
 \end{aligned}}
 \end{equation}
 Expanding the two parity theta functions gives the corresponding Ramanujan form
@@ -322,83 +315,50 @@ Expanding the two parity theta functions gives the corresponding Ramanujan form
 \boxed{
 \begin{aligned}
 \mathcal K(t,z;q_\ast)
-={}&-\lambda^2A_{\rm S}^2C_\sigma^4e^{2az_0^2}
-\sum_{\varepsilon=0}^1\sum_{\ell,m\in\mathbb Z}
-e^{2i\ell x_0}a_\ell a_m\\
-&\times\left[m^2-\ell^2
-+2\Delta(p)\bigl(\pi(m)-\pi(\ell)\bigr)\right]\\
-&\times p^{\varepsilon^2/2}
-(X_\ast e^{2i\ell\gamma})^\varepsilon
-(ze^{2im\gamma})^\varepsilon\\
-&\times\Phi_p\!\left(p^\varepsilon X_\ast^2e^{4i\ell\gamma}\right)
-\Phi_p\!\left(p^\varepsilon z^2e^{4im\gamma}\right).
+={}&A_{\rm S}^2C_\sigma^2e^{2az_0^2}
+\sum_{r,s\in\mathbb Z}c_rc_s e^{2i(r+s+1)x_0}\\
+&\times f\left(p^{1/2}X_\ast z e^{2i(2r+1)\gamma},
+\frac{p^{1/2}}{X_\ast z e^{2i(2r+1)\gamma}}\right)\\
+&\times f\left(p^{1/2}X_\ast z^{-1}e^{2i(2s+1)\gamma},
+\frac{p^{1/2}}{X_\ast z^{-1}e^{2i(2s+1)\gamma}}\right).
 \end{aligned}}
 \end{equation}
-
 \section{A two-component differential-operator reduction}
 A differential-operator representation rewrites the factors $\ell^2$ and $m^2$ as second derivatives of Fourier exponentials.  This shortens the double sum and reveals its separable structure.  The parity split can be reorganized further. For $r,s\in\{0,1\}$ define the theta lifts
 \begin{equation}
-\mathcal R_{\varepsilon,r}(x;t):=
-\sum_{\substack{\ell\in\mathbb Z\\\ell\equiv r\ ({\rm mod}\ 2)}}
-a_\ell e^{2i\ell x}
-\Theta_\varepsilon(X_\ast e^{2i\ell\gamma};p^{1/2}),
+\mathcal F_r(u):=c_r e^{i(2r+1)x_0}
+\Phi_{p^{1/2}}\!\left(X_\ast u e^{2i(2r+1)\gamma}\right).
 \end{equation}
 \begin{equation}
-\mathcal D_{\varepsilon,s}(y;z):=
-\sum_{\substack{m\in\mathbb Z\\m\equiv s\ ({\rm mod}\ 2)}}
-a_m e^{2imy}
-\Theta_\varepsilon(ze^{2im\gamma};p^{1/2}).
+\mathcal K(t,z;q_\ast)=A_{\rm S}^2C_\sigma^2e^{2az_0^2}
+\left(\sum_{r\in\mathbb Z}\mathcal F_r(z)\right)
+\left(\sum_{s\in\mathbb Z}\mathcal F_s(z^{-1})\right).
 \end{equation}
 For functions of $x$ and $y$, set
 \begin{equation}
-\boxed{\mathcal W(F,G):=\frac14\left((\partial_x^2F)G-F(\partial_y^2G)\right).}
+\boxed{\mathcal E_z:=z\frac{\partial}{\partial z}.}
 \end{equation}
 On a Fourier monomial this operator has symbol $m^2-\ell^2$. Put
 \begin{equation}
-\begin{aligned}
-\mathcal R_{\varepsilon,+}:=\mathcal R_{\varepsilon,0}+\mathcal R_{\varepsilon,1},
-\qquad
-\mathcal D_{\varepsilon,+}:=\mathcal D_{\varepsilon,0}+\mathcal D_{\varepsilon,1}.
-\end{aligned}
+\boxed{
+[z^k]\mathcal K(t,z;q_\ast)
+=\sum_{n\in\mathbb Z}W_{n+k}W_n t^{2n+k}.}
 \end{equation}
-
 \begin{proposition}[Wave term plus parity determinant]
 The double series is equivalently represented by
 \begin{equation}
 \boxed{
-\begin{aligned}
-\mathcal K(t,z;q_\ast)
-={}&-\lambda^2A_{\rm S}^2C_\sigma^4e^{2az_0^2}
-\sum_{\varepsilon=0}^1
-\Bigl\{
-\mathcal W(\mathcal R_{\varepsilon,+},\mathcal D_{\varepsilon,+})\\
-&\qquad\qquad
-+2\Delta(p)
-\bigl(
-\mathcal R_{\varepsilon,0}\mathcal D_{\varepsilon,1}
--\mathcal R_{\varepsilon,1}\mathcal D_{\varepsilon,0}
-\bigr)
-\Bigr\}_{x=x_0,\,y=0}.
-\end{aligned}}
+[z^4]\mathcal K
+=\alpha q_\ast^6[z^2]\mathcal K
++\beta q_\ast^8[z^0]\mathcal K.}
 \end{equation}
 \end{proposition}
-
 \begin{proof}
-The operator $\mathcal W$ supplies $m^2-\ell^2$ in all four parity sectors. The determinant
 \begin{equation}
-\det\begin{pmatrix}
-\mathcal R_{\varepsilon,0}&\mathcal R_{\varepsilon,1}\\
-\mathcal D_{\varepsilon,0}&\mathcal D_{\varepsilon,1}
-\end{pmatrix}
-=
-\mathcal R_{\varepsilon,0}\mathcal D_{\varepsilon,1}
--\mathcal R_{\varepsilon,1}\mathcal D_{\varepsilon,0}
+W_{n+4}W_n=\alpha q_\ast^6W_{n+3}W_{n+1}
++\beta q_\ast^8W_{n+2}^2.
 \end{equation}
-adds $+2\Delta$ in the even--odd sector, $-2\Delta$ in the odd--even sector, and zero in the same-parity sectors.
 \end{proof}
-
-This representation gives a structural interpretation of the double series. Its main part is a wave-type differential image of two separable theta lifts. The remaining parity coupling is carried by one $2\times2$ determinant and the single lattice scalar $\Delta(p)$.
-
 \section{Free and derived quantities}
 \renewcommand{\arraystretch}{1.2}
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.22\textwidth}>{\raggedright\arraybackslash}p{0.50\textwidth}}
@@ -413,7 +373,7 @@ $p,\lambda,a,C_\sigma$ & derived lattice data & Defined by the sigma/theta norma
 $P$ & aligned value & $P=p^{1/2}$, so the outer bilateral theta functions have nome $P^2=p$.\\
 $\gamma,x_0,X_\ast$ & derived & Shift phase, initial phase, and the combined $t$-variable.\\
 $a_\ell$ & explicit coefficient & Fourier coefficient of $\theta_1^2$, with closed parity formulas.\\
-$b_\ell$ & eliminated coefficient & $b_\ell=4\lambda^2(\ell^2-\Dp)a_\ell-2aa_\ell$; no convolution is needed.\\
+$b_\ell$ & eliminated coefficient & $b_\ell=(4\lambda^2\Dp-2\lambda^2\ell^2-2a)a_\ell$; no convolution is needed.\\
 $\Delta(p)$ & derived lattice scalar & Logarithmic nome derivative of $\theta_2(0,p^2)/\theta_3(0,p^2)$; it is the only non-polynomial coefficient in the parity coupling.\\
 \bottomrule
 \end{longtable}

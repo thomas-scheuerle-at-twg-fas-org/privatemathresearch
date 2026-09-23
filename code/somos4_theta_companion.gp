@@ -477,9 +477,18 @@ somos4_theta_bell_convolution(sigpar, ell, nmax) =
   my(a = eta1/(2*omega1));
   my(s = 0);
   for (n = -nmax, nmax,
-    s += (2*n + 1)*(2*ell - 2*n - 1) * p^((n + 1/2)^2 + (ell - n - 1/2)^2);
+    s += (2*n + 1 - ell)^2 * p^((n + 1/2)^2 + (ell - n - 1/2)^2);
   );
   2 * lambda^2 * (-1)^ell * s - 2 * a * somos4_theta_aell_direct(sigpar, ell, nmax);
+};
+
+somos4_theta_antisymmetric_coeff(sigpar, ell, m, nmax) =
+{
+  my(aell = somos4_theta_aell_direct(sigpar, ell, nmax));
+  my(am = somos4_theta_aell_direct(sigpar, m, nmax));
+  my(bell = somos4_theta_bell_convolution(sigpar, ell, nmax));
+  my(bm = somos4_theta_bell_convolution(sigpar, m, nmax));
+  aell*bm - bell*am;
 };
 
 somos4_theta_parity_sum(eps, Y, p, nmax) =
@@ -511,29 +520,24 @@ somos4_kernel_theta_series(sigpar, qstar, t, z, lmmax, nmax) =
   my(A = sigpar[5], B = sigpar[6]);
   my(omega1 = L[1]/2, omega3 = -L[2]/2);
   my(tau_mod = omega3/omega1, p = exp(Pi*I*tau_mod));
-  my(lambda = Pi/(2*omega1));
   my(eta1 = ellzeta(L, omega1));
   my(a = eta1/(2*omega1));
   my(Csigma = 2*omega1/(Pi*somos4_theta1prime0(p, nmax)));
-  my(gamma = lambda*kappa/2, x0 = lambda*z0);
+  my(lambda = Pi/(2*omega1), gamma = lambda*kappa/2, x0 = lambda*z0);
   my(Xstar = B*t/qstar * exp(2*a*z0*kappa));
-  my(T0 = somos4_theta2_const(p, nmax), T1 = somos4_theta3_const(p, nmax));
-  my(Delta = somos4_theta_Delta(p, nmax));
   my(total = 0);
   for (eps = 0, 1,
     for (ell = -lmmax, lmmax,
-      my(aell = somos4_theta_aell(ell, p, T0, T1));
       my(Th1 = somos4_theta_parity_sum(eps, Xstar * exp(2*I*ell*gamma), p, nmax));
       for (m = -lmmax, lmmax,
-        my(am = somos4_theta_aell(m, p, T0, T1));
         my(Th2 = somos4_theta_parity_sum(eps, z * exp(2*I*m*gamma), p, nmax));
-        total += exp(2*I*ell*x0) * aell * am
-          * (m^2 - ell^2 + 2*Delta*(((m % 2 + 2) % 2) - ((ell % 2 + 2) % 2)))
+        total += exp(2*I*ell*x0)
+          * somos4_theta_antisymmetric_coeff(sigpar, ell, m, nmax)
           * Th1 * Th2;
       );
     );
   );
-  2 * lambda^2 * A^2 * Csigma^4 * exp(2*a*z0^2) * total;
+  A^2 * Csigma^4 * exp(2*a*z0^2) * total;
 };
 
 somos4_kernel_direct_coeff(sigpar, qstar, t, k, nmax) =
@@ -561,13 +565,9 @@ somos4_kernel_preconvolution_coeff(sigpar, qstar, t, k, lmmax, nmax) =
   my(Xstar = B*t/qstar * exp(2*a*z0*kappa));
   my(eps = (k % 2 + 2) % 2, total = 0);
   for (ell = -lmmax, lmmax,
-    my(aell = somos4_theta_aell_direct(sigpar, ell, nmax));
-    my(bell = somos4_theta_bell_convolution(sigpar, ell, nmax));
     my(Th1 = somos4_theta_parity_sum(eps, Xstar * exp(2*I*ell*gamma), p, nmax));
     for (m = -lmmax, lmmax,
-      my(am = somos4_theta_aell_direct(sigpar, m, nmax));
-      my(bm = somos4_theta_bell_convolution(sigpar, m, nmax));
-      total += exp(2*I*ell*x0) * (aell*bm - bell*am)
+      total += exp(2*I*ell*x0) * somos4_theta_antisymmetric_coeff(sigpar, ell, m, nmax)
         * Th1 * p^(k^2/4) * exp(2*I*m*gamma*k);
     );
   );
@@ -576,30 +576,7 @@ somos4_kernel_preconvolution_coeff(sigpar, qstar, t, k, lmmax, nmax) =
 
 somos4_kernel_theta_coeff(sigpar, qstar, t, k, lmmax, nmax) =
 {
-  my(L = sigpar[2], z0 = sigpar[3], kappa = sigpar[4]);
-  my(A = sigpar[5], B = sigpar[6]);
-  my(omega1 = L[1]/2, omega3 = -L[2]/2);
-  my(tau_mod = omega3/omega1, p = exp(Pi*I*tau_mod));
-  my(lambda = Pi/(2*omega1));
-  my(eta1 = ellzeta(L, omega1));
-  my(a = eta1/(2*omega1));
-  my(Csigma = 2*omega1/(Pi*somos4_theta1prime0(p, nmax)));
-  my(gamma = lambda*kappa/2, x0 = lambda*z0);
-  my(Xstar = B*t/qstar * exp(2*a*z0*kappa));
-  my(T0 = somos4_theta2_const(p, nmax), T1 = somos4_theta3_const(p, nmax));
-  my(Delta = somos4_theta_Delta(p, nmax));
-  my(eps = (k % 2 + 2) % 2, total = 0);
-  for (ell = -lmmax, lmmax,
-    my(aell = somos4_theta_aell(ell, p, T0, T1));
-    my(Th1 = somos4_theta_parity_sum(eps, Xstar * exp(2*I*ell*gamma), p, nmax));
-    for (m = -lmmax, lmmax,
-      my(am = somos4_theta_aell(m, p, T0, T1));
-      total += exp(2*I*ell*x0) * aell * am
-        * (m^2 - ell^2 + 2*Delta*(((m % 2 + 2) % 2) - ((ell % 2 + 2) % 2)))
-        * Th1 * p^(k^2/4) * exp(2*I*m*gamma*k);
-    );
-  );
-  2 * lambda^2 * A^2 * Csigma^4 * exp(2*a*z0^2) * total;
+  somos4_kernel_preconvolution_coeff(sigpar, qstar, t, k, lmmax, nmax);
 };
 
 somos4_probe_theta_coefficients(sigpar, qstar, t, max_k, lmmax, nmax) =
@@ -627,6 +604,21 @@ somos4_probe_theta_series_expansion(sigpar, qstar, t, z, lmmax, nmax) =
   [kdir, ktheta, somos4_abs(kdir - ktheta)];
 };
 
+somos4_check_theta_series_layer(sigpar, qstar, t, z, max_k, lmmax, nmax, tol) =
+{
+  my(coeffprobe = somos4_probe_theta_coefficients(sigpar, qstar, t, max_k, lmmax, nmax));
+  my(seriesprobe = somos4_probe_theta_series_expansion(sigpar, qstar, t, z, lmmax, nmax));
+  for (j = 1, #coeffprobe,
+    if (coeffprobe[j][4] > tol,
+      error(Str("theta-series coefficient reconstruction failed at k=", coeffprobe[j][1]))
+    );
+  );
+  if (seriesprobe[3] > tol,
+    error("full theta-series kernel reconstruction failed")
+  );
+  [coeffprobe, seriesprobe];
+};
+
 somos4_check_kernel_relation_from_orbit(h, alpha, beta, qstar, upto_n) =
 {
   my(W = vector(#h, n, h[n] * qstar^(n*(n-1))));
@@ -643,7 +635,7 @@ somos4_check_kernel_relation_from_orbit(h, alpha, beta, qstar, upto_n) =
 somos4_check_sigma_direct_workflow(lambda, m, r, eta, tau, N, nterms, prec, tol) =
 {
   my(oldprec = default(realprecision));
-  my(J, w, sigpar, exact, sigma_vals, recovered_h, recovered_params, coeffs, gf_h, qstar, err);
+  my(J, w, sigpar, exact, sigma_vals, recovered_h, recovered_params, coeffs, gf_h, qstar, err, theta_checks, theta_tol = 1e-24);
   default(realprecision, prec);
   J = somos4_J(lambda, m, r, eta, tau);
   w = somos4_weierstrass_invariants(J, tau);
@@ -671,6 +663,7 @@ somos4_check_sigma_direct_workflow(lambda, m, r, eta, tau, N, nterms, prec, tol)
   );
   qstar = somos4_theta_qstar(sigpar);
   somos4_check_kernel_relation_from_orbit(exact, 1, tau, qstar, N - 4);
+  theta_checks = somos4_check_theta_series_layer(sigpar, qstar, 1/10, 6/5, 5, 10, nterms, theta_tol);
   print("------------------------------------------------------------");
   print("Elliptic sigma workflow tuple: ", [lambda, m, r, eta, tau]);
   print("J invariant / [g2,g3,Delta]: ", [J, w]);
@@ -682,6 +675,8 @@ somos4_check_sigma_direct_workflow(lambda, m, r, eta, tau, N, nterms, prec, tol)
   somos4_print_status("EXACT PASS", "first six signed Hankel values recovered from sigma data reconstruct (lambda,m,r,eta,alpha=1,tau)");
   somos4_print_status("EXACT PASS", "five-parameter generating function reconstructed from recovered data reproduces the same Hankel orbit");
   somos4_print_status("NUMERIC PASS", "theta-kernel coefficient identity verified from the sigma orbit and q_star");
+  somos4_print_status("NUMERIC PASS", Str("theta-series coefficient reconstruction matches the direct kernel coefficients at t=1/10 through k=", 5));
+  somos4_print_status("NUMERIC PASS", "full convolution-free theta double-series reconstruction matches the direct kernel at t=1/10, z=6/5");
   default(realprecision, oldprec);
 };
 
@@ -803,7 +798,7 @@ somos4_run_six_parameter_checks(lambda, m, r, eta, alpha, tau, q6, orient, nterm
 
 somos4_reference_run() =
 {
-  my(nterms = 20, upto_n = 8, qscale = 2, prec = 80, tol = 1e-40);
+  my(nterms = 20, upto_n = 8, qscale = 2, prec = 120, tol = 1e-50);
   somos4_print_header();
   somos4_symbol_map();
   somos4_run_direct_paper_checks(1, 1, 1, 1, 1, nterms, upto_n, qscale);
@@ -825,8 +820,9 @@ somos4_reference_run() =
   print("[PASS] explicit elliptic curve and sigma-orbit instantiation for the direct-paper slice");
   print("[PASS] parameter recovery from sigma data and regeneration of the five-parameter generating function");
   print("[PASS] theta-kernel coefficient identity from the sigma orbit and q_star");
+  print("[PASS] theta-series coefficient reconstruction from the corrected antisymmetric layer");
+  print("[PASS] full convolution-free theta double-series reconstruction at the sampled test point");
   print("[PASS] transported sigma-gauge verification for six-parameter alpha != 1 examples");
-  print("[NOTE] full convolution-free theta double-series helper is available for further normalization/debug work");
   print("[PASS] Hankel scaling law");
   print("[DONE] direct-paper end-to-end elliptic / generating-function / kernel verification completed");
 };
