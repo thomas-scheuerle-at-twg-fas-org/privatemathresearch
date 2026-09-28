@@ -10,12 +10,12 @@
 \newcommand{\Dp}{D_p}
 \title{A Generating-Function Bridge from Somos--4 Sequences to Ramanujan Theta Functions\\\large An explicit convolution-free theta expansion}
 \author{Thomas Scheuerle}
-\date{23 September 2026}
+\date{28 September 2026}
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Starting from a generating function whose Hankel determinants satisfy a Somos--4 recurrence, we introduce a multiplicative factor in the argument of a bilateral generating series.  This produces a two-variable kernel that admits expansions in Jacobi theta functions and, equivalently, in Ramanujan's two-variable theta function.  The main calculation removes a convolution from the Fourier coefficients and replaces it by an explicit quadratic factor together with a logarithmic derivative of theta constants.  The resulting formula gives a direct and computationally usable link among Somos--4 recurrences, generating functions, Hankel determinants, elliptic sigma functions, and Ramanujan theta functions.
+Starting from a generating function whose Hankel determinants satisfy a Somos--4 recurrence, we introduce a multiplicative factor in the argument of a bilateral generating series.  This produces a two-variable kernel that admits expansions in Jacobi theta functions and, equivalently, in Ramanujan's two-variable theta function.  The main calculation removes a convolution from the Fourier coefficients and replaces it by an explicit quadratic factor.  A classical theta-derivative identity then evaluates the remaining parity scalar as one half of a fourth power of a theta constant.  Jacobi's triple product consequently gives a derivative-free infinite-product factorization of every nonzero antisymmetric Fourier coefficient.  The resulting formula gives a direct and computationally usable link among Somos--4 recurrences, generating functions, Hankel determinants, elliptic sigma functions, and Ramanujan theta functions.
 \end{abstract}
 
 \section{Introduction and motivation}
@@ -267,7 +267,70 @@ a_\ell b_m-b_\ell a_m
 Insert the preceding formula for $b_k$. The terms $-2a\,a_k$ cancel identically. The difference of the two parity logarithmic derivatives is $-\Delta$, $0$, or $\Delta$ according to the parities of $(\ell,m)$, which gives the displayed formula.
 \end{proof}
 
+\begin{proposition}[Evaluation of the parity modulus]
+For $|p|<1$ one has
+\begin{equation}
+\boxed{\Delta(p)=\frac12\theta_4(0,p^2)^4.}
+\end{equation}
+Consequently,
+\begin{equation}
+\boxed{
+a_\ell b_m-b_\ell a_m
+=2\lambda^2\theta_4(0,p^2)^4a_\ell a_m
+\bigl(\pi(\ell)-\pi(m)\bigr).}
+\end{equation}
+\end{proposition}
+\begin{proof}
+For the nome convention used here, the classical identity
+\begin{equation}
+q\frac{d}{dq}\log\frac{\theta_2(0,q)}{\theta_3(0,q)}
+=\frac14\theta_4(0,q)^4
+\end{equation}
+holds; see \cite[Sec.~20.7(vii)]{DLMFTheta}.  Put $q=p^2$.  Since
+$p\,d/dp=2q\,d/dq$, the definition of $\Delta(p)$ gives
+\begin{equation}
+\Delta(p)=2q\frac{d}{dq}\log\frac{\theta_2(0,q)}{\theta_3(0,q)}
+=\frac12\theta_4(0,q)^4.
+\end{equation}
+Replacing $q$ by $p^2$ proves the first formula, and substitution in the
+preceding proposition proves the second.
+\end{proof}
 
+As a normalization check, when $p\to0$ one has
+$\theta_2(0,p^2)/\theta_3(0,p^2)\sim2p^{1/2}$, so both sides of the first
+formula tend to $1/2$.
+
+Let
+\begin{equation}
+(x;q)_\infty:=\prod_{n=0}^\infty(1-xq^n).
+\end{equation}
+Jacobi's triple product gives
+\begin{equation}
+\begin{aligned}
+\theta_2(0,p^2)&=2p^{1/2}(p^4;p^4)_\infty(-p^4;p^4)_\infty^2,\\
+\theta_3(0,p^2)&=(p^4;p^4)_\infty(-p^2;p^4)_\infty^2,\\
+\theta_4(0,p^2)&=(p^4;p^4)_\infty(p^2;p^4)_\infty^2.
+\end{aligned}
+\end{equation}
+Hence
+\begin{equation}
+\boxed{\Delta(p)=\frac12
+(p^4;p^4)_\infty^4(p^2;p^4)_\infty^8.}
+\end{equation}
+Thus every nonzero opposite-parity coefficient is an elementary power of
+$p$ times one universal infinite product.  Explicitly,
+\begin{equation}
+\boxed{
+\begin{aligned}
+a_{2r}b_{2s+1}-b_{2r}a_{2s+1}
+={}&4\lambda^2p^{2r^2+(2s+1)^2/2+1/2}\\
+&\times(p^4;p^4)_\infty^6(p^2;p^4)_\infty^8
+(-p^4;p^4)_\infty^2(-p^2;p^4)_\infty^2.
+\end{aligned}}
+\end{equation}
+Antisymmetry gives the odd--even sector, and the same-parity sectors vanish.
+After the elementary power of $p$ is removed, the remaining product is
+independent of $r$ and $s$.
 
 The four parity sectors are therefore
 \begin{equation}
@@ -408,7 +471,7 @@ With the preceding notation,
 \begin{equation}
 \boxed{
 \mathcal K(t,z;q_\ast)
-=4\lambda^2\Delta(p)A_{\rm S}^2C_\sigma^4e^{2az_0^2}
+=2\lambda^2\theta_4(0,p^2)^4A_{\rm S}^2C_\sigma^4e^{2az_0^2}
 \sum_{\varepsilon=0}^1
 \Bigl(
 \mathcal R_{\varepsilon,1}(t)\mathcal D_{\varepsilon,0}(z)
@@ -461,7 +524,7 @@ $P$ & aligned value & $P=p^{1/2}$, so the outer bilateral theta functions have n
 $\gamma,x_0,X_\ast$ & derived & Shift phase, initial phase, and the combined $t$-variable.\\
 $a_\ell$ & explicit coefficient & Fourier coefficient of $\theta_1^2$, with closed parity formulas.\\
 $b_\ell$ & eliminated coefficient & $b_\ell=(4\lambda^2\Dp-2\lambda^2\ell^2-2a)a_\ell$; no convolution is needed.\\
-$\Delta(p)$ & derived lattice scalar & Logarithmic nome derivative of $\theta_2(0,p^2)/\theta_3(0,p^2)$; it is the only non-polynomial coefficient in the parity coupling.\\
+$\Delta(p)$ & derived lattice scalar & $\Delta(p)=\tfrac12\theta_4(0,p^2)^4=\tfrac12(p^4;p^4)_\infty^4(p^2;p^4)_\infty^8$; the parity coupling is derivative-free and has an explicit product form.\\
 \bottomrule
 \end{longtable}
 
@@ -469,7 +532,7 @@ $\Delta(p)$ & derived lattice scalar & Logarithmic nome derivative of $\theta_2(
 The identities may be read coefficientwise in a formal setting. For an analytic interpretation, assume $|p|<1$ and restrict the remaining variables to a domain on which the bilateral theta sums and their differentiated series converge absolutely and locally uniformly. The operators $\Dp$, $\partial_x^2$, and $\partial_y^2$ may then be applied term by term.
 
 \section{Conclusion}
-The infinite theta expansion has a convolution-free coefficient structure. The sequence $b_\ell$ is generated from $a_\ell$ by a quadratic spectral operator and a nome derivative. Antisymmetrization removes the Gaussian constant and leaves the single parity modulus $\Delta(p)$, with the two opposite-parity sectors coupled with opposite signs. After the rank-two normalization is included, the kernel is expressed both as an explicit double-theta series and as a wave-type bilinear expression with a two-component parity determinant. These forms provide direct starting points for modular identities and special-value reductions.  In particular, the multiplicative factor in the arguments of the generating series turns a Somos--4 Hankel orbit into a coefficient-selecting kernel, and nome alignment then converts that kernel into Jacobi and Ramanujan theta expansions.
+The infinite theta expansion has a convolution-free coefficient structure. The sequence $b_\ell$ is generated from $a_\ell$ by a quadratic spectral operator and a nome derivative. Antisymmetrization removes the Gaussian constant, and the remaining parity modulus evaluates to $\Delta(p)=\tfrac12\theta_4(0,p^2)^4$.  Jacobi's triple product then makes every nonzero opposite-parity coefficient an elementary power of $p$ times one universal infinite product, while the two opposite-parity sectors remain coupled with opposite signs. After the rank-two normalization is included, the kernel is expressed both as an explicit double-theta series and as a wave-type bilinear expression with a two-component parity determinant. These forms provide direct starting points for modular identities and special-value reductions.  In particular, the multiplicative factor in the arguments of the generating series turns a Somos--4 Hankel orbit into a coefficient-selecting kernel, and nome alignment then converts that kernel into Jacobi and Ramanujan theta expansions.
 
 \section*{Disclosure on authoring and verification tools}
 The text of this manuscript was revised and partially rewritten with the
@@ -488,6 +551,7 @@ the computations underlying the present work.
 \bibitem{Barry2018} P. Barry, \emph{Riordan pseudo-involutions, continued fractions and Somos--4 sequences}, arXiv:1807.05794, 2018.
 \bibitem{Barry2019} P. Barry, \emph{Riordan arrays, the $A$-matrix, and Somos--4 sequences}, arXiv:1912.01126, 2019.
 \bibitem{Berndt1991} B. C. Berndt, \emph{Ramanujan's Notebooks, Part III}, Springer, 1991.
+\bibitem{DLMFTheta} NIST Digital Library of Mathematical Functions, \emph{Chapter 20: Theta Functions, Section 20.7}, \url{https://dlmf.nist.gov/20.7}, accessed 28 September 2026.
 \bibitem{Flajolet1980} P. Flajolet, \emph{Combinatorial aspects of continued fractions}, Discrete Mathematics 32 (1980), 125--161.
 \bibitem{Hone2005} A. N. W. Hone, \emph{Elliptic curves and quadratic recurrence sequences}, Bulletin of the London Mathematical Society 37 (2005), 161--171.
 \bibitem{Krattenthaler1999} C. Krattenthaler, \emph{Advanced determinant calculus}, S\'eminaire Lotharingien de Combinatoire 42 (1999), Article B42q.
