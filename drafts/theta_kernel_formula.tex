@@ -15,7 +15,7 @@
 \maketitle
 
 \begin{abstract}
-Starting from a generating function whose Hankel determinants satisfy a Somos--4 recurrence, we introduce a multiplicative factor in the argument of a bilateral generating series.  This produces a two-variable kernel that admits expansions in Jacobi theta functions and, equivalently, in Ramanujan's two-variable theta function.  The main calculation removes a convolution from the Fourier coefficients and replaces it by an explicit quadratic factor.  A classical theta-derivative identity then evaluates the remaining parity scalar as one half of a fourth power of a theta constant.  Jacobi's triple product consequently gives a derivative-free infinite-product factorization of every nonzero antisymmetric Fourier coefficient.  The resulting formula gives a direct and computationally usable link among Somos--4 recurrences, generating functions, Hankel determinants, elliptic sigma functions, and Ramanujan theta functions.
+Starting from a generating function whose Hankel determinants satisfy a Somos--4 recurrence, we introduce a multiplicative factor in the argument of a bilateral generating series.  This produces a two-variable kernel that admits expansions in Jacobi theta functions and, equivalently, in Ramanujan's two-variable theta function.  The main calculation removes a convolution from the Fourier coefficients and replaces it by an explicit quadratic factor.  A classical theta-derivative identity then evaluates the remaining parity scalar as one half of a fourth power of a theta constant.  Jacobi's triple product consequently gives a derivative-free infinite-product factorization of every nonzero antisymmetric Fourier coefficient.  Extracting a fixed power of the auxiliary variable then collapses the double theta kernel to a single bilateral theta sum, so the Somos--4 relation becomes an explicit identity among three one-dimensional theta product-sums.  The resulting formula gives a direct and computationally usable link among Somos--4 recurrences, generating functions, Hankel determinants, elliptic sigma functions, and Ramanujan theta functions.
 \end{abstract}
 
 \section{Introduction and motivation}
@@ -43,7 +43,7 @@ We use a few standard terms that may be unfamiliar outside the subject.
 \item A \emph{bilateral series} is summed over all integers rather than only nonnegative integers.  A \emph{parity sector} restricts its index to even or odd integers.
 \item ``Convolution-free'' means that a coefficient originally written as a sum over products of Fourier coefficients is replaced by a direct formula involving one coefficient and its nome derivative.
 \end{itemize}
-Section~1 introduces the generating-function bridge.  Sections~2--5 supply the elliptic and Fourier data and derive the explicit coefficient.  Sections~6--7 give the double-theta and differential-operator forms.  The final sections collect the parameters and state the analytic assumptions.
+Section~1 introduces the generating-function bridge.  Sections~2--5 supply the elliptic and Fourier data and derive the explicit coefficient.  Sections~6--7 give the double-theta and parity-determinant forms.  Section~8 extracts a fixed kernel coefficient and reduces the resulting double sum to one bilateral theta sum.  The final sections collect the parameters and state the analytic assumptions.
 
 \subsection*{Generating functions and the surrounding literature}
 For this paper, generating functions are used formally: $[x^k]G(x)=g_k$ denotes coefficient extraction, and identities are valid coefficient by coefficient whenever the displayed algebraic operations are defined.  When numerical or analytic evaluation is intended, convergence assumptions are added explicitly.  Useful general introductions are Wilf \cite{Wilf2006} and Stanley \cite{Stanley2012}; continued-fraction and Hankel methods are treated by Wall \cite{Wall1948}, Flajolet \cite{Flajolet1980}, and Krattenthaler \cite{Krattenthaler1999}.
@@ -386,6 +386,190 @@ Expanding the two parity theta functions gives the corresponding Ramanujan form
 \frac{p^{1/2}}{X_\ast z^{-1}e^{2i(2s+1)\gamma}}\right).
 \end{aligned}}
 \end{equation}
+
+\section{Single-sum formulas for the kernel coefficients}
+The preceding double-theta expansion describes the complete dependence on the
+auxiliary variable $z$.  For the Somos--4 relation, however, only the three
+coefficients of $z^0$, $z^2$, and $z^4$ are needed.  Extracting a fixed
+coefficient before performing the outer sums produces a further reduction.
+The argument uses only the already defined function $\Phi_\rho$ and introduces
+one parity selector for a Jacobi theta factor.
+
+\begin{proposition}[Coefficient extraction for a pair of bilateral theta series]
+For nonzero $A$ and $B$ and every $k\in\mathbb Z$,
+\begin{equation}
+\boxed{
+[z^k]\left(
+\Phi_{p^{1/2}}(Az)\Phi_{p^{1/2}}(Bz^{-1})
+\right)
+=A^kp^{k^2/2}\Phi_p(p^kAB).
+}
+\end{equation}
+\end{proposition}
+\begin{proof}
+Expanding the two bilateral series gives
+\begin{equation}
+\Phi_{p^{1/2}}(Az)\Phi_{p^{1/2}}(Bz^{-1})
+=\sum_{u,v\in\mathbb Z}
+p^{(u^2+v^2)/2}A^uB^v z^{u-v}.
+\end{equation}
+The coefficient of $z^k$ is obtained by setting $u=v+k$.  Hence
+\begin{equation}
+\begin{aligned}
+[z^k]\left(
+\Phi_{p^{1/2}}(Az)\Phi_{p^{1/2}}(Bz^{-1})
+\right)
+&=\sum_{v\in\mathbb Z}
+p^{((v+k)^2+v^2)/2}A^{v+k}B^v\\
+&=A^kp^{k^2/2}\sum_{v\in\mathbb Z}p^{v^2}(p^kAB)^v,
+\end{aligned}
+\end{equation}
+which is the stated formula.
+\end{proof}
+
+To apply this identity to the kernel, define only the following
+parity-selected factor:
+\begin{equation}
+\boxed{
+\mathcal J_k(h;p):=
+\begin{cases}
+\theta_2(2k\gamma,p^2),&h\equiv0\pmod2,\\
+\theta_3(2k\gamma,p^2),&h\equiv1\pmod2.
+\end{cases}}
+\end{equation}
+This notation is separate from the theta constants $T_0(p)$ and $T_1(p)$ used
+in Section~4: the latter occur only at zero argument, whereas
+$\mathcal J_k(h;p)$ records both the extracted coefficient $k$ and the parity
+of the remaining summation index $h$.
+
+\begin{proposition}[Single-sum coefficient formula]
+For every $k\in\mathbb Z$,
+\begin{equation}
+\boxed{
+\begin{aligned}
+[z^k]\mathcal K(t,z;q_\ast)
+={}&A_{\rm S}^2C_\sigma^2e^{2az_0^2}
+X_\ast^kp^{k^2/2}
+\sum_{h\in\mathbb Z}(-1)^hp^{h^2/2}e^{2ih(x_0+k\gamma)}\\
+&\qquad\times\mathcal J_k(h;p)
+\Phi_p\!\left(p^kX_\ast^2e^{4ih\gamma}\right).
+\end{aligned}}
+\end{equation}
+\end{proposition}
+\begin{proof}
+In the double-theta kernel of Section~6, apply the preceding proposition with
+\begin{equation}
+A=X_\ast e^{2i(2r+1)\gamma},\qquad
+B=X_\ast e^{2i(2s+1)\gamma}.
+\end{equation}
+This gives
+\begin{equation}
+\begin{aligned}
+[z^k]\mathcal K
+={}&A_{\rm S}^2C_\sigma^2e^{2az_0^2}X_\ast^kp^{k^2/2}
+\sum_{r,s\in\mathbb Z}c_rc_s e^{2i(r+s+1)x_0}
+ e^{2ik(2r+1)\gamma}\\
+&\qquad\times
+\Phi_p\!\left(p^kX_\ast^2e^{4i(r+s+1)\gamma}\right).
+\end{aligned}
+\end{equation}
+Set $h=r+s+1$, so that $s=h-1-r$.  The last theta factor now depends only
+on $h$.  From the definition of $c_r$,
+\begin{equation}
+c_rc_{h-1-r}
+=(-1)^h p^{(r+1/2)^2+(h-r-1/2)^2}.
+\end{equation}
+With
+\begin{equation}
+y=r+\frac{1-h}{2},
+\end{equation}
+one has
+\begin{equation}
+(r+\tfrac12)^2+(h-r-\tfrac12)^2=\frac{h^2}{2}+2y^2,
+\qquad 2r+1=h+2y.
+\end{equation}
+If $h$ is even, then $y\in\mathbb Z+1/2$; if $h$ is odd, then
+$y\in\mathbb Z$.  Therefore
+\begin{equation}
+\sum_{r\in\mathbb Z}c_rc_{h-1-r}e^{2ik(2r+1)\gamma}
+=(-1)^hp^{h^2/2}e^{2ikh\gamma}\mathcal J_k(h;p).
+\end{equation}
+Substitution gives the claimed single-sum formula.
+\end{proof}
+
+The remaining factor has an equivalent Ramanujan form because
+$\Phi_p(\xi)=f(p\xi,p/\xi)$:
+\begin{equation}
+\begin{aligned}
+\Phi_p\!\left(p^kX_\ast^2e^{4ih\gamma}\right)
+=f\!\left(
+ p^{k+1}X_\ast^2e^{4ih\gamma},
+ p^{1-k}X_\ast^{-2}e^{-4ih\gamma}
+\right).
+\end{aligned}
+\end{equation}
+The product of the two arguments is always $p^2$.  Thus the coefficient
+reduction changes the elliptic argument but not the nome base of Ramanujan's
+theta function.
+
+Jacobi's triple product also gives the product form
+\begin{equation}
+\boxed{
+\begin{aligned}
+\Phi_p\!\left(p^kX_\ast^2e^{4ih\gamma}\right)
+={}&(p^2;p^2)_\infty
+\left(-p^{k+1}X_\ast^2e^{4ih\gamma};p^2\right)_\infty\\
+&\times
+\left(-p^{1-k}X_\ast^{-2}e^{-4ih\gamma};p^2\right)_\infty.
+\end{aligned}}
+\end{equation}
+Consequently, each coefficient $[z^k]\mathcal K$ is a one-dimensional sum of
+explicit theta products rather than the double sum of Section~6.
+
+For a concise statement of the induced Somos--4 identity, define
+\begin{equation}
+\boxed{
+\begin{aligned}
+\mathcal L_k(t):={}&X_\ast^kp^{k^2/2}
+\sum_{h\in\mathbb Z}(-1)^hp^{h^2/2}e^{2ih(x_0+k\gamma)}
+\mathcal J_k(h;p)\\
+&\qquad\times
+\Phi_p\!\left(p^kX_\ast^2e^{4ih\gamma}\right).
+\end{aligned}}
+\end{equation}
+The variable $t$ enters through $X_\ast$, as defined in Section~3.  The
+single-sum formula is equivalently
+\begin{equation}
+[z^k]\mathcal K(t,z;q_\ast)
+=A_{\rm S}^2C_\sigma^2e^{2az_0^2}\mathcal L_k(t).
+\end{equation}
+The common prefactor cancels from the coefficient recurrence, giving the
+following direct theta identity.
+
+\begin{corollary}[Single-sum Somos--4 identity]
+The three one-dimensional theta sums satisfy
+\begin{equation}
+\boxed{
+\mathcal L_4(t)
+=\alpha q_\ast^6\mathcal L_2(t)
++\beta q_\ast^8\mathcal L_0(t).
+}
+\end{equation}
+\end{corollary}
+\begin{proof}
+Substitute the preceding expression for $[z^k]\mathcal K$ with
+$k=0,2,4$ into the kernel coefficient recurrence from Section~2 and cancel
+$A_{\rm S}^2C_\sigma^2e^{2az_0^2}$.
+\end{proof}
+
+The reduction is also suited to finite dissections.  If
+$e^{4iN\gamma}=1$ for a positive integer $N$, the factor
+$e^{4ih\gamma}$ depends only on the residue class of $h$ modulo $N$.
+Writing $h=Nj+r$ therefore separates the single sum into $N$ residue-class
+sums.  This observation supplies a direct starting point for torsion
+specializations, but no additional torsion assumption is required for the
+identities proved above.
+
 \section{A two-component parity-determinant reduction}
 
 \begin{proposition}[Rank-two parity expansion]
@@ -524,6 +708,8 @@ $P$ & aligned value & $P=p^{1/2}$, so the outer bilateral theta functions have n
 $\gamma,x_0,X_\ast$ & derived & Shift phase, initial phase, and the combined $t$-variable.\\
 $a_\ell$ & explicit coefficient & Fourier coefficient of $\theta_1^2$, with closed parity formulas.\\
 $b_\ell$ & eliminated coefficient & $b_\ell=(4\lambda^2\Dp-2\lambda^2\ell^2-2a)a_\ell$; no convolution is needed.\\
+$\mathcal J_k(h;p)$ & derived parity factor & Selects $\theta_2(2k\gamma,p^2)$ for even $h$ and $\theta_3(2k\gamma,p^2)$ for odd $h$ in the single-sum coefficient formula.\\
+$\mathcal L_k(t)$ & derived coefficient sum & One-dimensional theta sum with $[z^k]\mathcal K=A_{\rm S}^2C_\sigma^2e^{2az_0^2}\mathcal L_k(t)$; it satisfies the induced Somos--4 identity for $k=0,2,4$.\\
 $\Delta(p)$ & derived lattice scalar & $\Delta(p)=\tfrac12\theta_4(0,p^2)^4=\tfrac12(p^4;p^4)_\infty^4(p^2;p^4)_\infty^8$; the parity coupling is derivative-free and has an explicit product form.\\
 \bottomrule
 \end{longtable}
@@ -532,7 +718,7 @@ $\Delta(p)$ & derived lattice scalar & $\Delta(p)=\tfrac12\theta_4(0,p^2)^4=\tfr
 The identities may be read coefficientwise in a formal setting. For an analytic interpretation, assume $|p|<1$ and restrict the remaining variables to a domain on which the bilateral theta sums and their differentiated series converge absolutely and locally uniformly. The operators $\Dp$, $\partial_x^2$, and $\partial_y^2$ may then be applied term by term.
 
 \section{Conclusion}
-The infinite theta expansion has a convolution-free coefficient structure. The sequence $b_\ell$ is generated from $a_\ell$ by a quadratic spectral operator and a nome derivative. Antisymmetrization removes the Gaussian constant, and the remaining parity modulus evaluates to $\Delta(p)=\tfrac12\theta_4(0,p^2)^4$.  Jacobi's triple product then makes every nonzero opposite-parity coefficient an elementary power of $p$ times one universal infinite product, while the two opposite-parity sectors remain coupled with opposite signs. After the rank-two normalization is included, the kernel is expressed both as an explicit double-theta series and as a wave-type bilinear expression with a two-component parity determinant. These forms provide direct starting points for modular identities and special-value reductions.  In particular, the multiplicative factor in the arguments of the generating series turns a Somos--4 Hankel orbit into a coefficient-selecting kernel, and nome alignment then converts that kernel into Jacobi and Ramanujan theta expansions.
+The infinite theta expansion has a convolution-free coefficient structure. The sequence $b_\ell$ is generated from $a_\ell$ by a quadratic spectral operator and a nome derivative. Antisymmetrization removes the Gaussian constant, and the remaining parity modulus evaluates to $\Delta(p)=\tfrac12\theta_4(0,p^2)^4$.  Jacobi's triple product then makes every nonzero opposite-parity coefficient an elementary power of $p$ times one universal infinite product, while the two opposite-parity sectors remain coupled with opposite signs. After the rank-two normalization is included, the kernel is expressed both as an explicit double-theta series and as a two-component parity determinant.  Extracting a fixed power of the auxiliary variable collapses the double series to one bilateral theta sum, and the Somos--4 recurrence becomes the explicit identity $\mathcal L_4=\alpha q_\ast^6\mathcal L_2+\beta q_\ast^8\mathcal L_0$.  The single-sum form also isolates the residue-class dependence needed for finite torsion dissections. These forms provide direct starting points for modular identities and special-value reductions.  In particular, the multiplicative factor in the arguments of the generating series turns a Somos--4 Hankel orbit into a coefficient-selecting kernel, and nome alignment then converts that kernel into Jacobi and Ramanujan theta expansions.
 
 \section*{Disclosure on authoring and verification tools}
 The text of this manuscript was revised and partially rewritten with the
